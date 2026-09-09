@@ -1,0 +1,312 @@
+{
+  "version": 1,
+  "synonymGroups": [
+    ["pricing", "price", "prices", "cost", "costs", "plan", "plans", "subscription", "quote", "budget"],
+    ["documentation", "scribe", "scribing", "note", "notes", "chart", "charts", "dictation", "transcript"],
+    ["workflow", "workflows", "process", "processes", "implementation", "rollout", "onboarding", "turnaround"],
+    ["trust", "hipaa", "privacy", "security", "secure", "safeguards", "compliance"],
+    ["revenue", "billing", "claims", "claim", "denials", "collections", "cashflow", "cash", "payer"],
+    ["coding", "codes", "code", "specificity", "audit", "audits", "reimbursement", "compliance"],
+    ["payroll", "compensation", "finance", "hours", "reconciliation", "schedules", "provider pay"],
+    ["specialty", "specialties", "cardiology", "dermatology", "family medicine", "multispecialty", "providers"],
+    ["demo", "contact", "book", "email", "sales", "walkthrough", "meeting"],
+    ["dashboard", "login", "portal", "workspace", "app"]
+  ],
+  "intents": [
+    {
+      "id": "services-overview",
+      "topic": "services",
+      "title": "Services Overview",
+      "summary": "Anot Health supports healthcare teams across clinical documentation, revenue cycle support, coding and compliance, payroll administration, and implementation planning.",
+      "highlights": [
+        "Clinical Documentation is built to reduce after-hours charting and improve note readiness.",
+        "Revenue Cycle support is positioned around cleaner claims, fewer preventable rework loops, and steadier collections.",
+        "Coding and Compliance support focuses on specificity, reimbursement logic, and audit confidence.",
+        "Payroll Administration support helps reconcile provider compensation inputs and finance handoffs."
+      ],
+      "bestFit": "This is the best starting answer when a buyer is trying to understand whether Anot is a documentation-only vendor or a broader healthcare operations partner.",
+      "nextStep": "If you want a narrower answer, ask which service line is the best fit for your current bottleneck.",
+      "sourcePages": ["index.html", "scribing.html", "billing.html", "coding.html", "payroll.html"],
+      "triggers": [
+        "what services do you provide",
+        "what does anot do",
+        "what do you offer",
+        "services overview",
+        "what can anot help with"
+      ]
+    },
+    {
+      "id": "pricing-overview",
+      "topic": "pricing",
+      "title": "Pricing Overview",
+      "summary": "Anot pricing starts at $1,000 per month for Foundation, moves to $1,500 per month for Professional, and uses custom pricing for Enterprise.",
+      "highlights": [
+        "Foundation is designed for clearer, more consistent documentation workflows with AI-first note generation and light human QA.",
+        "Professional adds a stronger review layer when documentation complexity or specialty nuance increases.",
+        "Enterprise is scoped for higher-complexity documentation profiles or broader operational support."
+      ],
+      "bestFit": "This answer is most useful when someone wants the headline pricing structure before getting into specialty, visit length, or workflow complexity.",
+      "nextStep": "Ask which plan fits your specialty or whether your workflow sounds closer to Foundation, Professional, or Enterprise.",
+      "sourcePages": ["pricing.html", "index.html"],
+      "triggers": [
+        "how much does anot cost",
+        "pricing",
+        "price",
+        "what is the pricing",
+        "how much"
+      ]
+    },
+    {
+      "id": "foundation-plan",
+      "topic": "pricing",
+      "title": "Foundation Plan",
+      "summary": "Foundation starts at $1,000 per month and is designed for clear, consistent dictation with AI-first note generation and light human QA.",
+      "highlights": [
+        "It is positioned for cleaner source audio, simpler visit structures, and lower documentation complexity.",
+        "The review model stays relatively light compared with the higher tiers.",
+        "It is usually the best starting point when a practice wants relief without a heavier review layer."
+      ],
+      "bestFit": "Foundation is usually the right fit when the documentation profile is relatively straightforward and the team wants the lightest public entry tier.",
+      "nextStep": "If you are unsure whether your workflow is still simple enough for Foundation, ask about note complexity or specialty fit.",
+      "sourcePages": ["pricing.html", "index.html"],
+      "triggers": [
+        "foundation plan",
+        "1000 plan",
+        "starter plan",
+        "entry tier",
+        "base pricing"
+      ]
+    },
+    {
+      "id": "professional-plan",
+      "topic": "pricing",
+      "title": "Professional Plan",
+      "summary": "Professional starts at $1,500 per month and is meant for workflows that need a stronger review layer before the notes are handed off.",
+      "highlights": [
+        "It is better suited to moderate complexity, specialty nuance, longer notes, or less predictable source material.",
+        "It adds more human review support than Foundation.",
+        "It is typically selected when a mostly AI-first workflow is no longer enough."
+      ],
+      "bestFit": "Professional is usually the best fit when accuracy pressure is higher and the team needs more cleanup, review, or specialty-aware oversight.",
+      "nextStep": "If you want, ask what kinds of documentation patterns usually move a team from Foundation to Professional.",
+      "sourcePages": ["pricing.html", "index.html"],
+      "triggers": [
+        "professional plan",
+        "1500 plan",
+        "middle tier",
+        "pro plan",
+        "which plan needs more review"
+      ]
+    },
+    {
+      "id": "enterprise-plan",
+      "topic": "pricing",
+      "title": "Enterprise Plan",
+      "summary": "Enterprise uses custom pricing and is reserved for higher-complexity documentation profiles or broader workflow scope beyond the public plan bands.",
+      "highlights": [
+        "It is appropriate when visit structures, note density, specialty nuance, or operational scope move beyond the standard tiers.",
+        "The final scope is confirmed during a workflow review rather than implied from one flat public rate.",
+        "Enterprise can also support conversations that span documentation and broader operations."
+      ],
+      "bestFit": "Enterprise is the right path when the practice has a more complex documentation environment or wants a broader operating partnership.",
+      "nextStep": "Ask for an Enterprise walkthrough if you need a scoped discussion instead of a simple public tier comparison.",
+      "sourcePages": ["pricing.html", "contact.html"],
+      "triggers": [
+        "enterprise pricing",
+        "custom pricing",
+        "complex workflow pricing",
+        "large group pricing",
+        "enterprise plan"
+      ]
+    },
+    {
+      "id": "documentation-model",
+      "topic": "documentation",
+      "title": "Clinical Documentation Model",
+      "summary": "Anot's documentation model is built around AI-assisted speed with human review before the output becomes operationally relied on.",
+      "highlights": [
+        "AI helps with drafting, structure, and first-pass speed.",
+        "Experienced healthcare professionals review and refine the work before handoff.",
+        "The operating goal is dependable note readiness rather than unreviewed automation."
+      ],
+      "bestFit": "This is the strongest answer when a buyer is evaluating whether Anot is replacing humans with AI or combining AI with expert oversight.",
+      "nextStep": "Ask about turnaround, provider relief, specialty fit, or how the review layer changes by pricing tier.",
+      "sourcePages": ["scribing.html", "index.html", "pricing.html"],
+      "triggers": [
+        "how does anot work",
+        "how do the notes work",
+        "ai generated notes",
+        "human review",
+        "documentation workflow"
+      ]
+    },
+    {
+      "id": "revenue-cycle-value",
+      "topic": "revenue",
+      "title": "Revenue Cycle Support",
+      "summary": "Anot positions revenue cycle support around better documentation inputs, cleaner claim preparation, and fewer preventable rework loops downstream.",
+      "highlights": [
+        "The site emphasizes stronger claim readiness and cleaner handoffs into billing workflows.",
+        "The value story is tied to reducing preventable rework and stabilizing collections.",
+        "The strongest results usually depend on documentation and coding quality improving upstream."
+      ],
+      "bestFit": "This answer is most useful when a practice wants to know whether Anot helps only with notes or also with financial workflow quality.",
+      "nextStep": "Ask whether your main pressure is claim quality, denials, coding follow-up, or collections timing.",
+      "sourcePages": ["billing.html", "index.html"],
+      "triggers": [
+        "billing support",
+        "revenue cycle",
+        "claims help",
+        "denials",
+        "collections"
+      ]
+    },
+    {
+      "id": "coding-compliance-value",
+      "topic": "coding",
+      "title": "Coding And Compliance Support",
+      "summary": "Anot positions coding and compliance support around specificity, reimbursement logic, and stronger review confidence before downstream decisions depend on the work.",
+      "highlights": [
+        "The coding story is tied to documentation quality, audit confidence, and reimbursement alignment.",
+        "The site frames this as a protection against weak specificity and preventable coding risk.",
+        "It is especially relevant when the practice wants stronger review discipline before submission."
+      ],
+      "bestFit": "This answer fits when the buyer is worried about coding quality, audit exposure, or reimbursement logic rather than only note speed.",
+      "nextStep": "Ask whether you want clarity around compliance confidence, specificity, or coding workflow fit.",
+      "sourcePages": ["coding.html", "index.html"],
+      "triggers": [
+        "coding support",
+        "compliance support",
+        "audit confidence",
+        "specificity",
+        "coding workflow"
+      ]
+    },
+    {
+      "id": "payroll-value",
+      "topic": "payroll",
+      "title": "Payroll Administration Support",
+      "summary": "Anot positions payroll administration around cleaner provider compensation inputs, reconciliation support, and fewer manual finance handoffs.",
+      "highlights": [
+        "The workflow is framed for practices that still reconcile provider hours, schedules, and compensation logic manually.",
+        "The value is strongest when finance and operational data do not line up cleanly today.",
+        "It is described as support for steadier and more disciplined payroll workflows."
+      ],
+      "bestFit": "This answer is useful when a buyer wants to know whether Anot extends beyond clinical workflows into administrative operations.",
+      "nextStep": "Ask whether your main issue is reconciliation, compensation inputs, or provider-pay workflow coordination.",
+      "sourcePages": ["payroll.html", "index.html"],
+      "triggers": [
+        "payroll support",
+        "provider compensation",
+        "finance workflow",
+        "reconciliation",
+        "payroll administration"
+      ]
+    },
+    {
+      "id": "trust-and-hipaa",
+      "topic": "trust",
+      "title": "HIPAA And Trust",
+      "summary": "Anot presents its trust posture around privacy-conscious workflows, operational safeguards, and expert review discipline rather than unreviewed automation.",
+      "highlights": [
+        "HIPAA, privacy, and controlled handling of healthcare workflows are recurring themes on the site.",
+        "The model emphasizes oversight and workflow discipline, not only policy language.",
+        "Trust is framed as part of how the work is done, not only as a legal statement."
+      ],
+      "bestFit": "This is the right answer when a buyer wants to know whether Anot takes trust and workflow controls seriously before relying on the output.",
+      "nextStep": "Ask whether you want the trust answer framed around HIPAA, privacy, or implementation safeguards.",
+      "sourcePages": ["hipaa.html", "privacy.html", "terms.html"],
+      "triggers": [
+        "is anot hipaa compliant",
+        "is anot secure",
+        "is anot safe",
+        "privacy",
+        "security"
+      ]
+    },
+    {
+      "id": "implementation-approach",
+      "topic": "workflows",
+      "title": "Implementation Approach",
+      "summary": "Anot's implementation story is built around stabilizing the highest-pressure workflow first and expanding deliberately from there.",
+      "highlights": [
+        "The site emphasizes phased rollout logic rather than a one-size-fits-all deployment story.",
+        "The model is meant to fit around the operational bottleneck that needs relief first.",
+        "The best implementation conversation usually starts with the workflow that is absorbing the most manual cleanup today."
+      ],
+      "bestFit": "This is the strongest answer when someone asks how the rollout works or how Anot would fit into an existing practice workflow.",
+      "nextStep": "Ask about onboarding, turnaround, or which team usually feels the earliest operational impact.",
+      "sourcePages": ["index.html", "about.html", "contact.html"],
+      "triggers": [
+        "implementation",
+        "onboarding",
+        "rollout",
+        "how long to get started",
+        "workflow setup"
+      ]
+    },
+    {
+      "id": "specialty-fit",
+      "topic": "specialties",
+      "title": "Specialty Fit",
+      "summary": "Anot's specialty fit depends less on a simple yes-or-no answer and more on note structure, vocabulary, documentation density, and workflow variability.",
+      "highlights": [
+        "The site indicates support for varied clinical workflows rather than one narrow specialty profile.",
+        "The best specialty conversation usually starts with documentation complexity and provider variation.",
+        "Pricing fit can change when specialty nuance materially changes the review burden."
+      ],
+      "bestFit": "This answer is useful when the user asks whether Anot can support a specific specialty such as cardiology or a multispecialty group.",
+      "nextStep": "Ask about your specialty directly and I can frame the answer around fit, complexity, and likely pricing tier.",
+      "sourcePages": ["specialties.html", "pricing.html", "scribing.html"],
+      "triggers": [
+        "what specialties do you support",
+        "specialty fit",
+        "cardiology",
+        "dermatology",
+        "multispecialty"
+      ]
+    },
+    {
+      "id": "dashboard-login",
+      "topic": "contact",
+      "title": "Dashboard Access",
+      "summary": "The site header includes a Dashboard button that links directly to the Anot Health login experience.",
+      "highlights": [
+        "The dashboard link points to the live login at https://anot-health.vercel.app/login.",
+        "It is separate from the marketing-site chatbot and does not require the chatbot itself to use an external AI API.",
+        "The chatbot is part of the website experience, while the dashboard is a separate application entry point."
+      ],
+      "bestFit": "This answer is most useful when someone asks where to log in or how the dashboard relates to the website.",
+      "nextStep": "If you need product access, use the Dashboard button. If you need a sales conversation, use the demo or contact flow instead.",
+      "sourcePages": ["index.html", "contact.html"],
+      "triggers": [
+        "where is the dashboard",
+        "dashboard login",
+        "portal login",
+        "where do i log in",
+        "app login"
+      ]
+    },
+    {
+      "id": "contact-and-demo",
+      "topic": "contact",
+      "title": "Contact And Demo",
+      "summary": "Anot encourages direct outreach through the demo flow or the team email when a buyer wants a workflow-specific conversation.",
+      "highlights": [
+        "The public contact email is admin@anot.health.",
+        "The Get a Demo flow is positioned for workflow-specific discussions rather than a generic product tour.",
+        "The strongest demo requests usually explain which service line or operational bottleneck needs relief first."
+      ],
+      "bestFit": "This answer is useful when the user is ready to talk to the team or wants to know the best next step after learning the basics.",
+      "nextStep": "Use the demo flow and frame the request around the workflow that needs relief first.",
+      "sourcePages": ["contact.html", "index.html"],
+      "triggers": [
+        "contact anot",
+        "book a demo",
+        "how do i reach anot",
+        "email anot",
+        "talk to sales"
+      ]
+    }
+  ]
+}

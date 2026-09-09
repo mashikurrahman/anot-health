@@ -1,0 +1,63 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="160" y1="100" x2="1010" y2="1100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8F1FF"/>
+      <stop offset="1" stop-color="#F8FBFF"/>
+    </linearGradient>
+    <linearGradient id="navy" x1="260" y1="180" x2="980" y2="940" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="247" y1="319" x2="834" y2="954" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <filter id="shadow" x="120" y="120" width="960" height="960" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="30" stdDeviation="40" flood-color="#0F172A" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="1200" rx="120" fill="url(#bg)"/>
+  <circle cx="222" cy="180" r="120" fill="#BFDBFE" fill-opacity="0.7"/>
+  <circle cx="980" cy="1020" r="180" fill="#DBEAFE" fill-opacity="0.8"/>
+  <g filter="url(#shadow)">
+    <rect x="180" y="160" width="840" height="880" rx="56" fill="white"/>
+    <rect x="180" y="160" width="840" height="880" rx="56" stroke="#D8E4F7" stroke-width="2"/>
+  </g>
+  <rect x="230" y="220" width="740" height="120" rx="34" fill="url(#navy)"/>
+  <circle cx="284" cy="280" r="11" fill="#93C5FD"/>
+  <circle cx="322" cy="280" r="11" fill="#60A5FA"/>
+  <circle cx="360" cy="280" r="11" fill="#BC4800"/>
+  <text x="430" y="292" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">Expert-Led Workflow</text>
+  <text x="270" y="408" fill="#64748B" font-family="Arial, sans-serif" font-size="28" font-weight="700">Capture</text>
+  <text x="500" y="408" fill="#64748B" font-family="Arial, sans-serif" font-size="28" font-weight="700">AI Draft</text>
+  <text x="712" y="408" fill="#64748B" font-family="Arial, sans-serif" font-size="28" font-weight="700">Expert Review</text>
+  <text x="886" y="408" fill="#64748B" font-family="Arial, sans-serif" font-size="28" font-weight="700">Verified</text>
+  <rect x="250" y="446" width="178" height="250" rx="30" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="460" y="446" width="208" height="250" rx="30" fill="url(#blue)"/>
+  <rect x="700" y="446" width="150" height="250" rx="30" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <rect x="882" y="446" width="88" height="250" rx="30" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <rect x="278" y="490" width="122" height="18" rx="9" fill="#CBD5E1"/>
+  <rect x="278" y="532" width="96" height="16" rx="8" fill="#E2E8F0"/>
+  <rect x="278" y="570" width="116" height="16" rx="8" fill="#E2E8F0"/>
+  <rect x="278" y="608" width="86" height="16" rx="8" fill="#E2E8F0"/>
+  <rect x="498" y="486" width="132" height="18" rx="9" fill="#DBEAFE"/>
+  <rect x="498" y="530" width="132" height="16" rx="8" fill="#BFDBFE"/>
+  <rect x="498" y="566" width="88" height="16" rx="8" fill="#93C5FD"/>
+  <rect x="498" y="602" width="112" height="16" rx="8" fill="#DBEAFE"/>
+  <circle cx="774" cy="520" r="34" fill="#E0F2FE"/>
+  <path d="M760 520L770 530L790 510" stroke="#2563EB" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="730" y="580" width="94" height="16" rx="8" fill="#CBD5E1"/>
+  <rect x="730" y="618" width="76" height="16" rx="8" fill="#E2E8F0"/>
+  <rect x="730" y="656" width="90" height="16" rx="8" fill="#E2E8F0"/>
+  <circle cx="926" cy="522" r="24" fill="#2563EB"/>
+  <path d="M916 523L924 531L939 516" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="900" y="584" width="52" height="16" rx="8" fill="#93C5FD"/>
+  <rect x="900" y="620" width="42" height="16" rx="8" fill="#BFDBFE"/>
+  <path d="M428 571H460" stroke="#93C5FD" stroke-width="10" stroke-linecap="round"/>
+  <path d="M668 571H700" stroke="#93C5FD" stroke-width="10" stroke-linecap="round"/>
+  <path d="M850 571H882" stroke="#93C5FD" stroke-width="10" stroke-linecap="round"/>
+  <rect x="250" y="760" width="720" height="210" rx="34" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="290" y="826" fill="#0F172A" font-family="Arial, sans-serif" font-size="40" font-weight="700">Why it works</text>
+  <text x="290" y="882" fill="#475569" font-family="Arial, sans-serif" font-size="28">AI accelerates draft speed. Expert review protects the final handoff.</text>
+  <text x="290" y="926" fill="#475569" font-family="Arial, sans-serif" font-size="28">The result is calmer operations across documentation, coding, billing, and payroll.</text>
+</svg>

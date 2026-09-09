@@ -1,0 +1,24 @@
+{
+  "name": "Anot Health",
+  "short_name": "Anot Health",
+  "description": "Expert-led clinical documentation, coding, billing, and payroll support for healthcare teams, strengthened by advanced AI and human review.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8FAFC",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/images/logo-mark.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

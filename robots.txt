@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /pricing.html
+Disallow: /chatbot-admin.html
+
+Sitemap: https://anot.health/sitemap.xml
