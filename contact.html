@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -22,6 +22,7 @@
     <meta name="theme-color" content="#2563EB">
     <script src="https://unpkg.com/lucide@0.537.0" defer></script>
     <link rel="stylesheet" href="css/style.css?v=202606082127">
+    <script src="js/geo-switcher.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -104,6 +105,14 @@
                                 </div>
                             </div>
                             <div class="items-center gap-16">
+                                <div class="card-icon-box contact-icon-box"><i data-lucide="phone" class="icon-md"></i>
+                                </div>
+                                <div>
+                                    <div class="contact-info-label">Direct Phone</div>
+                                    <div class="contact-info-value">US: (800) 555-ANOT &bull; Canada: (888) 555-ANOT</div>
+                                </div>
+                            </div>
+                            <div class="items-center gap-16">
                                 <div class="card-icon-box contact-icon-box"><i data-lucide="clock-3" class="icon-md"></i>
                                 </div>
                                 <div>
@@ -161,6 +170,42 @@
                             <label for="practice" class="sr-only">Practice Name</label>
                             <input type="text" id="practice" name="practice" placeholder="Practice Name"
                                 class="form-input" required>
+
+                            <label for="region_location" class="sr-only">Practice Region / Country</label>
+                            <select id="region_location" name="region_location" class="form-input" required title="Select your practice region">
+                                <option value="" disabled selected>Practice Region / Location</option>
+                                <optgroup label="Canada (Provincial Health Plans)">
+                                    <option value="Ontario">Canada &mdash; Ontario (OHIP)</option>
+                                    <option value="British Columbia">Canada &mdash; British Columbia (MSP)</option>
+                                    <option value="Alberta">Canada &mdash; Alberta (AHCIP)</option>
+                                    <option value="Quebec">Canada &mdash; Quebec (RAMQ)</option>
+                                    <option value="Other-Canada">Canada &mdash; Other Province / Territory</option>
+                                </optgroup>
+                                <optgroup label="United States &amp; International">
+                                    <option value="US-East">United States &mdash; East Coast</option>
+                                    <option value="US-Central">United States &mdash; Central / Midwest</option>
+                                    <option value="US-West">United States &mdash; West Coast / Pacific</option>
+                                    <option value="International">International Practice</option>
+                                </optgroup>
+                            </select>
+
+                            <label for="emr" class="sr-only">Primary EHR / EMR</label>
+                            <select id="emr" name="emr" class="form-input" title="Select your primary EHR / EMR">
+                                <option value="" disabled selected>Primary EHR / EMR System</option>
+                                <optgroup label="Canadian EMRs">
+                                    <option value="Accuro">Accuro EMR (QHR)</option>
+                                    <option value="Telus-PS-Suite">Telus PS Suite</option>
+                                    <option value="Telus-Med-Access">Telus Med Access</option>
+                                    <option value="OSCAR">OSCAR Pro</option>
+                                </optgroup>
+                                <optgroup label="US / Enterprise EHRs">
+                                    <option value="Epic">Epic</option>
+                                    <option value="Cerner">Oracle Cerner</option>
+                                    <option value="Athena">athenahealth</option>
+                                    <option value="eClinicalWorks">eClinicalWorks</option>
+                                    <option value="Other-EMR">Other EMR / System</option>
+                                </optgroup>
+                            </select>
 
                             <label for="service" class="sr-only">Service of Interest</label>
                             <select id="service" name="service" class="form-input" required

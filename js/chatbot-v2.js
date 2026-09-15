@@ -32,6 +32,7 @@
         'contact.html'
     ];
     const CURRENT_PAGE = window.location.pathname.split('/').pop() || 'index.html';
+    const isCanadianChat = localStorage.getItem('anot_selected_region') === 'ca' || CURRENT_PAGE.includes('-ca.html') || CURRENT_PAGE.includes('pipeda.html');
     const PAGE_CONTEXTS = {
         'index.html': {
             label: 'homepage',
@@ -181,14 +182,20 @@
         },
         {
             patterns: [
-                /\bhipaa\b/,
+                /\b(hipaa|pipeda|phipa|hia|pipa)\b/,
                 /\bis (it|this|anot) secure\b/,
                 /\bis (it|this|anot) safe\b/,
                 /\bprivacy\b/
             ],
-            title: 'HIPAA And Trust',
-            shortAnswer: 'The website presents Anot as privacy-focused, HIPAA-conscious, and built around operational safeguards.',
-            keyPoints: [
+            title: isCanadianChat ? 'PIPEDA, PHIPA & Canadian Compliance' : 'HIPAA And Trust',
+            shortAnswer: isCanadianChat
+                ? 'Anot Health Canada strictly complies with PIPEDA (Federal), PHIPA (Ontario), HIA (Alberta), and PIPA (BC) with 100% in-country data residency in AWS Canada Central.'
+                : 'The website presents Anot as privacy-focused, HIPAA-conscious, and built around operational safeguards.',
+            keyPoints: isCanadianChat ? [
+                'All patient audio and clinical notes stay inside AWS Canada Central (Montreal/Calgary).',
+                'We execute formal Information Manager Agreements (IMAs) with Canadian clinics.',
+                'Certified human scribes and QPS auditors validate notes before Canadian EMR injection.'
+            ] : [
                 'Protected workflows and expert oversight are recurring themes across the site.',
                 'Human review is part of the operating model rather than an afterthought.',
                 'The trust-related pages reinforce privacy, compliance, and implementation discipline.'
@@ -1996,7 +2003,7 @@
             <div class="chatbot-suggestions" id="chatbotSuggestions">
                 <button type="button" class="chatbot-suggestion" data-suggestion="What services do you provide?">Services</button>
                 <button type="button" class="chatbot-suggestion" data-suggestion="How does Anot work?">How it works</button>
-                <button type="button" class="chatbot-suggestion" data-suggestion="Is Anot HIPAA compliant?">HIPAA</button>
+                <button type="button" class="chatbot-suggestion" data-suggestion="${isCanadianChat ? 'Is Anot PIPEDA and PHIPA compliant?' : 'Is Anot HIPAA compliant?'}">${isCanadianChat ? 'PIPEDA' : 'HIPAA'}</button>
                 <button type="button" class="chatbot-suggestion" data-suggestion="Who is Anot for?">Who it helps</button>
             </div>
             <div class="chatbot-input-area">

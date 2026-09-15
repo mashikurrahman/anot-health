@@ -1,3 +1,73 @@
+# ==========================================================
+# Anot Health - Namecheap / Apache Server Configuration
+# Automatic Canadian Visitor Routing & Performance Caching
+# ==========================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # 1. Manual Query Parameter Overrides (?region=ca or ?region=us)
+    RewriteCond %{QUERY_STRING} (^|&)region=ca(&|$) [NC]
+    RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L]
+    RewriteCond %{QUERY_STRING} (^|&)region=ca(&|$) [NC]
+    RewriteRule ^pricing\.html$ /pricing-ca.html [R=302,L]
+    RewriteCond %{QUERY_STRING} (^|&)region=ca(&|$) [NC]
+    RewriteRule ^billing\.html$ /billing-ca.html [R=302,L]
+    RewriteCond %{QUERY_STRING} (^|&)region=ca(&|$) [NC]
+    RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L]
+
+    RewriteCond %{QUERY_STRING} (^|&)region=us(&|$) [NC]
+    RewriteRule ^homepage-ca\.html$ /index.html [R=302,L]
+    RewriteCond %{QUERY_STRING} (^|&)region=us(&|$) [NC]
+    RewriteRule ^pricing-ca\.html$ /pricing.html [R=302,L]
+    RewriteCond %{QUERY_STRING} (^|&)region=us(&|$) [NC]
+    RewriteRule ^billing-ca\.html$ /billing.html [R=302,L]
+    RewriteCond %{QUERY_STRING} (^|&)region=us(&|$) [NC]
+    RewriteRule ^pipeda\.html$ /hipaa.html [R=302,L]
+
+    # 2. Cookie-based Region Persistence (set by geo-switcher.js)
+    RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
+    RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L]
+    RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
+    RewriteRule ^pricing\.html$ /pricing-ca.html [R=302,L]
+    RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
+    RewriteRule ^billing\.html$ /billing-ca.html [R=302,L]
+    RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
+    RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L]
+
+    # 3. Cloudflare Country Header (if domain utilizes Cloudflare proxy)
+    RewriteCond %{HTTP:CF-IPCountry} ^CA$ [NC]
+    RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+    RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L]
+    RewriteCond %{HTTP:CF-IPCountry} ^CA$ [NC]
+    RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+    RewriteRule ^pricing\.html$ /pricing-ca.html [R=302,L]
+    RewriteCond %{HTTP:CF-IPCountry} ^CA$ [NC]
+    RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+    RewriteRule ^billing\.html$ /billing-ca.html [R=302,L]
+    RewriteCond %{HTTP:CF-IPCountry} ^CA$ [NC]
+    RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+    RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L]
+
+    # 4. Server-Side GeoIP (if mod_geoip is active on Namecheap cPanel)
+    <IfModule mod_geoip.c>
+        RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
+        RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+        RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L]
+        RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
+        RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+        RewriteRule ^pricing\.html$ /pricing-ca.html [R=302,L]
+        RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
+        RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+        RewriteRule ^billing\.html$ /billing-ca.html [R=302,L]
+        RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
+        RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+        RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L]
+    </IfModule>
+</IfModule>
+
+# Caching and Headers
 <IfModule mod_headers.c>
     <FilesMatch "\.(html?)$">
         Header set Cache-Control "no-cache, no-store, must-revalidate"
