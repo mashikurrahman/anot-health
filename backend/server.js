@@ -49,12 +49,36 @@ function escapeHtml(value) {
         .replace(/'/g, '&#39;');
 }
 
+const allowedOrigins = [
+    'https://anot.health',
+    'https://www.anot.health',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+];
+if (process.env.ALLOWED_ORIGIN) {
+    allowedOrigins.push(process.env.ALLOWED_ORIGIN);
+}
+
 app.use(cors({
-    origin: [ALLOWED_ORIGIN, 'http://localhost:3000'],
+    origin: function(origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.anot.health')) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'), false);
+    },
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization']
 }));
 app.use(express.json({ limit: '16kb' }));
+
+// Gracefully handle malformed JSON requests without terminating the process
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({ success: false, error: 'Malformed JSON payload.' });
+    }
+    next(err);
+});
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -103,21 +127,33 @@ function isLoginRateLimited(ip) {
 
 function saveLead(lead) {
     try {
-        const leadsFile = path.resolve(SITE_ROOT, 'data', 'leads.json');
+        const candidateDirs = [
+            path.resolve(SITE_ROOT, 'data'),
+            path.resolve(__dirname, '..', 'data'),
+            path.resolve(__dirname, 'data')
+        ];
+        let targetDir = candidateDirs.find(d => fs.existsSync(d)) || candidateDirs[0];
+        if (!fs.existsSync(targetDir)) {
+            fs.mkdirSync(targetDir, { recursive: true });
+        }
+        const leadsFile = path.join(targetDir, 'leads.json');
         let leads = [];
         if (fs.existsSync(leadsFile)) {
             leads = JSON.parse(fs.readFileSync(leadsFile, 'utf8') || '[]');
         }
         leads.unshift(lead);
-        const dataDir = path.dirname(leadsFile);
-        if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
         fs.writeFileSync(leadsFile, JSON.stringify(leads.slice(0, 1000), null, 2), 'utf8');
     } catch (e) {
         console.error('Error saving lead to data/leads.json:', e);
     }
 }
 
-app.post('/api/contact', async (req, res) => {
+// ----------------------------------------------------
+// API Router: Dual-mounted at /api and / for Passenger compatibility
+// ----------------------------------------------------
+const apiRouter = express.Router();
+
+apiRouter.post('/contact', async (req, res) => {
     const clientIp = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
     if (isRateLimited(clientIp)) {
         return res.status(429).json({ success: false, error: 'Too many requests. Please wait before trying again.' });
@@ -217,12 +253,8 @@ ${messageStr || 'No custom message entered.'}
     }
 });
 
-// ----------------------------------------------------
-// Admin Analytics & SEO Endpoints
-// ----------------------------------------------------
-
 // Admin Login
-app.post('/api/admin/login', (req, res) => {
+apiRouter.post('/admin/login', (req, res) => {
     const clientIp = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
     if (isLoginRateLimited(clientIp)) {
         return res.status(429).json({ success: false, error: 'Too many failed login attempts. Please wait 15 minutes before trying again.' });
@@ -244,7 +276,7 @@ app.post('/api/admin/login', (req, res) => {
 });
 
 // Admin Logout
-app.post('/api/admin/logout', requireAdminAuth, (req, res) => {
+apiRouter.post('/admin/logout', requireAdminAuth, (req, res) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (token) {
@@ -254,7 +286,7 @@ app.post('/api/admin/logout', requireAdminAuth, (req, res) => {
 });
 
 // Analytics Status Check
-app.get('/api/admin/analytics/status', requireAdminAuth, (req, res) => {
+apiRouter.get('/admin/analytics/status', requireAdminAuth, (req, res) => {
     const hasCreds = analyticsService.hasCredentials();
     const serviceAccountEmail = analyticsService.getClientEmail();
     const propertyId = process.env.GA4_PROPERTY_ID || '';
@@ -271,7 +303,7 @@ app.get('/api/admin/analytics/status', requireAdminAuth, (req, res) => {
 });
 
 // GA4 Traffic & Conversions Overview
-app.get('/api/admin/analytics/overview', requireAdminAuth, async (req, res) => {
+apiRouter.get('/admin/analytics/overview', requireAdminAuth, async (req, res) => {
     try {
         const days = Math.min(Math.max(Number(req.query.days || 30), 1), 365);
         const forceRefresh = req.query.refresh === 'true';
@@ -284,7 +316,7 @@ app.get('/api/admin/analytics/overview', requireAdminAuth, async (req, res) => {
 });
 
 // GSC Keywords & Search Queries
-app.get('/api/admin/analytics/keywords', requireAdminAuth, async (req, res) => {
+apiRouter.get('/admin/analytics/keywords', requireAdminAuth, async (req, res) => {
     try {
         const days = Math.min(Math.max(Number(req.query.days || 30), 1), 365);
         const forceRefresh = req.query.refresh === 'true';
@@ -296,18 +328,27 @@ app.get('/api/admin/analytics/keywords', requireAdminAuth, async (req, res) => {
     }
 });
 
+// Mount router at both /api and / to handle sub-URI deployments and root deployments
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
+
 // ----------------------------------------------------
 // Security Shield: Block sensitive internal paths & files
 // ----------------------------------------------------
 app.use((req, res, next) => {
     const rawPath = decodeURIComponent(req.path).toLowerCase();
 
-    // Deny all requests into backend directory, dotfiles, credentials, and source scripts
+    // Deny all requests into backend directory, dotfiles, credentials, and source
+    // scripts. data/chatbot-knowledge.json, cache-version.json and site.webmanifest
+    // are legitimate public JSON the front end fetches at runtime and must stay
+    // reachable - only the lead database and credential files are blocked by name.
     if (
         rawPath.startsWith('/backend') ||
         rawPath.startsWith('/.') ||
         rawPath.includes('/.') ||
-        rawPath.endsWith('.json') && !rawPath.includes('cache-version') && !rawPath.includes('site.webmanifest') ||
+        rawPath === '/data/leads.json' ||
+        /(^|\/)service-account.*\.json$/.test(rawPath) ||
+        /(^|\/)package(-lock)?\.json$/.test(rawPath) ||
         rawPath.endsWith('.env') ||
         rawPath.endsWith('.log') ||
         rawPath.endsWith('.ps1') ||
@@ -324,7 +365,19 @@ app.use(express.static(SITE_ROOT, {
     dotfiles: 'deny'
 }));
 
-app.listen(PORT, () => {
+// Catch-all error handler: a rejected CORS origin otherwise falls through to
+// Express's default handler, which returns 500 and leaks the server's file
+// paths in a stack trace.
+app.use((err, req, res, next) => {
+    if (err && err.message === 'Not allowed by CORS') {
+        return res.status(403).type('text/plain').send('403 Forbidden: Origin not allowed.');
+    }
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Internal server error.' });
+});
+
+// Start server when executed directly (or managed by Passenger)
+const server = app.listen(PORT, () => {
     console.log(`Custom backend server running on http://localhost:${PORT}`);
     console.log(`Static site root: ${SITE_ROOT}`);
     console.log('Contact form endpoint ready at /api/contact');
@@ -340,3 +393,5 @@ app.listen(PORT, () => {
         console.warn('SMTP environment variables not set — email sending will fail.');
     }
 });
+
+module.exports = app;

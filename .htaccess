@@ -35,6 +35,19 @@
     </IfModule>
 </FilesMatch>
 
+# Lead database: visitor names, emails, phone numbers and messages from the
+# contact forms. Must never be directly downloadable, unlike the other files
+# under data/ (chatbot-knowledge.json, cache-version.json) which are public.
+<Files "leads.json">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /

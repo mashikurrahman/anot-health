@@ -972,14 +972,14 @@
     <div id="scroll-progress-mount"></div>
     <div id="header-mount"></div>
 
-    <div class="exec-viewport">
+    <main class="exec-viewport" id="main-content" tabindex="-1">
 
         <!-- LOGIN GATE -->
         <div id="loginGate" class="login-card-modal">
             <div style="width: 60px; height: 60px; background: var(--accent-lime-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; color: var(--dark-forest);">
                 <i data-lucide="shield-check" class="icon-md"></i>
             </div>
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; margin: 0 0 8px; color: #0F172A;">Admin Intelligence Login</h2>
+            <h1 style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; margin: 0 0 8px; color: #0F172A;">Admin Intelligence Login</h1>
             <p style="font-size: 0.92rem; color: #64748B; margin: 0 0 26px;">Protected access for Anot Health Administrators & SEO Managers.</p>
 
             <form id="analyticsLoginForm">
@@ -1094,7 +1094,7 @@
                                     GA4 CONNECTED
                                 </span>
                                 <div style="display: flex; gap: 6px;">
-                                    <button type="button" style="background: rgba(255,255,255,0.4); border: none; border-radius: 50%; width: 32px; height: 32px; color: var(--dark-forest); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                    <button type="button" aria-label="More search performance options" style="background: rgba(255,255,255,0.4); border: none; border-radius: 50%; width: 32px; height: 32px; color: var(--dark-forest); display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                         <i data-lucide="more-horizontal" class="icon-xs"></i>
                                     </button>
                                 </div>
@@ -1208,7 +1208,7 @@
                                 <i data-lucide="search" class="icon-sm" style="color: var(--dark-forest);"></i>
                                 <span>Top Search Queries</span>
                             </div>
-                            <button type="button" style="background: transparent; border: none; color: #94A3B8; cursor: pointer;">
+                            <button type="button" aria-label="More search query options" style="background: transparent; border: none; color: #94A3B8; cursor: pointer;">
                                 <i data-lucide="more-horizontal" class="icon-xs"></i>
                             </button>
                         </div>
@@ -1484,7 +1484,7 @@
             </footer>
 
         </div>
-    </div>
+    </main>
 
     <div id="footer-mount"></div>
     <div id="scroll-top-mount"></div>
