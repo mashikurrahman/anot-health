@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-CA">
 
 <head>
@@ -92,88 +92,335 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="pricing-plans">
             <div class="container">
-                <div class="section-header reveal">
-                    <h2 class="section-title">Two ways to run documentation &mdash; <span class="text-gradient">and one built around your clinic</span></h2>
-                    <p class="section-subtitle">The difference between the plans is simple: who checks the note before it
-                        reaches the chart. On AI Scribe that is you. On Verified Scribe a certified scribe and a QPS
-                        auditor do it first. All plans are billed in Canadian dollars.</p>
-                </div>
-                <div class="pricing-grid">
-
-                    <article class="premium-card pricing-card reveal">
-                        <div class="pricing-card-top">
-                            <span class="pricing-badge">AI Scribe</span>
-                            <div class="pricing-amount-row">
-                                <span class="pricing-amount">$99</span>
-                                <span class="pricing-unit">CAD per provider / month</span>
-                            </div>
-                            <p class="pricing-kicker">The full ambient pipeline with nothing held back for a higher tier. EMR
-                                delivery and provincial code capture are included at this price. The AI drafts, you
-                                review and sign.</p>
-                        </div>
-                        <ul class="pricing-list">
-                            <li>Ambient capture with medical-grade speech recognition</li>
-                            <li>AI-drafted SOAP notes with structured HPI, ROS and A&amp;P</li>
-                            <li>Delivered into Accuro, PS Suite, Med Access or OSCAR Pro</li>
-                            <li>Suggested provincial diagnostic and fee codes on the note</li>
-                            <li>Unlimited notes, fair use &mdash; the AI has no shift</li>
-                        </ul>
-                        <p class="pricing-note">You remain the reviewer of record. Every note arrives as a draft for you to
-                            check and sign.</p>
-                        <a href="contact-ca.html?service=documentation&focus=ai-scribe-99-cad#demo-form" class="btn btn-outline btn-full mt-20">Start with AI Scribe</a>
-                    </article>
-
-                    <article class="premium-card pricing-card pricing-card-featured reveal delay-100">
-                        <div class="pricing-card-top">
-                            <span class="pricing-badge pricing-badge-featured">Verified Scribe &middot; Most chosen</span>
-                            <div class="pricing-amount-row">
-                                <span class="pricing-amount">$599</span>
-                                <span class="pricing-unit">CAD per provider / month</span>
-                            </div>
-                            <p class="pricing-kicker">Everything in AI Scribe, plus a certified scribe and a QPS auditor who read
-                                every note before you do &mdash; the review layer a pure AI scribe cannot give you. This is
-                                the plan that takes charting off your evening.</p>
-                        </div>
-                        <ul class="pricing-list">
-                            <li><strong>Everything in AI Scribe</strong></li>
-                            <li>A certified medical scribe reviews every single note</li>
-                            <li>QPS auditor verifies dosages, laterality and diagnoses</li>
-                            <li>Provincial codes checked by a certified coder, not just suggested</li>
-                            <li>Notes arrive sign-ready rather than draft-ready</li>
-                            <li>Guided onboarding and a named Canadian support contact</li>
-                        </ul>
-                        <p class="pricing-note">The upgrade you are buying is accountability: two trained people stand
-                            between the AI and your chart.</p>
-                        <a href="contact-ca.html?service=documentation&focus=verified-scribe-599-cad#demo-form" class="btn btn-cyan btn-full mt-20">Choose Verified Scribe</a>
-                    </article>
-
-                    <article class="premium-card pricing-card reveal delay-200">
-                        <div class="pricing-card-top">
-                            <span class="pricing-badge">Custom</span>
-                            <div class="pricing-amount-row">
-                                <span class="pricing-amount">Custom</span>
-                                <span class="pricing-unit">scoped to your clinic</span>
-                            </div>
-                            <p class="pricing-kicker">For Family Health Teams, multi-site groups, or practices that want
-                                provincial billing and payroll running on the same team as documentation.</p>
-                        </div>
-                        <ul class="pricing-list">
-                            <li><strong>Everything in Verified Scribe</strong></li>
-                            <li>Provincial billing, coding and payroll in one scope</li>
-                            <li>Volume-based rates across providers and sites</li>
-                            <li>Multi-province support where you bill more than one plan</li>
-                            <li>Named account team and agreed service levels</li>
-                            <li>PIA and TRA documentation support for your Health Authority</li>
-                        </ul>
-                        <p class="pricing-note">Scoped after a walkthrough of your specialty mix, provincial plan and
-                            current documentation load.</p>
-                        <a href="contact-ca.html?service=multiple&focus=custom-plan-canada#demo-form" class="btn btn-outline btn-full mt-20">Talk to Us</a>
-                    </article>
+                <div class="pricing-v2-header reveal">
+                    <h2 class="section-title">Simple, transparent pricing</h2>
+                    <p class="section-subtitle">No contracts. No surprise fees. Denominated &amp; billed in Canadian Dollars ($ CAD).</p>
                 </div>
 
-                <div class="pricing-strip reveal">
+                <!-- Monthly / Yearly Billing Toggle -->
+                <div class="pricing-toggle-wrap reveal">
+                    <div class="pricing-toggle-pill" role="tablist" aria-label="Billing frequency">
+                        <button type="button" class="pricing-toggle-btn active" id="toggleMonthly" role="tab" aria-selected="true">
+                            Monthly
+                        </button>
+                        <button type="button" class="pricing-toggle-btn" id="toggleYearly" role="tab" aria-selected="false">
+                            Yearly <span class="pricing-discount-badge">Save 15%</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3-Card Modern Grid matching reference design -->
+                <div class="pricing-v2-grid">
+                    <!-- Base / AI Scribe -->
+                    <article class="pricing-v2-card reveal">
+                        <div class="pricing-v2-price-wrap">
+                            <div class="pricing-v2-price-row">
+                                <span class="pricing-v2-amount" id="priceAiAmount">$99</span>
+                                <span class="pricing-v2-period" id="periodAi">/month</span>
+                                <span class="pricing-v2-currency-tag">CAD</span>
+                            </div>
+                        </div>
+                        <h3 class="pricing-v2-title">AI Scribe</h3>
+                        <p class="pricing-v2-desc">Ambient AI visit capture with instant SOAP drafting directly in your Canadian EMR. You review and sign.</p>
+                        <ul class="pricing-v2-features">
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Ambient speech capture with medical-grade acoustic AI</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Structured SOAP notes with HPI, ROS, Exam &amp; A&amp;P</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Delivered into Accuro, PS Suite, Med Access or OSCAR Pro</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Suggested provincial diagnostic and fee codes on the note</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Unlimited encounters per provider &mdash; no shift limits</span>
+                            </li>
+                        </ul>
+                        <a href="contact-ca.html?service=documentation&focus=ai-scribe-99-cad#demo-form" class="pricing-v2-btn">Start with AI Scribe</a>
+                    </article>
+
+                    <!-- Verified Scribe (Featured / Most Popular) -->
+                    <article class="pricing-v2-card is-featured reveal delay-100">
+                        <span class="pricing-v2-popular-badge">Most Popular</span>
+                        <div class="pricing-v2-price-wrap">
+                            <div class="pricing-v2-price-row">
+                                <span class="pricing-v2-amount" id="priceVerifiedAmount">$599</span>
+                                <span class="pricing-v2-period" id="periodVerified">/month</span>
+                                <span class="pricing-v2-currency-tag">CAD</span>
+                            </div>
+                        </div>
+                        <h3 class="pricing-v2-title">Verified Scribe</h3>
+                        <p class="pricing-v2-desc">A certified medical scribe and clinical auditor review every single chart before you do. 100% sign-ready.</p>
+                        <ul class="pricing-v2-features">
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span><strong>Everything in AI Scribe included</strong></span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Dedicated certified scribe inspects every single note</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>QPS clinical audit (dosages, laterality &amp; diagnoses)</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Provincial codes verified by a certified Canadian coder</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Named onboarding specialist &amp; Canadian clinic support</span>
+                            </li>
+                        </ul>
+                        <a href="contact-ca.html?service=documentation&focus=verified-scribe-599-cad#demo-form" class="pricing-v2-btn">Choose Verified Scribe</a>
+                    </article>
+
+                    <!-- Custom Enterprise -->
+                    <article class="pricing-v2-card reveal delay-200">
+                        <div class="pricing-v2-price-wrap">
+                            <div class="pricing-v2-price-row">
+                                <span class="pricing-v2-amount">Custom</span>
+                                <span class="pricing-v2-period">/scoped</span>
+                                <span class="pricing-v2-currency-tag">CAD</span>
+                            </div>
+                        </div>
+                        <h3 class="pricing-v2-title">Custom Enterprise</h3>
+                        <p class="pricing-v2-desc">For Family Health Teams, multi-site clinics, and practices bundling documentation with provincial billing &amp; payroll.</p>
+                        <ul class="pricing-v2-features">
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span><strong>Everything in Verified Scribe included</strong></span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Comprehensive provincial claim billing, reconciliation &amp; payroll</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Multi-physician group volume discounts across all clinic sites</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Custom Health Authority &amp; provincial EMR workflow engineering</span>
+                            </li>
+                            <li class="pricing-v2-feature-item">
+                                <span class="pricing-v2-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                                <span>Full PIA &amp; TRA documentation support for Canadian compliance</span>
+                            </li>
+                        </ul>
+                        <a href="contact-ca.html?service=multiple&focus=custom-plan-canada#demo-form" class="pricing-v2-btn">Talk to Us</a>
+                    </article>
+                </div>
+
+                <!-- Expandable Detailed Comparison Section -->
+                <div class="pricing-expandable-wrap reveal">
+                    <button type="button" class="btn-expand-pricing" id="toggleCompareTableBtn" aria-expanded="false" aria-controls="compareTableCollapse">
+                        <i data-lucide="sliders-horizontal" class="icon-sm"></i>
+                        <span class="toggle-text">Compare All 28 Features in Detail</span>
+                        <i data-lucide="chevron-down" class="icon-sm toggle-chevron"></i>
+                    </button>
+                    <p class="pricing-expand-hint">Click to inspect full Canadian clinical, EMR, provincial coding, and PIPEDA specifications</p>
+
+                    <div id="compareTableCollapse" class="pricing-compare-collapse" hidden>
+                        <p class="plan-table-hint" style="text-align: center; margin-bottom: 16px;">Scroll table sideways on smaller screens to compare all three tiers.</p>
+                        <div class="plan-table-wrap">
+                            <table class="plan-table">
+                                <caption class="sr-only">Feature comparison of the AI Scribe, Verified Scribe and Custom plans for Canadian clinics in CAD</caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">AI Scribe <span>$99 CAD / provider</span></th>
+                                        <th scope="col" class="is-featured">Verified Scribe <span>$599 CAD / provider</span></th>
+                                        <th scope="col">Custom <span>Scoped in CAD</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="plan-group">
+                                        <th scope="colgroup" colspan="4">Capture and drafting</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Ambient visit capture</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Medical-grade speech recognition</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">AI-drafted SOAP note</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Specialty templates</th>
+                                        <td>Standard library</td>
+                                        <td class="is-featured">Calibrated to each provider</td>
+                                        <td>Built to your specification</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Accuro, PS Suite, Med Access, OSCAR Pro</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td>Custom integration available</td>
+                                    </tr>
+
+                                    <tr class="plan-group">
+                                        <th scope="colgroup" colspan="4">Human verification &mdash; the difference between the plans</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Certified scribe reviews the note</th>
+                                        <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
+                                        <td class="is-featured"><strong>Every note</strong></td>
+                                        <td><strong>Every note</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">QPS clinical audit (dosage, laterality, diagnosis)</th>
+                                        <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Note arrives as</th>
+                                        <td>A draft for you to check</td>
+                                        <td class="is-featured"><strong>Sign-ready</strong></td>
+                                        <td><strong>Sign-ready</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Who checks accuracy before you sign</th>
+                                        <td>You</td>
+                                        <td class="is-featured">A scribe and a QPS auditor, then you</td>
+                                        <td>A scribe and a QPS auditor, then you</td>
+                                    </tr>
+
+                                    <tr class="plan-group">
+                                        <th scope="colgroup" colspan="4">Coding and provincial billing</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Provincial diagnostic and fee codes</th>
+                                        <td>Suggested by AI</td>
+                                        <td class="is-featured">Reviewed by a certified coder</td>
+                                        <td>Reviewed and audited</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Documentation supports the code billed</th>
+                                        <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Premium and shadow-billing eligibility checked</th>
+                                        <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Provincial claim submission and RA reconciliation</th>
+                                        <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
+                                        <td class="is-featured">Available as an add-on</td>
+                                        <td>Included in scope</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Practice payroll and locum accounting</th>
+                                        <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
+                                        <td class="is-featured">Available as an add-on</td>
+                                        <td>Included in scope</td>
+                                    </tr>
+
+                                    <tr class="plan-group">
+                                        <th scope="colgroup" colspan="4">Volume and delivery</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Notes included</th>
+                                        <td>Unlimited, fair use</td>
+                                        <td class="is-featured">Up to 400 reviewed notes / month</td>
+                                        <td>Contracted volume</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Turnaround</th>
+                                        <td>Fastest turnaround time</td>
+                                        <td class="is-featured">Fastest turnaround time</td>
+                                        <td>Fastest turnaround time, to an agreed service level</td>
+                                    </tr>
+
+                                    <tr class="plan-group">
+                                        <th scope="colgroup" colspan="4">Onboarding and support</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Onboarding</th>
+                                        <td>Self-serve setup</td>
+                                        <td class="is-featured">Guided, with EMR template calibration</td>
+                                        <td>Dedicated implementation</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Support</th>
+                                        <td>24/7 email support</td>
+                                        <td class="is-featured">Priority support, named Canadian contact</td>
+                                        <td>Named account team</td>
+                                    </tr>
+
+                                    <tr class="plan-group">
+                                        <th scope="colgroup" colspan="4">Privacy and compliance &mdash; identical on every plan</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Data resident in AWS Canada Central</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">PIPEDA, PHIPA, HIA and PIPA aligned</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Information Manager Agreement (IMA)</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">AES-256 at rest, TLS 1.3 in transit</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Your patient data never trains public models</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">SOC 2 Type II report on request</th>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                        <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Strip -->
+                <div class="pricing-strip reveal" style="margin-top: 50px;">
                     <div class="pricing-strip-item">
                         <span class="pricing-strip-label">How it is billed</span>
                         <strong>Per provider, per month, in Canadian dollars. No setup fee, no lock-in, no FX surprises.</strong>
@@ -188,201 +435,7 @@
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="section section-surface">
-            <div class="container">
-                <div class="section-header reveal">
-                    <h2 class="section-title">Exactly what each plan <span class="text-gradient">includes</span></h2>
-                    <p class="section-subtitle">Canadian data residency and privacy compliance are identical on every plan.
-                        You never pay more to be protected &mdash; you pay more for human review.</p>
-                </div>
-
-                <p class="plan-table-hint">Scroll the table sideways to compare all three plans.</p>
-                <div class="plan-table-wrap reveal">
-                    <table class="plan-table">
-                        <caption class="sr-only">Feature comparison of the AI Scribe, Verified Scribe and Custom plans for Canadian clinics</caption>
-                        <thead>
-                            <tr>
-                                <th scope="col">Feature</th>
-                                <th scope="col">AI Scribe <span>$99 CAD / provider</span></th>
-                                <th scope="col" class="is-featured">Verified Scribe <span>$599 CAD / provider</span></th>
-                                <th scope="col">Custom <span>Scoped to you</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="plan-group">
-                                <th scope="colgroup" colspan="4">Capture and drafting</th>
-                            </tr>
-                            <tr>
-                                <th scope="row">Ambient visit capture</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Medical-grade speech recognition</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">AI-drafted SOAP note</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Specialty templates</th>
-                                <td>Standard library</td>
-                                <td class="is-featured">Calibrated to each provider</td>
-                                <td>Built to your specification</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Accuro, PS Suite, Med Access, OSCAR Pro</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td>Custom integration available</td>
-                            </tr>
-
-                            <tr class="plan-group">
-                                <th scope="colgroup" colspan="4">Human verification &mdash; the difference between the plans</th>
-                            </tr>
-                            <tr>
-                                <th scope="row">Certified scribe reviews the note</th>
-                                <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
-                                <td class="is-featured"><strong>Every note</strong></td>
-                                <td><strong>Every note</strong></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">QPS clinical audit (dosage, laterality, diagnosis)</th>
-                                <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Note arrives as</th>
-                                <td>A draft for you to check</td>
-                                <td class="is-featured"><strong>Sign-ready</strong></td>
-                                <td><strong>Sign-ready</strong></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Who checks accuracy before you sign</th>
-                                <td>You</td>
-                                <td class="is-featured">A scribe and a QPS auditor, then you</td>
-                                <td>A scribe and a QPS auditor, then you</td>
-                            </tr>
-
-                            <tr class="plan-group">
-                                <th scope="colgroup" colspan="4">Coding and provincial billing</th>
-                            </tr>
-                            <tr>
-                                <th scope="row">Provincial diagnostic and fee codes</th>
-                                <td>Suggested by AI</td>
-                                <td class="is-featured">Reviewed by a certified coder</td>
-                                <td>Reviewed and audited</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Documentation supports the code billed</th>
-                                <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Premium and shadow-billing eligibility checked</th>
-                                <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Provincial claim submission and RA reconciliation</th>
-                                <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
-                                <td class="is-featured">Available as an add-on</td>
-                                <td>Included in scope</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Practice payroll and locum accounting</th>
-                                <td><span class="plan-no" aria-hidden="true">&mdash;</span><span class="sr-only">Not included</span></td>
-                                <td class="is-featured">Available as an add-on</td>
-                                <td>Included in scope</td>
-                            </tr>
-
-                            <tr class="plan-group">
-                                <th scope="colgroup" colspan="4">Volume and delivery</th>
-                            </tr>
-                            <tr>
-                                <th scope="row">Notes included</th>
-                                <td>Unlimited, fair use</td>
-                                <td class="is-featured">Up to 400 reviewed notes / month</td>
-                                <td>Contracted volume</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Turnaround</th>
-                                <td>Fastest turnaround time</td>
-                                <td class="is-featured">Fastest turnaround time</td>
-                                <td>Fastest turnaround time, to an agreed service level</td>
-                            </tr>
-
-                            <tr class="plan-group">
-                                <th scope="colgroup" colspan="4">Onboarding and support</th>
-                            </tr>
-                            <tr>
-                                <th scope="row">Onboarding</th>
-                                <td>Self-serve setup</td>
-                                <td class="is-featured">Guided, with EMR template calibration</td>
-                                <td>Dedicated implementation</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Support</th>
-                                <td>24/7 email support</td>
-                                <td class="is-featured">Priority support, named Canadian contact</td>
-                                <td>Named account team</td>
-                            </tr>
-
-                            <tr class="plan-group">
-                                <th scope="colgroup" colspan="4">Privacy and compliance &mdash; identical on every plan</th>
-                            </tr>
-                            <tr>
-                                <th scope="row">Data resident in AWS Canada Central</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">PIPEDA, PHIPA, HIA and PIPA aligned</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Information Manager Agreement (IMA)</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">AES-256 at rest, TLS 1.3 in transit</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Your patient data never trains public models</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">SOC 2 Type II report on request</th>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td class="is-featured"><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                                <td><span class="plan-yes" aria-hidden="true">&check;</span><span class="sr-only">Included</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+        </section>ction>
 
         <section class="section">
             <div class="container">
@@ -495,6 +548,62 @@
 
     <script src="js/components.js?v=202609161530"></script>
     <script src="js/main.js?v=202609161530" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Monthly / Yearly Pricing Toggle
+            const toggleMonthly = document.getElementById('toggleMonthly');
+            const toggleYearly = document.getElementById('toggleYearly');
+            const priceAi = document.getElementById('priceAiAmount');
+            const priceVerified = document.getElementById('priceVerifiedAmount');
+            const periodAi = document.getElementById('periodAi');
+            const periodVerified = document.getElementById('periodVerified');
+
+            if (toggleMonthly && toggleYearly) {
+                toggleMonthly.addEventListener('click', () => {
+                    toggleMonthly.classList.add('active');
+                    toggleYearly.classList.remove('active');
+                    toggleMonthly.setAttribute('aria-selected', 'true');
+                    toggleYearly.setAttribute('aria-selected', 'false');
+                    if (priceAi) priceAi.textContent = '$99';
+                    if (priceVerified) priceVerified.textContent = '$599';
+                    if (periodAi) periodAi.textContent = '/month';
+                    if (periodVerified) periodVerified.textContent = '/month';
+                });
+
+                toggleYearly.addEventListener('click', () => {
+                    toggleYearly.classList.add('active');
+                    toggleMonthly.classList.remove('active');
+                    toggleYearly.setAttribute('aria-selected', 'true');
+                    toggleMonthly.setAttribute('aria-selected', 'false');
+                    if (priceAi) priceAi.textContent = '$84';
+                    if (priceVerified) priceVerified.textContent = '$509';
+                    if (periodAi) periodAi.textContent = '/mo (billed annually)';
+                    if (periodVerified) periodVerified.textContent = '/mo (billed annually)';
+                });
+            }
+
+            // 2. Expandable Feature Comparison Table Toggle
+            const toggleBtn = document.getElementById('toggleCompareTableBtn');
+            const collapseSection = document.getElementById('compareTableCollapse');
+
+            if (toggleBtn && collapseSection) {
+                toggleBtn.addEventListener('click', () => {
+                    const isHidden = collapseSection.hasAttribute('hidden');
+                    if (isHidden) {
+                        collapseSection.removeAttribute('hidden');
+                        toggleBtn.setAttribute('aria-expanded', 'true');
+                        const text = toggleBtn.querySelector('.toggle-text');
+                        if (text) text.textContent = 'Hide Detailed Feature Comparison';
+                    } else {
+                        collapseSection.setAttribute('hidden', '');
+                        toggleBtn.setAttribute('aria-expanded', 'false');
+                        const text = toggleBtn.querySelector('.toggle-text');
+                        if (text) text.textContent = 'Compare All 28 Features in Detail';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
