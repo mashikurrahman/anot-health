@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://anot.health/</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/homepage-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/homepage-ca.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/homepage-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/scribing.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/scribing.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/scribing-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/scribing.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/scribing-ca.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/scribing.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/scribing-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/scribing.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/billing.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/billing.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/billing-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/billing.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/billing-ca.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/billing.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/billing-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/billing.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/coding.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/coding.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/coding-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/coding.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/coding-ca.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/coding.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/coding-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/coding.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/payroll.html</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/specialties.html</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/pricing.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/pricing.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/pricing-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/pricing.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/pricing-ca.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/pricing.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/pricing-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/pricing.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/about.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/about-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/about.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/about-ca.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/about-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/about.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/contact-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/contact.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/contact-ca.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/contact-ca.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/contact.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/hipaa.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/hipaa.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/pipeda.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/hipaa.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/pipeda.html</loc>
+    <xhtml:link rel="alternate" hreflang="en-us" href="https://anot.health/hipaa.html"/>
+    <xhtml:link rel="alternate" hreflang="en-ca" href="https://anot.health/pipeda.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://anot.health/hipaa.html"/>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/privacy.html</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://anot.health/terms.html</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

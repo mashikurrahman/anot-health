@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Chatbot Admin | Anot Health</title>
+    <meta name="description" content="Local review panel for the Anot Health no-API chatbot brain, chat memory, and feedback.">
+    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202606082127">
+    <script src="https://unpkg.com/lucide@0.537.0" defer></script>
+    <link rel="stylesheet" href="css/style.css?v=202609161530">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+</head>
+
+<body>
+    <div id="scroll-progress-mount"></div>
+    <div id="header-mount"></div>
+
+    <main>
+        <section class="hero hero-page">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content hero-page-wide">
+                        <div class="hero-badge reveal"><i data-lucide="brain-circuit" class="icon-xs"></i><span>No-API Chatbot Admin</span></div>
+                        <h1 class="hero-title reveal delay-100">Review the chatbot's <span class="text-gradient">local brain and learning signals</span></h1>
+                        <p class="hero-subtitle reveal delay-200 hero-subtitle-wide">This page reads the chatbot's curated knowledge file plus the local browser memory, feedback, and weak-question logs. It does not call an external AI API.</p>
+                        <div class="hero-actions reveal delay-300">
+                            <a href="pricing.html" class="btn btn-cyan">Open Pricing</a>
+                            <a href="contact.html?service=multiple&focus=chatbot-review#demo-form" class="btn btn-outline">Talk to the Team</a>
+                        </div>
+                    </div>
+                    <div class="hero-visual reveal-scale">
+                        <div class="surface-panel chatbot-admin-note">
+                            <span class="detail-eyebrow">How it works</span>
+                            <h3>Local by design</h3>
+                            <ul class="pricing-feature-list">
+                                <li>Curated answers come from <strong>data/chatbot-knowledge.json</strong>.</li>
+                                <li>Website retrieval comes from the public site pages.</li>
+                                <li>User learning signals come from local browser storage on this device.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">Brain health at a glance</h2>
+                    <p class="section-subtitle">Use these metrics to see whether the chatbot has enough curated knowledge, enough reusable memory, and too many weak or rejected answers.</p>
+                </div>
+                <div class="chatbot-admin-stats reveal" id="chatbotAdminStats"></div>
+            </div>
+        </section>
+
+        <section class="section section-surface">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">Knowledge and learning review</h2>
+                    <p class="section-subtitle">The curated knowledge brain is controlled by your site files. The other panels show what this browser session has taught the chatbot so far.</p>
+                </div>
+                <div class="chatbot-admin-layout">
+                    <article class="surface-panel chatbot-admin-panel reveal">
+                        <div class="chatbot-admin-panel-head">
+                            <div>
+                                <span class="detail-eyebrow">Training console</span>
+                                <h3>Local override intents</h3>
+                            </div>
+                            <div class="chatbot-admin-actions">
+                                <button type="button" class="btn btn-outline btn-admin-export" data-export="overrides">Export JSON</button>
+                            </div>
+                        </div>
+                        <div class="chatbot-admin-body">
+                            <form class="chatbot-training-form" id="chatbotTrainingForm">
+                                <input type="hidden" id="trainingIntentId">
+                                <div class="chatbot-training-grid">
+                                    <label class="chatbot-training-field">
+                                        <span>Title</span>
+                                        <input type="text" id="trainingTitle" required>
+                                    </label>
+                                    <label class="chatbot-training-field">
+                                        <span>Topic</span>
+                                        <select id="trainingTopic" required>
+                                            <option value="services">Services</option>
+                                            <option value="pricing">Pricing</option>
+                                            <option value="documentation">Documentation</option>
+                                            <option value="revenue">Revenue</option>
+                                            <option value="coding">Coding</option>
+                                            <option value="payroll">Payroll</option>
+                                            <option value="trust">Trust</option>
+                                            <option value="workflows">Workflows</option>
+                                            <option value="specialties">Specialties</option>
+                                            <option value="contact">Contact</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <label class="chatbot-training-field">
+                                    <span>Triggers</span>
+                                    <textarea id="trainingTriggers" rows="3" placeholder="One per line or comma separated"></textarea>
+                                </label>
+                                <label class="chatbot-training-field">
+                                    <span>Summary</span>
+                                    <textarea id="trainingSummary" rows="4" required></textarea>
+                                </label>
+                                <label class="chatbot-training-field">
+                                    <span>Highlights</span>
+                                    <textarea id="trainingHighlights" rows="4" placeholder="One bullet per line"></textarea>
+                                </label>
+                                <label class="chatbot-training-field">
+                                    <span>Best Fit</span>
+                                    <textarea id="trainingBestFit" rows="3"></textarea>
+                                </label>
+                                <label class="chatbot-training-field">
+                                    <span>Next Step</span>
+                                    <textarea id="trainingNextStep" rows="3"></textarea>
+                                </label>
+                                <label class="chatbot-training-field">
+                                    <span>Source Pages</span>
+                                    <input type="text" id="trainingSources" placeholder="pricing.html, contact.html">
+                                </label>
+                                <div class="chatbot-admin-actions">
+                                    <button type="submit" class="btn btn-cyan">Save override intent</button>
+                                    <button type="button" class="btn btn-outline" id="trainingReset">Reset form</button>
+                                </div>
+                            </form>
+                            <div class="chatbot-admin-divider"></div>
+                            <div id="chatbotAdminOverrides"></div>
+                        </div>
+                    </article>
+                    <article class="surface-panel chatbot-admin-panel reveal">
+                        <div class="chatbot-admin-panel-head">
+                            <div>
+                                <span class="detail-eyebrow">Curated brain</span>
+                                <h3>Knowledge intents</h3>
+                            </div>
+                            <div class="chatbot-admin-actions">
+                                <button type="button" class="btn btn-outline btn-admin-export" data-export="knowledge">Export JSON</button>
+                            </div>
+                        </div>
+                        <div class="chatbot-admin-body" id="chatbotAdminKnowledge"></div>
+                    </article>
+                    <article class="surface-panel chatbot-admin-panel reveal delay-100">
+                        <div class="chatbot-admin-panel-head">
+                            <div>
+                                <span class="detail-eyebrow">Learned memory</span>
+                                <h3>Saved question and answer pairs</h3>
+                            </div>
+                            <div class="chatbot-admin-actions">
+                                <button type="button" class="btn btn-outline btn-admin-clear" data-clear="memory">Clear local memory</button>
+                                <button type="button" class="btn btn-outline btn-admin-export" data-export="memory">Export JSON</button>
+                            </div>
+                        </div>
+                        <div class="chatbot-admin-body" id="chatbotAdminMemory"></div>
+                    </article>
+                    <article class="surface-panel chatbot-admin-panel reveal delay-200">
+                        <div class="chatbot-admin-panel-head">
+                            <div>
+                                <span class="detail-eyebrow">Weak signals</span>
+                                <h3>Questions that need better answers</h3>
+                            </div>
+                            <div class="chatbot-admin-actions">
+                                <button type="button" class="btn btn-outline btn-admin-clear" data-clear="weak">Clear weak questions</button>
+                                <button type="button" class="btn btn-outline btn-admin-export" data-export="weak">Export JSON</button>
+                            </div>
+                        </div>
+                        <div class="chatbot-admin-body" id="chatbotAdminWeak"></div>
+                    </article>
+                    <article class="surface-panel chatbot-admin-panel reveal delay-300">
+                        <div class="chatbot-admin-panel-head">
+                            <div>
+                                <span class="detail-eyebrow">Feedback</span>
+                                <h3>Helpful and not-helpful patterns</h3>
+                            </div>
+                            <div class="chatbot-admin-actions">
+                                <button type="button" class="btn btn-outline btn-admin-clear" data-clear="feedback">Clear feedback</button>
+                                <button type="button" class="btn btn-outline btn-admin-export" data-export="feedback">Export JSON</button>
+                            </div>
+                        </div>
+                        <div class="chatbot-admin-body" id="chatbotAdminFeedback"></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-mount"></div>
+    <div id="scroll-top-mount"></div>
+
+    <script src="js/components.js?v=202609161530"></script>
+    <script src="js/main.js?v=202609161530" defer></script>
+    <script src="js/chatbot-admin.js?v=202606082127" defer></script>
+</body>
+
+</html>
+
+
+

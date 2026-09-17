@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="32" fill="#1B3A5C" />
+  
+  <!-- A letter - White -->
+  <path d="M14 50 L28 14 L34 14 L42 34 L36 34 L30 34 L24 46 L18 46 Z" fill="white" />
+  <polygon points="27,38 35,38 31,26" fill="#1B3A5C" />
+  
+  <!-- Heartbeat line - Teal -->
+  <polyline points="32,36 35,36 37,30 39,38 41,34 44,36" fill="none" stroke="#2A9D8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- H letter - Teal -->
+  <rect x="42" y="22" width="4" height="28" fill="#2A9D8F" />
+  <rect x="42" y="34" width="12" height="4" fill="#2A9D8F" />
+  <rect x="50" y="22" width="4" height="28" fill="#2A9D8F" />
+  
+  <!-- Cross - Teal -->
+  <rect x="51" y="14" width="4" height="8" rx="1" fill="#2A9D8F" />
+  <rect x="49" y="16" width="8" height="4" rx="1" fill="#2A9D8F" />
+</svg>

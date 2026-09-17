@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://images.unsplash.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Executive Analytics & SEO Suite | Anot Health</title>
+    <meta name="description" content="Executive Analytics & Search Intelligence Cockpit for Anot Health administrators and SEO Managers.">
+    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202606082127">
+    <script src="https://unpkg.com/lucide@0.537.0" defer></script>
+    <link rel="stylesheet" href="css/style.css?v=202609161530">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+
+    <style>
+        :root {
+            --app-bg: #EAECEF;
+            --surface-white: #FFFFFF;
+            
+            /* Reference Lime-Green & Deep Forest Palette */
+            --accent-lime: #98EC55;
+            --accent-lime-light: #B4F576;
+            --accent-lime-bg: #E8FCD0;
+            --dark-forest: #12380B;
+            --dark-forest-deep: #0D2608;
+            --dark-pill: #112A0A;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-light: #F1F5F9;
+            --border-subtle: #E2E8F0;
+            --card-radius: 28px;
+            --master-radius: 36px;
+        }
+
+        body {
+            background-color: var(--app-bg) !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .exec-viewport {
+            max-width: 1260px;
+            margin: 28px auto 60px;
+            padding: 0 16px;
+        }
+
+        .exec-canvas {
+            background: var(--surface-white);
+            border-radius: var(--master-radius);
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.07), 0 4px 12px rgba(15, 23, 42, 0.03);
+            padding: 32px 36px 40px;
+            position: relative;
+        }
+
+        /* Top App Bar */
+        .exec-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 16px;
+        }
+
+        .exec-user-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .exec-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--dark-pill);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-lime);
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 4px 12px rgba(18, 56, 11, 0.2);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .exec-user-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .exec-nav-pills {
+            display: flex;
+            align-items: center;
+            background: #F8FAFC;
+            padding: 4px;
+            border-radius: 40px;
+            gap: 2px;
+            border: 1px solid var(--border-light);
+        }
+
+        .exec-nav-pill {
+            border: none;
+            background: transparent;
+            padding: 8px 18px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .exec-nav-pill.active {
+            background: var(--accent-lime);
+            color: var(--dark-forest);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(152, 236, 85, 0.35);
+        }
+
+        .exec-nav-pill:not(.active):hover {
+            color: var(--dark-forest);
+            background: var(--accent-lime-bg);
+        }
+
+        .exec-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-circle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border-subtle);
+            background: var(--surface-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .icon-circle-btn:hover {
+            background: #F8FAFC;
+            color: var(--text-primary);
+            border-color: #cbd5e1;
+        }
+
+        .notif-pill {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 10px;
+            height: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            background: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        /* Grids */
+        .exec-grid-top {
+            display: grid;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .exec-grid-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr 1.25fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1060px) {
+            .exec-grid-top, .exec-grid-bottom {
+                grid-template-columns: 1fr;
+            }
+            .exec-topbar {
+                flex-wrap: wrap;
+            }
+            .exec-nav-pills {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Top Hero Card 1 (Balance Style) */
+        .card-active-traffic {
+            background: var(--surface-white);
+            border: 1px solid #E2E8F0;
+            border-radius: var(--card-radius);
+            padding: 28px 30px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-active-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .region-toggle-pill {
+            display: inline-flex;
+            background: #F1F5F9;
+            padding: 3px;
+            border-radius: 24px;
+            gap: 2px;
+        }
+
+        .region-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .region-btn.active {
+            background: #ffffff;
+            color: var(--text-primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        .account-num-pill {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .account-num-code {
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .metric-eyebrow {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0 0 8px;
+            font-weight: 500;
+        }
+
+        .metric-hero-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin: 0 0 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-eye-toggle {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-active-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .footer-action-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-dark-pill {
+            background: var(--dark-pill);
+            color: #ffffff;
+            border: none;
+            border-radius: 28px;
+            padding: 12px 22px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-dark-pill:hover {
+            background: var(--dark-forest);
+            box-shadow: 0 6px 16px rgba(18, 56, 11, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-light-pill {
+            background: #ffffff;
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 28px;
+            padding: 12px 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-light-pill:hover {
+            background: #F8FAFC;
+            border-color: #cbd5e1;
+        }
+
+        .btn-accent-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent-lime);
+            color: var(--dark-forest);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 8px 22px rgba(152, 236, 85, 0.45);
+            transition: all 0.2s ease;
+        }
+
+        .btn-accent-circle:hover {
+            background: var(--accent-lime-light);
+            transform: scale(1.06) rotate(45deg);
+        }
+
+        /* Top Hero Card 2 (Vibrant Lime Card) */
+        .card-brand-accent {
+            background: linear-gradient(135deg, #A2EC4B 0%, #87E639 100%);
+            border-radius: var(--card-radius);
+            padding: 28px 28px;
+            color: var(--dark-forest);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 16px 36px rgba(152, 236, 85, 0.35);
+        }
+
+        .card-brand-accent::after {
+            content: '';
+            position: absolute;
+            right: -25px;
+            top: -25px;
+            width: 170px;
+            height: 170px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .brand-accent-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge-live-stream {
+            background: var(--dark-pill);
+            color: var(--accent-lime);
+            font-size: 0.76rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .brand-sub-val-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .frosted-sub-box {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            border-radius: 18px;
+            padding: 12px 16px;
+        }
+
+        .frosted-sub-title {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: #27561B;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .frosted-sub-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--dark-forest);
+            margin: 0;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        /* Bottom Subcards */
+        .exec-subcard {
+            background: var(--surface-white);
+            border: 1px solid #E2E8F0;
+            border-radius: var(--card-radius);
+            padding: 24px 24px 22px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .subcard-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .subcard-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .subcard-badge {
+            background: #F1F5F9;
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 16px;
+        }
+
+        /* Circular SVG Gauge */
+        .gauge-wrap {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 6px auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: #ECEEF0;
+            stroke-width: 12;
+        }
+
+        .gauge-us-val {
+            fill: none;
+            stroke: var(--accent-lime);
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .gauge-center-text {
+            position: absolute;
+            text-align: center;
+        }
+
+        .gauge-center-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
+        .gauge-center-sub {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--dark-forest);
+        }
+
+        .gauge-insight {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .gauge-legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 12px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-light);
+            padding-top: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Progress bars */
+        .progress-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .progress-row-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .progress-track {
+            height: 10px;
+            background: #F1F5F9;
+            border-radius: 6px;
+            overflow: visible;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-lime);
+            border-radius: 6px;
+            position: relative;
+            transition: width 0.8s ease;
+        }
+
+        .progress-pill-marker {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translate(50%, -50%);
+            background: var(--dark-pill);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+
+        /* Query list */
+        .query-featured-box {
+            background: #F8FAFC;
+            border-radius: 16px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            border: 1px solid var(--border-light);
+        }
+
+        .query-list-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .query-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            padding: 6px 0;
+        }
+
+        .query-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 72%;
+        }
+
+        .query-icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent-lime-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-forest);
+            flex-shrink: 0;
+        }
+
+        .query-text-wrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .query-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .query-meta {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .query-stat-right {
+            text-align: right;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            color: var(--dark-forest);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        /* ----------------------------------------------------
+           NEW SEO MANAGER SUITE STYLES
+           ---------------------------------------------------- */
+        .seo-panel {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: var(--card-radius);
+            padding: 28px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+            margin-bottom: 24px;
+        }
+
+        .banner-striking-distance {
+            background: linear-gradient(135deg, #FDFCE7 0%, #F5FBE6 100%);
+            border: 1px solid #E2E8C0;
+            border-left: 5px solid var(--accent-lime);
+            border-radius: 18px;
+            padding: 18px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .seo-filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .seo-search-input {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .seo-search-input input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            border-radius: 24px;
+            border: 1px solid #CBD5E1;
+            font-size: 0.88rem;
+            outline: none;
+            box-sizing: border-box;
+            background: #F8FAFC;
+        }
+
+        .seo-search-input input:focus {
+            background: #ffffff;
+            border-color: var(--accent-lime);
+            box-shadow: 0 0 0 3px rgba(152, 236, 85, 0.25);
+        }
+
+        .seo-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
+        }
+
+        .filter-chip-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            border: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active {
+            background: var(--accent-lime);
+            color: var(--dark-forest);
+            border-color: var(--accent-lime);
+            box-shadow: 0 2px 6px rgba(152, 236, 85, 0.3);
+        }
+
+        .opp-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .opp-top3 {
+            background: var(--accent-lime-bg);
+            color: var(--dark-forest);
+        }
+
+        .opp-striking {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .opp-lowctr {
+            background: #EFF6FF;
+            color: #1E40AF;
+        }
+
+        /* SERP Snippet Previewer Box */
+        .serp-card-box {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin-top: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            max-width: 650px;
+        }
+
+        .serp-url-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+
+        .serp-title-preview {
+            font-size: 1.25rem;
+            color: #1A0DAB;
+            font-family: Arial, sans-serif;
+            line-height: 1.3;
+            text-decoration: none;
+            font-weight: 400;
+            margin: 0 0 4px;
+            display: block;
+            cursor: pointer;
+        }
+
+        .serp-title-preview:hover {
+            text-decoration: underline;
+        }
+
+        .serp-desc-preview {
+            font-size: 0.88rem;
+            color: #4D5156;
+            line-height: 1.58;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .serp-input-field {
+            margin-bottom: 14px;
+        }
+
+        .serp-input-field label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+
+        .serp-input-field input, .serp-input-field textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #CBD5E1;
+            font-size: 0.88rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .serp-input-field input:focus, .serp-input-field textarea:focus {
+            border-color: var(--accent-lime);
+            box-shadow: 0 0 0 3px rgba(152, 236, 85, 0.2);
+        }
+
+        .char-counter {
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .char-good { color: #16A34A; }
+        .char-warn { color: #D97706; }
+        .char-bad { color: #DC2626; }
+
+        /* Technical Health Cards */
+        .tech-audit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .tech-audit-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tech-audit-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .tech-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--accent-lime-bg);
+            color: var(--dark-forest);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .exec-info-bar {
+            background: #F8FAFC;
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .login-card-modal {
+            max-width: 420px;
+            margin: 80px auto;
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 40px 32px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+            border: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="scroll-progress-mount"></div>
+    <div id="header-mount"></div>
+
+    <div class="exec-viewport">
+
+        <!-- LOGIN GATE -->
+        <div id="loginGate" class="login-card-modal">
+            <div style="width: 60px; height: 60px; background: var(--accent-lime-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; color: var(--dark-forest);">
+                <i data-lucide="shield-check" class="icon-md"></i>
+            </div>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; margin: 0 0 8px; color: #0F172A;">Admin Intelligence Login</h2>
+            <p style="font-size: 0.92rem; color: #64748B; margin: 0 0 26px;">Protected access for Anot Health Administrators & SEO Managers.</p>
+
+            <form id="analyticsLoginForm">
+                <div style="margin-bottom: 20px; text-align: left;">
+                    <label for="adminPass" style="display: block; font-size: 0.82rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Password</label>
+                    <input type="password" id="adminPass" placeholder="••••••••" required autocomplete="current-password"
+                           style="width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid #CBD5E1; font-size: 0.95rem; box-sizing: border-box; outline: none;">
+                </div>
+                <button type="submit" class="btn-dark-pill" style="width: 100%; justify-content: center; padding: 14px;">
+                    <i data-lucide="lock" class="icon-xs"></i> Enter Dashboard
+                </button>
+                <p id="loginError" style="color: #E11D48; font-size: 0.85rem; margin-top: 14px; display: none;"></p>
+            </form>
+        </div>
+
+        <!-- MASTER CANVAS -->
+        <div id="dashboardContent" class="exec-canvas" style="display: none;">
+
+            <!-- Top Header Bar -->
+            <header class="exec-topbar">
+                <div class="exec-user-pill">
+                    <div class="exec-avatar">AH</div>
+                    <div>
+                        <h1 class="exec-user-title">Hello, Administrator</h1>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="exec-nav-pills">
+                    <button type="button" class="exec-nav-pill active" data-tab="overview">Overview</button>
+                    <button type="button" class="exec-nav-pill" data-tab="keywords">Keywords &amp; SEO</button>
+                    <button type="button" class="exec-nav-pill" data-tab="channels">Channels &amp; Devices</button>
+                    <button type="button" class="exec-nav-pill" data-tab="technical">Technical SEO</button>
+                </nav>
+
+                <!-- Action Utilities -->
+                <div class="exec-actions">
+                    <button type="button" id="btnRefresh" class="icon-circle-btn" title="Refresh Live Data">
+                        <i data-lucide="refresh-cw" class="icon-xs"></i>
+                    </button>
+                    <div class="notif-pill" title="Live Google Analytics Events" id="liveEventPill">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; margin-right: 4px;"></span>
+                        <span id="notifBadgeCount">Live</span>
+                    </div>
+                    <button type="button" id="btnLogout" class="icon-circle-btn" title="Log Out" style="color: #E11D48;">
+                        <i data-lucide="log-out" class="icon-xs"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ====================================================
+                 TAB 1: OVERVIEW (Existing Master Fintech Layout)
+                 ==================================================== -->
+            <div id="tab-overview" class="exec-tab-pane">
+
+                <!-- Top Grid -->
+                <section class="exec-grid-top">
+                    <!-- Left Hero Card -->
+                    <div class="card-active-traffic">
+                        <div>
+                            <div class="card-active-header">
+                                <div class="region-toggle-pill">
+                                    <button type="button" class="region-btn active" data-region="ALL">🌐 All</button>
+                                    <button type="button" class="region-btn" data-region="US">🇺🇸 USD</button>
+                                    <button type="button" class="region-btn" data-region="CA">🇨🇦 CAD</button>
+                                </div>
+
+                                <div class="account-num-pill" id="btnCopyPropertyId" title="Click to copy GA4 Property ID">
+                                    <span>Property ID</span>
+                                    <span class="account-num-code" id="propIdDisplay">554598931</span>
+                                    <i data-lucide="copy" class="icon-xs" style="color: #94A3B8;"></i>
+                                </div>
+                            </div>
+
+                            <p class="metric-eyebrow">Active Visitors (GA4 Realtime)</p>
+                            <div class="metric-hero-val">
+                                <span id="heroActiveUsers">1,420</span>
+                                <button type="button" class="btn-eye-toggle" id="btnToggleMask" title="Toggle Privacy Mask">
+                                    <i data-lucide="eye" class="icon-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-active-footer">
+                            <div class="footer-action-group">
+                                <button type="button" class="btn-dark-pill" id="btnActionRefresh">
+                                    <i data-lucide="activity" class="icon-xs" style="color: var(--accent-lime);"></i>
+                                    Live Stream
+                                </button>
+                                <button type="button" class="btn-light-pill" id="btnExportCsv">
+                                    <i data-lucide="download" class="icon-xs"></i>
+                                    Export CSV
+                                </button>
+                                <button type="button" class="btn-light-pill" id="btnToggleDays">
+                                    <span id="daysLabel">Last 30D</span>
+                                    <i data-lucide="chevron-down" class="icon-xs"></i>
+                                </button>
+                            </div>
+
+                            <button type="button" class="btn-accent-circle" id="btnQuickLaunch" title="Go to Keywords">
+                                <i data-lucide="arrow-up-right" class="icon-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Vibrant Lime Card -->
+                    <div class="card-brand-accent">
+                        <div>
+                            <div class="brand-accent-top">
+                                <span class="badge-live-stream">
+                                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-lime);"></span>
+                                    GA4 CONNECTED
+                                </span>
+                                <div style="display: flex; gap: 6px;">
+                                    <button type="button" style="background: rgba(255,255,255,0.4); border: none; border-radius: 50%; width: 32px; height: 32px; color: var(--dark-forest); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                        <i data-lucide="more-horizontal" class="icon-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p style="font-size: 0.85rem; color: #27561B; margin: 0 0 6px; font-weight: 600;">Organic Google Impressions</p>
+                            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
+                                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; margin: 0; line-height: 1; color: var(--dark-forest);" id="heroSearchViews">24,600</h2>
+                                <span style="background: rgba(255,255,255,0.7); color: var(--dark-forest); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.4);" id="heroGrowthBadge">
+                                    +18% this month
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="brand-sub-val-row">
+                            <div class="frosted-sub-box">
+                                <div class="frosted-sub-title">
+                                    <span>Google Clicks</span>
+                                    <i data-lucide="mouse-pointer" class="icon-xs" style="color: #27561B;"></i>
+                                </div>
+                                <div class="frosted-sub-val">
+                                    <span id="subClicksVal">840</span>
+                                </div>
+                            </div>
+
+                            <div class="frosted-sub-box">
+                                <div class="frosted-sub-title">
+                                    <span>Average CTR</span>
+                                    <i data-lucide="trending-up" class="icon-xs" style="color: #27561B;"></i>
+                                </div>
+                                <div class="frosted-sub-val">
+                                    <span id="subCtrVal">3.4%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bottom 3 Cards -->
+                <section class="exec-grid-bottom">
+                    <!-- Regional Gauge Card -->
+                    <div class="exec-subcard">
+                        <div class="subcard-head">
+                            <div class="subcard-title-wrap">
+                                <i data-lucide="pie-chart" class="icon-sm" style="color: var(--dark-forest);"></i>
+                                <span>Regional Split</span>
+                            </div>
+                            <span class="subcard-badge" id="gaugeRangeLabel">Last 30D</span>
+                        </div>
+
+                        <div class="gauge-wrap">
+                            <svg class="gauge-svg" viewBox="0 0 100 100">
+                                <circle class="gauge-bg" cx="50" cy="50" r="40" />
+                                <circle class="gauge-us-val" id="svgGaugeUs" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="100" />
+                            </svg>
+                            <div class="gauge-center-text">
+                                <div class="gauge-center-num" id="gaugeCenterPct">59.2%</div>
+                                <div class="gauge-center-sub" id="gaugeCenterLabel">US Share</div>
+                            </div>
+                        </div>
+
+                        <div class="gauge-insight" id="gaugeInsightText">
+                            <i data-lucide="sparkles" class="icon-xs" style="color: var(--dark-forest);"></i>
+                            <span>US market represents majority traffic</span>
+                        </div>
+
+                        <div class="gauge-legend-grid">
+                            <div class="legend-item">
+                                <span class="legend-dot" style="background: var(--accent-lime);"></span>
+                                <span>US: <strong id="legendUsCount">840</strong></span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot" style="background: #E11D48;"></span>
+                                <span>Canada: <strong id="legendCaCount">430</strong></span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot" style="background: #94A3B8;"></span>
+                                <span>Global: <strong id="legendOtherCount">150</strong></span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot" style="background: var(--dark-forest);"></span>
+                                <span>Leads: <strong id="legendLeadsCount">28</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Demand Progress Card -->
+                    <div class="exec-subcard">
+                        <div class="subcard-head">
+                            <div class="subcard-title-wrap">
+                                <i data-lucide="bar-chart-2" class="icon-sm" style="color: var(--dark-forest);"></i>
+                                <span>Page Demand</span>
+                            </div>
+                            <span class="subcard-badge" style="background: var(--accent-lime-bg); color: var(--dark-forest); font-weight: 700;" id="badgeTotalViews">5,890 Views</span>
+                        </div>
+
+                        <div style="margin-bottom: 16px;">
+                            <h3 style="font-family: 'Outfit', sans-serif; font-size: 2.1rem; font-weight: 800; margin: 0; color: #0F172A;" id="earningTotalViews">5,890</h3>
+                            <span style="font-size: 0.78rem; color: #16A34A; font-weight: 600;">+18% engagement vs last period</span>
+                        </div>
+
+                        <div class="progress-list" id="progressList">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Search Queries Preview Card -->
+                    <div class="exec-subcard">
+                        <div class="subcard-head">
+                            <div class="subcard-title-wrap">
+                                <i data-lucide="search" class="icon-sm" style="color: var(--dark-forest);"></i>
+                                <span>Top Search Queries</span>
+                            </div>
+                            <button type="button" style="background: transparent; border: none; color: #94A3B8; cursor: pointer;">
+                                <i data-lucide="more-horizontal" class="icon-xs"></i>
+                            </button>
+                        </div>
+
+                        <div class="query-featured-box" id="featuredQueryBox">
+                            <div style="display: flex; align-items: center; gap: 10px; max-width: 80%;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent-lime-bg); color: var(--dark-forest); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i data-lucide="trending-up" class="icon-xs"></i>
+                                </div>
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <strong style="font-size: 0.85rem; color: #0F172A; display: block;" id="featQueryTitle">medical billing services small practice</strong>
+                                    <span style="font-size: 0.72rem; color: #16A34A; font-weight: 600;">Rank #3.8 • 112 Clicks</span>
+                                </div>
+                            </div>
+                            <div style="width: 26px; height: 26px; border-radius: 50%; background: var(--accent-lime); color: var(--dark-forest); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800;">
+                                ✓
+                            </div>
+                        </div>
+
+                        <div class="query-list-stack" id="queryListStack">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ====================================================
+                 TAB 2: KEYWORDS & SEO OPPORTUNITIES
+                 ==================================================== -->
+            <div id="tab-keywords" class="exec-tab-pane" style="display: none;">
+                <!-- Striking Distance Opportunity Banner -->
+                <div class="banner-striking-distance">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div style="width: 44px; height: 44px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; color: var(--dark-forest); box-shadow: 0 4px 10px rgba(0,0,0,0.06); flex-shrink: 0;">
+                            <i data-lucide="zap" class="icon-sm"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin: 0 0 4px; font-size: 1rem; color: var(--dark-forest);">Striking Distance Keywords Detected</h4>
+                            <p style="margin: 0; font-size: 0.85rem; color: #475569;">
+                                Queries ranking between <strong>#4 and #15</strong> with strong impressions. Pushing these to the Top 3 generates the fastest organic traffic surge.
+                            </p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-dark-pill" id="btnFilterStriking" style="white-space: nowrap; padding: 10px 18px; font-size: 0.82rem;">
+                        View Opportunities
+                    </button>
+                </div>
+
+                <!-- Filter & Search Bar -->
+                <div class="seo-panel">
+                    <div class="seo-filter-bar">
+                        <div class="seo-search-input">
+                            <i data-lucide="search" class="icon-xs seo-search-icon"></i>
+                            <input type="text" id="keywordSearchInput" placeholder="Search keywords (e.g. billing, scribe, ohip)...">
+                        </div>
+
+                        <div class="filter-chip-group">
+                            <button type="button" class="filter-chip active" data-kw-filter="ALL">All Keywords (<span id="kwCountAll">0</span>)</button>
+                            <button type="button" class="filter-chip" data-kw-filter="TOP3">🏆 Top 3 Rank (<span id="kwCountTop3">0</span>)</button>
+                            <button type="button" class="filter-chip" data-kw-filter="STRIKING">⚡ Striking Distance (<span id="kwCountStriking">0</span>)</button>
+                            <button type="button" class="filter-chip" data-kw-filter="LOWCTR">🎯 Low CTR Opportunities (<span id="kwCountLowCtr">0</span>)</button>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Keywords Table -->
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #E2E8F0; text-align: left; color: #64748B;">
+                                    <th style="padding: 12px 10px;">Search Query</th>
+                                    <th style="padding: 12px 10px;">Google Clicks</th>
+                                    <th style="padding: 12px 10px;">Impressions</th>
+                                    <th style="padding: 12px 10px;">CTR (%)</th>
+                                    <th style="padding: 12px 10px;">Rank Position</th>
+                                    <th style="padding: 12px 10px;">SEO Strategy</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fullKeywordsTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====================================================
+                 TAB 3: CHANNELS & DEVICES
+                 ==================================================== -->
+            <div id="tab-channels" class="exec-tab-pane" style="display: none;">
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;">
+
+                    <!-- Acquisition Channels Card -->
+                    <div class="seo-panel" style="margin-bottom: 0;">
+                        <div class="subcard-head">
+                            <div class="subcard-title-wrap">
+                                <i data-lucide="share-2" class="icon-sm" style="color: var(--dark-forest);"></i>
+                                <span>Traffic Acquisition Channels</span>
+                            </div>
+                            <span class="subcard-badge">GA4 Sources</span>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #64748B; margin-top: -8px; margin-bottom: 20px;">
+                            Distribution of incoming client visits across search engines, direct brand recall, and referral partners.
+                        </p>
+
+                        <div class="progress-list" id="channelsListContainer">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Device Category Breakdown -->
+                    <div class="seo-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div class="subcard-head">
+                                <div class="subcard-title-wrap">
+                                    <i data-lucide="smartphone" class="icon-sm" style="color: var(--dark-forest);"></i>
+                                    <span>Mobile vs. Desktop Distribution</span>
+                                </div>
+                                <span class="subcard-badge" style="background: var(--accent-lime-bg); color: var(--dark-forest); font-weight: 700;">Mobile-First Ready</span>
+                            </div>
+                            <p style="font-size: 0.85rem; color: #64748B; margin-top: -8px; margin-bottom: 20px;">
+                                Google prioritizes mobile performance. Monitor patient and physician device preferences.
+                            </p>
+
+                            <div style="display: flex; height: 16px; border-radius: 8px; overflow: hidden; background: #ECEEF0; margin-bottom: 24px;">
+                                <div id="devBarDesktop" style="width: 64%; background: var(--dark-pill);" title="Desktop"></div>
+                                <div id="devBarMobile" style="width: 33%; background: var(--accent-lime);" title="Mobile"></div>
+                                <div id="devBarTablet" style="width: 3%; background: #94A3B8;" title="Tablet"></div>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 12px;" id="devicesLegendList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <div style="background: #F8FAFC; border-radius: 12px; padding: 14px; font-size: 0.82rem; color: #64748B; border: 1px solid #E2E8F0; margin-top: 20px;">
+                            <strong style="color: var(--dark-forest); display: block; margin-bottom: 4px;">⚡ SEO Best Practice:</strong>
+                            Ensure tap targets and consultation forms maintain &gt;48px touch height on mobile screens to preserve Core Web Vitals.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ====================================================
+                 TAB 4: TECHNICAL SEO & SERP PREVIEWER
+                 ==================================================== -->
+            <div id="tab-technical" class="exec-tab-pane" style="display: none;">
+
+                <!-- Technical SEO Audit Cards -->
+                <div class="tech-audit-grid">
+                    <div class="tech-audit-card">
+                        <div class="tech-icon-box"><i data-lucide="file-code" class="icon-sm"></i></div>
+                        <div>
+                            <strong style="display: block; font-size: 0.95rem; color: #0F172A; margin-bottom: 2px;">XML Sitemap Health</strong>
+                            <span style="font-size: 0.82rem; color: #16A34A; font-weight: 600;">🟢 <span id="auditSitemapCount">22</span> URLs Indexed</span>
+                            <p style="margin: 4px 0 0; font-size: 0.78rem; color: #64748B;">/sitemap.xml validated and available for Google bot crawl.</p>
+                        </div>
+                    </div>
+
+                    <div class="tech-audit-card">
+                        <div class="tech-icon-box"><i data-lucide="shield-check" class="icon-sm"></i></div>
+                        <div>
+                            <strong style="display: block; font-size: 0.95rem; color: #0F172A; margin-bottom: 2px;">Robots.txt Directives</strong>
+                            <span style="font-size: 0.82rem; color: #16A34A; font-weight: 600;">🟢 Clean &amp; Active</span>
+                            <p style="margin: 4px 0 0; font-size: 0.78rem; color: #64748B;">No crawl blockers. Clean disallow rules for admin endpoints.</p>
+                        </div>
+                    </div>
+
+                    <div class="tech-audit-card">
+                        <div class="tech-icon-box"><i data-lucide="lock" class="icon-sm"></i></div>
+                        <div>
+                            <strong style="display: block; font-size: 0.95rem; color: #0F172A; margin-bottom: 2px;">HTTPS &amp; Canonical Tags</strong>
+                            <span style="font-size: 0.82rem; color: #16A34A; font-weight: 600;">🟢 100% Configured</span>
+                            <p style="margin: 4px 0 0; font-size: 0.78rem; color: #64748B;">Self-referencing canonical tags prevent duplicate content flags.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Google SERP Snippet Previewer -->
+                <div class="seo-panel">
+                    <div class="subcard-head">
+                        <div class="subcard-title-wrap">
+                            <i data-lucide="eye" class="icon-sm" style="color: var(--dark-forest);"></i>
+                            <span>Google SERP Snippet Previewer</span>
+                        </div>
+                        <span class="subcard-badge" style="background: var(--accent-lime-bg); color: var(--dark-forest); font-weight: 700;">Live Google Simulator</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #64748B; margin-top: -8px; margin-bottom: 20px;">
+                        Simulate how your meta titles and descriptions look in real Google Search results before updating code.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <!-- Input controls -->
+                        <div>
+                            <div class="serp-input-field">
+                                <label for="serpPageSelect">
+                                    <span>Select Page Template</span>
+                                </label>
+                                <select id="serpPageSelect" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #CBD5E1; font-size: 0.88rem; outline: none;">
+                                    <option value="home">Homepage (USA &amp; Global)</option>
+                                    <option value="home-ca">Homepage (Canada)</option>
+                                    <option value="billing">Medical Billing &amp; RCM</option>
+                                    <option value="scribing">Clinical Medical Scribing</option>
+                                    <option value="pricing">Pricing &amp; ROI</option>
+                                    <option value="custom">Custom Custom Page...</option>
+                                </select>
+                            </div>
+
+                            <div class="serp-input-field">
+                                <label for="serpTitleInput">
+                                    <span>Meta Title</span>
+                                    <span class="char-counter" id="titleCharCount">0 / 60 chars</span>
+                                </label>
+                                <input type="text" id="serpTitleInput" value="Anot Health | Medical Billing &amp; Clinical Solutions">
+                            </div>
+
+                            <div class="serp-input-field">
+                                <label for="serpUrlInput">
+                                    <span>Target URL Slug</span>
+                                </label>
+                                <input type="text" id="serpUrlInput" value="https://anot.health/billing.html">
+                            </div>
+
+                            <div class="serp-input-field">
+                                <label for="serpDescInput">
+                                    <span>Meta Description</span>
+                                    <span class="char-counter" id="descCharCount">0 / 155 chars</span>
+                                </label>
+                                <textarea id="serpDescInput" rows="3">Human-verified medical billing, certified coding, and PIPEDA/HIPAA compliant clinical scribes for healthcare practices in the US and Canada.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Live SERP Render -->
+                        <div>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 8px;">
+                                Google Search Card Preview (Desktop &amp; Mobile)
+                            </span>
+
+                            <div class="serp-card-box">
+                                <div class="serp-url-row">
+                                    <div style="width: 18px; height: 18px; border-radius: 50%; background: #0F172A; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 0.65rem; font-weight: 700;">
+                                        AH
+                                    </div>
+                                    <div>
+                                        <span style="font-weight: 600; color: #202124;">Anot Health</span>
+                                        <span style="color: #5f6368; font-size: 0.78rem;" id="serpRenderUrl">https://anot.health &gt; billing.html</span>
+                                    </div>
+                                </div>
+                                <h3 class="serp-title-preview" id="serpRenderTitle">Anot Health | Medical Billing &amp; Clinical Solutions</h3>
+                                <p class="serp-desc-preview" id="serpRenderDesc">
+                                    Human-verified medical billing, certified coding, and PIPEDA/HIPAA compliant clinical scribes for healthcare practices in the US and Canada.
+                                </p>
+                            </div>
+
+                            <div style="margin-top: 18px; font-size: 0.82rem; line-height: 1.6; color: #64748B;">
+                                💡 <strong>SEO Recommendation:</strong> Keep title between <strong>50–60 characters</strong> to prevent truncation on mobile SERPs. Descriptions between <strong>120–155 characters</strong> achieve the highest organic CTR.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom System Status & Guidance Footer -->
+            <footer class="exec-info-bar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981;"></span>
+                    <span id="footerStatusMsg">Connected to Google Analytics 4 (Property 554598931). Live data streaming active.</span>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="font-size: 0.8rem; color: #94A3B8;">Anot Health Operations v2026.1</span>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <div id="footer-mount"></div>
+    <div id="scroll-top-mount"></div>
+
+    <script src="js/components.js?v=202609161530"></script>
+    <script src="js/main.js?v=202609161530" defer></script>
+    <script src="js/admin-analytics.js?v=2026091703" defer></script>
+</body>
+
+</html>

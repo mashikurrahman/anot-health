@@ -1,0 +1,20 @@
+# ==========================================================
+# The backend is a Node service (server.js). Nothing in this
+# folder should ever be served as a static file over the web.
+#
+# Without this, uploading the project to public_html exposes
+# backend/.env (SMTP password, admin password) and
+# backend/service-account.json (a Google private key) at
+# predictable URLs such as https://anot.health/backend/.env
+# ==========================================================
+
+<IfModule mod_authz_core.c>
+    # Apache 2.4+
+    Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    # Apache 2.2
+    Order allow,deny
+    Deny from all
+</IfModule>

@@ -1,0 +1,180 @@
+# ==========================================================
+# Anot Health - Namecheap / Apache Server Configuration
+# Automatic Canadian Visitor Routing & Performance Caching
+# ==========================================================
+
+# ==========================================================
+# Block files that must never be served
+# ----------------------------------------------------------
+# Deploying this project copies build tooling, deployment notes
+# and the Node backend into the web root alongside the site.
+# Apache will happily serve all of it unless told otherwise.
+# data/chatbot-knowledge.json and cache-version.json are NOT
+# blocked here - the front end fetches them at runtime.
+# ==========================================================
+
+# Dotfiles: .env, .gitignore, .htpasswd, .FullName and friends.
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Build scripts, deployment notes, credential files and lockfiles.
+<FilesMatch "\.(ps1|sh|bat|cmd|md|log|bak|sql|ini|yml|yaml)$|^(service-account\.json|package(-lock)?\.json)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Belt and braces: refuse the backend folder even if its own
+    # .htaccess is lost during upload.
+    RewriteRule ^backend/ - [F,L]
+
+    # Regional page pairs, kept in step with PAIRS_US_TO_CA in js/geo-switcher.js.
+    # Six pages follow the "<name>.html <-> <name>-ca.html" convention and are
+    # handled by one alternation rule each way; index and hipaa are irregular
+    # (homepage-ca.html and pipeda.html) so they get their own rules.
+    #   regular: scribing, billing, coding, pricing, about, contact
+    # QSA keeps any querystring, and the redirect preserves the fragment.
+
+    # 1. Manual Query Parameter Overrides (?region=ca or ?region=us)
+    RewriteCond %{QUERY_STRING} (^|&)region=ca(&|$) [NC]
+    RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L,QSA]
+    RewriteCond %{QUERY_STRING} (^|&)region=ca(&|$) [NC]
+    RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L,QSA]
+    RewriteCond %{QUERY_STRING} (^|&)region=ca(&|$) [NC]
+    RewriteRule ^(scribing|billing|coding|pricing|about|contact)\.html$ /$1-ca.html [R=302,L,QSA]
+
+    RewriteCond %{QUERY_STRING} (^|&)region=us(&|$) [NC]
+    RewriteRule ^homepage-ca\.html$ /index.html [R=302,L,QSA]
+    RewriteCond %{QUERY_STRING} (^|&)region=us(&|$) [NC]
+    RewriteRule ^pipeda\.html$ /hipaa.html [R=302,L,QSA]
+    RewriteCond %{QUERY_STRING} (^|&)region=us(&|$) [NC]
+    RewriteRule ^(scribing|billing|coding|pricing|about|contact)-ca\.html$ /$1.html [R=302,L,QSA]
+
+    # 2. Cookie-based Region Persistence (set by geo-switcher.js)
+    RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
+    RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L,QSA]
+    RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
+    RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L,QSA]
+    RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
+    RewriteRule ^(scribing|billing|coding|pricing|about|contact)\.html$ /$1-ca.html [R=302,L,QSA]
+
+    RewriteCond %{HTTP_COOKIE} anot_region=us [NC]
+    RewriteRule ^homepage-ca\.html$ /index.html [R=302,L,QSA]
+    RewriteCond %{HTTP_COOKIE} anot_region=us [NC]
+    RewriteRule ^pipeda\.html$ /hipaa.html [R=302,L,QSA]
+    RewriteCond %{HTTP_COOKIE} anot_region=us [NC]
+    RewriteRule ^(scribing|billing|coding|pricing|about|contact)-ca\.html$ /$1.html [R=302,L,QSA]
+
+    # 3. Cloudflare Country Header (if domain utilizes Cloudflare proxy)
+    RewriteCond %{HTTP:CF-IPCountry} ^CA$ [NC]
+    RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+    RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L,QSA]
+    RewriteCond %{HTTP:CF-IPCountry} ^CA$ [NC]
+    RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+    RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L,QSA]
+    RewriteCond %{HTTP:CF-IPCountry} ^CA$ [NC]
+    RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+    RewriteRule ^(scribing|billing|coding|pricing|about|contact)\.html$ /$1-ca.html [R=302,L,QSA]
+
+    # 4. Server-Side GeoIP (if mod_geoip is active on Namecheap cPanel)
+    <IfModule mod_geoip.c>
+        RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
+        RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+        RewriteRule ^(index\.html)?$ /homepage-ca.html [R=302,L,QSA]
+        RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
+        RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+        RewriteRule ^hipaa\.html$ /pipeda.html [R=302,L,QSA]
+        RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
+        RewriteCond %{HTTP_COOKIE} !anot_region=us [NC]
+        RewriteRule ^(scribing|billing|coding|pricing|about|contact)\.html$ /$1-ca.html [R=302,L,QSA]
+    </IfModule>
+</IfModule>
+
+# ==========================================================
+# Security Headers
+# ----------------------------------------------------------
+# These are served as real HTTP headers rather than <meta> tags for two
+# reasons: frame-ancestors is IGNORED by browsers when delivered via <meta>
+# (so the clickjacking protection was previously inert), and headers apply
+# to every page uniformly, including the ten that carry no CSP meta tag.
+# The policy below is identical to the meta policy on the pages that have
+# one, so the two never conflict.
+# ==========================================================
+<IfModule mod_headers.c>
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.web3forms.com https://api.country.is https://ipapi.co; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests"
+
+    # Legacy equivalent of frame-ancestors, for older browsers.
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+
+    # HSTS is deliberately left commented out. Enabling it is a ONE-WAY DOOR:
+    # browsers cache the instruction for max-age and will refuse to load the
+    # site over plain HTTP, so if the certificate ever lapses the site becomes
+    # unreachable for returning visitors. Turn it on only once HTTPS is live
+    # and renewing reliably on the production domain.
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    <FilesMatch "\.(html?)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=300, must-revalidate"
+    </FilesMatch>
+
+    <FilesMatch "\.(png|jpe?g|webp|gif|svg|ico)$">
+        Header set Cache-Control "public, max-age=1800, must-revalidate"
+    </FilesMatch>
+
+    <FilesMatch "\.(mp4)$">
+        Header set Cache-Control "public, max-age=21600, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# Some shared hosts still ship without these mappings, which makes the browser
+# download .webp / .avif as octet-stream instead of rendering them.
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+    AddType image/avif .avif
+    AddType video/mp4 .mp4
+    AddType application/manifest+json .webmanifest
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType text/css "access plus 5 minutes"
+    ExpiresByType application/javascript "access plus 5 minutes"
+    ExpiresByType text/javascript "access plus 5 minutes"
+
+    ExpiresByType image/png "access plus 30 minutes"
+    ExpiresByType image/jpeg "access plus 30 minutes"
+    ExpiresByType image/webp "access plus 30 minutes"
+    ExpiresByType image/gif "access plus 30 minutes"
+    ExpiresByType image/svg+xml "access plus 30 minutes"
+    ExpiresByType image/x-icon "access plus 30 minutes"
+    ExpiresByType video/mp4 "access plus 6 hours"
+</IfModule>
+
+FileETag MTime Size
