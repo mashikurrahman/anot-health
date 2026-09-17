@@ -1,285 +1,223 @@
-# Anot Health - cPanel Deployment Guide
-**Geo-Detection System Setup for US/Canada Visitor Routing**
+# Anot Health — Complete Namecheap cPanel Live Deployment Guide
+**Production Deployment for `anot.health` (Static Frontend + Node.js Backend API + SEO Suite)**
 
 ---
 
-## ✅ Pre-Deployment Checklist
+## 🏛️ 1. Architecture Overview
 
-- [ ] All files uploaded to cPanel public_html directory
-- [ ] `.htaccess` file is present in root directory
-- [ ] All HTML files included:
-  - [ ] `index.html` (US homepage)
-  - [ ] `homepage-ca.html` (Canada homepage)
-  - [ ] `pricing.html` & `pricing-ca.html`
-  - [ ] `billing.html` & `billing-ca.html`
-  - [ ] `hipaa.html` & `pipeda.html`
-  - [ ] All service pages (coding, scribing, payroll, etc.)
-  - [ ] All support pages (contact, about, specialties, privacy, terms)
-- [ ] `/css/` folder with `style.css`
-- [ ] `/js/` folder with `geo-switcher.js` and `components.js`
-- [ ] `/images/` folder with all image assets
-- [ ] `/backend/` folder (if email forms needed)
-- [ ] `backend/server.js` configured for Express
-- [ ] Environment variables set up (if using email)
+Anot Health runs as a high-performance **hybrid application** on Namecheap cPanel:
+
+```
+                          VISITOR / BROWSER
+                                 │
+                  https://anot.health / https://www.anot.health
+                                 │
+                     ┌───────────┴───────────┐
+                     ▼                       ▼
+            Standard Web Pages          /api/* Requests
+         (HTML, CSS, JS, Images)       (Contact Forms, Analytics)
+                     │                       │
+                     ▼                       ▼
+             Apache Web Server       Phusion Passenger
+               (public_html/)          (Node.js App)
+                     │                       │
+            Instant CDN Speed,         backend/server.js
+           Gzip, Cache, Security        Gmail SMTP Dispatch
+           & Geo-Routing (.htaccess)    Google Analytics 4 & GSC
+                                       data/leads.json Logging
+```
+
+* **Frontend (`public_html/`)**: Served directly by Apache for maximum speed, HTTP/2 multiplexing, and geo-targeted routing via `.htaccess`.
+* **Backend (`anot-backend` or `public_html/backend`)**: Managed by **CloudLinux Phusion Passenger** via cPanel's **Setup Node.js App** at `anot.health/api`.
+* **Security Shield**: Sensitive server files (`.env`, `service-account.json`, `leads.json`) are blocked with HTTP `403 Forbidden` both at the Apache `.htaccess` layer and inside Express middleware.
 
 ---
 
-## 🌍 How Geo-Detection Works (Detection Priority)
+## 📋 2. Pre-Flight Checklist: What You Need Ready
 
-### **Layer 1: Server-Side (.htaccess)** ⚡ Fastest
-The `.htaccess` file handles routing at the server level before the browser loads JavaScript:
+Your GitHub repository (`https://github.com/mashikurrahman/anot-health`) contains all code, **except** secrets protected by `.gitignore`. Before beginning, have these 2 files ready on your computer:
 
-1. **Manual URL Override** - `?region=ca` or `?region=us` parameter
-2. **Cookie-Based** - Saved user preference from previous visit (`anot_region` cookie)
-3. **Cloudflare GeoIP** - If using Cloudflare proxy (automatic detection)
-4. **Server GeoIP Module** - If `mod_geoip` is enabled on cPanel (optional)
+### 1. `backend/.env` (SMTP & Dashboard Secrets)
+Ensure your local `backend/.env` contains the working credentials:
+```env
+PORT=3000
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=mashikurrahman7@gmail.com
+SMTP_PASS=qaqozhezancwbegs
+CONTACT_TO=admin@anot.health, mashikurrahman7@gmail.com
+ADMIN_ANALYTICS_PASSWORD=AnotAdmin2026!
+GOOGLE_APPLICATION_CREDENTIALS=./service-account.json
+GA4_PROPERTY_ID=554598931
+GSC_SITE_URL=https://anot.health/
+```
 
-### **Layer 2: Client-Side (geo-switcher.js)** 📱 Fallback
-JavaScript-based detection runs in the browser:
-
-1. **Timezone Detection** - Browser's native timezone (instant, 0ms)
-   - Detects 24 Canadian timezones
-   - No external API call needed
-2. **GeoIP API Fallback** - External IP lookup if timezone is unknown
-   - `api.country.is`
-   - `ipapi.co` (secondary)
-
-### **Layer 3: Dynamic Header (components.js)** 🎯 Always Accurate
-Every page loads region-aware navigation:
-
-- Correct service page links for CA vs US
-- Localized pricing links (CAD vs USD)
-- Regional trust/compliance links (PIPEDA vs HIPAA)
-- Correct phone number and currency
+### 2. `backend/service-account.json` (Google Cloud Service Account)
+The Google Cloud JSON key for your analytics bot:
+* Client Email: `anot-dashboard-bot@molten-raceway-477409-j8.iam.gserviceaccount.com`
 
 ---
 
-## 🚀 Deployment Steps on cPanel
+## 🚀 3. Step-by-Step Deployment Instructions
 
-### **Step 1: Upload Files to Public HTML**
+### Step 1: Upload Static Frontend to `public_html/`
 
-```
-anot.health/
-├── index.html (US home)
-├── homepage-ca.html (CA home)
-├── .htaccess ← IMPORTANT: Copy this file
-├── css/
-│   └── style.css
-├── js/
-│   ├── geo-switcher.js
-│   ├── components.js
-│   └── main.js
-├── images/
-│   └── [all image files]
-└── [all other HTML files]
-```
+1. **Prepare ZIP file**:
+   * On your computer, open your project folder `anot-health-master`.
+   * Select all frontend files and folders:
+     * HTML files (`index.html`, `pricing.html`, `contact.html`, etc.)
+     * `css/`, `js/`, `images/`, `data/` folders
+     * `.htaccess`, `robots.txt`, `sitemap.xml`, `site.webmanifest`
+   * Right-click and compress to a `.zip` archive (e.g., `anot-frontend.zip`).
+   *(Note: You do not need to include `node_modules` or `.git`)*.
 
-**cPanel Upload Tips:**
-- Use cPanel File Manager or FTP
-- Ensure `.htaccess` is visible (might need to show hidden files)
-- Verify file permissions: `.htaccess` should be `644`
+2. **Open cPanel File Manager**:
+   * Log into your Namecheap cPanel dashboard.
+   * Go to **Files** ➔ **File Manager**.
+   * In the top-right corner, click **Settings** ➔ Check **"Show Hidden Files (dotfiles)"** ➔ Click **Save**. *(This is vital so you can see `.htaccess`)*.
+   * Navigate into the **`public_html`** directory.
 
-### **Step 2: Verify Apache Modules (cPanel Dashboard)**
+3. **Upload & Extract**:
+   * Click **Upload** in the top toolbar.
+   * Upload `anot-frontend.zip`.
+   * Return to File Manager, select `anot-frontend.zip`, and click **Extract** ➔ Extract to `/public_html`.
+   * Delete the `.zip` file after extracting.
 
-1. Login to cPanel
-2. Go to **Home > Software > EasyApache 4** (or Modules)
-3. Verify these are enabled:
-   - ✅ `mod_rewrite` (REQUIRED for .htaccess routing)
-   - ✅ `mod_headers` (for cache headers)
-   - ✅ `mod_expires` (for cache expiration)
-   - ⚠️ `mod_geoip` (optional, for server-side GeoIP detection)
-
-If `mod_rewrite` is not enabled, contact cPanel support to enable it.
-
-### **Step 3: Check .htaccess Rules**
-
-The `.htaccess` file includes these routing rules:
-
-```apache
-# Example routing rules (already in your .htaccess)
-RewriteCond %{HTTP_COOKIE} anot_region=ca [NC]
-RewriteRule ^index\.html$ /homepage-ca.html [R=302,L]
-```
-
-No manual edits needed unless you're using Cloudflare (see below).
-
-### **Step 4: Enable Server-Side GeoIP (Optional)**
-
-If `mod_geoip` is available on your server:
-
-1. Download the GeoIP database: `GeoIP.dat`
-2. Upload to server (usually `/usr/share/GeoIP/`)
-3. The `.htaccess` file already includes the detection rules—no changes needed
-
-**Your .htaccess already includes:**
-```apache
-<IfModule mod_geoip.c>
-    RewriteCond %{ENV:GEOIP_COUNTRY_CODE} ^CA$ [NC]
-    # Routing rules...
-</IfModule>
-```
+4. **Verify File Permissions**:
+   * Folders should be `755` (`rwxr-xr-x`).
+   * Files (including `.htaccess`) should be `644` (`rw-r--r--`).
+   * Ensure `data/` directory has write permission (`775` or `755`) so `data/leads.json` can be created and updated when consultation requests are submitted.
 
 ---
 
-## 🧪 Testing Geo-Detection
+### Step 2: Configure the Node.js Backend API
 
-### **Test 1: Manual Region Override (Easiest)**
-Open these URLs in your browser:
+1. **Create Application in cPanel**:
+   * In cPanel, scroll to the **SOFTWARE** section.
+   * Click **Setup Node.js App**.
+   * Click the blue **Create Application** button.
+   * Fill in the application parameters:
+     | Field | Recommended Value | Notes |
+     |---|---|---|
+     | **Node.js version** | `20.x` (or `18.x`) | Select latest LTS available |
+     | **Application mode** | `Production` | Optimized runtime |
+     | **Application root** | `anot-backend` | Dedicated directory in `/home/username/` |
+     | **Application URL** | `anot.health/api` | Select domain and enter `api` path |
+     | **Application startup file** | `server.js` | Main entry point |
+   * Click **Create** (top right).
 
-```
-https://anot.health/?region=ca
-→ Should load homepage-ca.html (Canada version)
+2. **Upload Backend Files into `anot-backend/`**:
+   * Return to **File Manager**.
+   * Navigate to the newly created folder: `/home/username/anot-backend/`.
+   * Upload the following 4 files from your local `backend/` folder:
+     * `server.js`
+     * `analyticsService.js`
+     * `package.json`
+     * `.env`
+     * `service-account.json`
+   *(Do NOT upload `node_modules/` — cPanel installs them directly in the next step)*.
 
-https://anot.health/?region=us
-→ Should load index.html (US version)
+3. **Install Dependencies via cPanel**:
+   * Go back to **Setup Node.js App**.
+   * Click the **Edit** (pencil icon) next to your `anot.health/api` application.
+   * Under the **Detected configuration files** section, you will see `package.json`.
+   * Click the **Run NPM Install** button.
+   * Wait 30–60 seconds. You will see a green success message confirming all packages (`express`, `nodemailer`, `googleapis`, `@google-analytics/data`, `cors`, `dotenv`) are installed.
 
-https://anot.health/pricing.html?region=ca
-→ Should redirect to pricing-ca.html
-```
-
-### **Test 2: Timezone Detection**
-1. Change your computer's timezone to a Canadian timezone (e.g., America/Toronto)
-2. Clear browser cookies and localStorage
-3. Visit `https://anot.health/`
-4. Should automatically show homepage-ca.html
-
-**Canadian Timezones Detected:**
-- America/Toronto
-- America/Vancouver
-- America/Montreal
-- America/Calgary
-- America/Edmonton
-- [+ 19 more Canadian zones]
-
-### **Test 3: Cookie Persistence**
-1. Visit homepage-ca.html
-2. Click the "Switch to 🇺🇸" button to set the region preference
-3. Revisit `https://anot.health/`
-4. Should remember your preference and show US version
-5. Cookie lasts 30 days
-
-### **Test 4: VPN Testing**
-1. Use a Canadian VPN/proxy
-2. Clear cookies and localStorage
-3. Visit `https://anot.health/`
-4. Should route to Canadian version (via GeoIP APIs)
-
-### **Test 5: Service Page Redirects**
-Test these redirects work:
-```
-pricing.html?region=ca → pricing-ca.html ✓
-billing.html?region=ca → billing-ca.html ✓
-hipaa.html?region=ca → pipeda.html ✓
-```
+4. **Start the Application**:
+   * Click **Restart** or **Start App** at the top of the page.
+   * Your API is now live and listening at `https://anot.health/api/`!
 
 ---
 
-## 🔧 If Something Isn't Working
+### Step 3: Connect Google Search Console (Fix GSC 403 Error)
 
-### **Problem: Users stay on wrong region**
-**Solutions:**
-1. Verify `.htaccess` is in the root directory
-2. Check `mod_rewrite` is enabled in cPanel
-3. Clear browser cache and cookies
-4. Test with `?region=ca` parameter
+Because the Google Cloud service account is newly configured, Google Search Console requires you to authorize it on `https://anot.health/`:
 
-### **Problem: Canadian visitors see US version**
-**Causes:**
-1. Browser timezone isn't set to Canadian timezone
-2. GeoIP APIs are blocked/slow
-3. `.htaccess` rules aren't executing
+1. Open [Google Search Console](https://search.google.com/search-console).
+2. Ensure you have the property **`https://anot.health/`** selected in the top-left dropdown.
+3. In the left sidebar, click **Settings** (bottom left).
+4. Click **Users and permissions**.
+5. Click **Add user** (top right).
+6. Fill in:
+   * **Email address**: `anot-dashboard-bot@molten-raceway-477409-j8.iam.gserviceaccount.com`
+   * **Permission**: **Full** (or **Owner**)
+7. Click **Add**.
 
-**Fix:**
-- Verify mod_rewrite is enabled
-- Check .htaccess permissions (should be 644)
-- Monitor browser console for errors in geo-switcher.js
-
-### **Problem: Getting 404 errors after redirect**
-**Cause:** Page pair not in geo-switcher.js mapping
-
-**Fix:** Edit `js/geo-switcher.js`:
-```javascript
-const PAIRS_US_TO_CA = {
-    'index.html': 'homepage-ca.html',
-    'pricing.html': 'pricing-ca.html',
-    // Add missing pairs here
-};
-```
-
-### **Problem: Cloudflare conflicts**
-**Solution:** If using Cloudflare:
-1. Ensure Cloudflare has Geo-Location enabled
-2. Your `.htaccess` checks for `CF-IPCountry` header
-3. Priority: User cookie > Cloudflare GeoIP > Timezone
+> [!TIP]
+> Once added, the **Admin Analytics & SEO Dashboard** at `https://anot.health/admin-analytics.html` will automatically begin pulling real Google Search queries, clicks, impressions, and rankings without any further configuration!
 
 ---
 
-## 📊 Monitoring & Analytics
+### Step 4: Verify SSL & Geo-Routing
 
-After deployment, track:
+1. **Verify Free AutoSSL (HTTPS)**:
+   * In cPanel, search for **SSL/TLS Status**.
+   * Confirm that `anot.health` and `www.anot.health` show green locks with active certificates.
+   * If not, click **Run AutoSSL** and allow Namecheap 5 minutes to issue the Comodo/Sectigo SSL certificate.
 
-1. **Traffic by Region**
-   - Monitor which pages get the most visits (index.html vs homepage-ca.html)
-   - Check Google Analytics: audience > geo
-
-2. **Geo-Detection Accuracy**
-   - Add logging to geo-switcher.js for debugging
-   - Check browser console for detection method used
-
-3. **Cookie Tracking**
-   - Monitor `anot_region` cookie in browser dev tools
-   - Verify 30-day persistence works
+2. **Verify Geo-Redirection**:
+   * Visit `https://anot.health/?region=ca` ➔ should display Canadian flag and route to `homepage-ca.html`.
+   * Visit `https://anot.health/?region=us` ➔ should display US flag and route to `index.html`.
+   * Switch languages/regions using the top-nav pills to verify cookie persistence (`anot_region`).
 
 ---
 
-## 🚨 Important Notes
+## 🧪 4. Live Testing & Verification Checklist
 
-### **JavaScript Dependency**
-- Server-side `.htaccess` handles the primary routing
-- Client-side geo-switcher.js handles fallback and manual switching
-- If JS is disabled, `.htaccess` routing still works ✅
+Complete these checks immediately after deployment:
 
-### **Timezone Accuracy**
-- Timezone detection is ~95% accurate for Canada
-- Some users may have manual timezone overrides
-- GeoIP APIs provide fallback for 5% edge cases
-
-### **CORS & External APIs**
-These external APIs are used as fallback:
-- `https://api.country.is/` - IP-based country detection
-- `https://ipapi.co/json/` - Secondary IP geolocation
-
-Both are CORS-enabled and should work fine.
-
-### **URL Structure**
-- US pages: `index.html`, `pricing.html`, `billing.html`, `hipaa.html`
-- CA pages: `homepage-ca.html`, `pricing-ca.html`, `billing-ca.html`, `pipeda.html`
-- Agnostic pages: `contact.html`, `about.html`, `specialties.html` (same for both regions)
-
----
-
-## ✨ Quick Summary
-
-| Component | Status | Function |
-|-----------|--------|----------|
-| `.htaccess` | ✅ Ready | Server-side routing (fastest) |
-| `geo-switcher.js` | ✅ Ready | Client-side timezone detection + manual switch |
-| `components.js` | ✅ Ready | Region-aware header/footer injection |
-| Page Pairs | ✅ Ready | US ↔ CA page mapping |
-| Cookies | ✅ Ready | 30-day user preference saving |
-| GeoIP APIs | ✅ Ready | Fallback IP-based detection |
-
-**You're good to deploy!** 🚀
+- [ ] **Homepage Check**: Open `https://anot.health` in an incognito window. Header, hero, navigation, and mobile menu load crisply.
+- [ ] **Contact Form Submission**:
+  - Go to `https://anot.health/contact.html`.
+  - Submit a test consultation inquiry.
+  - Expect: Green success checkmark `"Thank you! Your request has been received."`
+- [ ] **Email Dispatch Verification**:
+  - Check `mashikurrahman7@gmail.com` and `admin@anot.health`.
+  - Expect: Form notification email received with user details.
+- [ ] **Lead Persistence Verification**:
+  - In cPanel File Manager, inspect `anot-backend/data/leads.json` or `public_html/data/leads.json`.
+  - Expect: New submission recorded as a JSON lead record.
+- [ ] **Admin Intelligence Dashboard**:
+  - Visit `https://anot.health/admin-analytics.html`.
+  - Enter the password: `AnotAdmin2026!`
+  - Expect: Metrics cards display active GA4 status (`GA4 CONNECTED`), Traffic graphs, Top Visited Pages, and Search Console Keywords.
+- [ ] **Security Shield Audit**:
+  - In browser, visit `https://anot.health/backend/.env` ➔ **Must return 403 Forbidden**.
+  - Visit `https://anot.health/data/leads.json` ➔ **Must return 403 Forbidden**.
+  - Visit `https://anot.health/backend/service-account.json` ➔ **Must return 403 Forbidden**.
 
 ---
 
-## 📞 Support
+## 🛠️ 5. Troubleshooting Common cPanel Issues
 
-If you encounter issues:
-1. Check `.htaccess` is in root directory
-2. Verify `mod_rewrite` is enabled
-3. Clear browser cache and cookies
-4. Check browser console for JavaScript errors
-5. Contact cPanel support if mod_rewrite isn't available
+### Issue 1: Contact Form shows "Failed to send message" or 404
+* **Cause**: Node.js app is not running, or Application URL was not set to `anot.health/api`.
+* **Fix**:
+  1. In cPanel ➔ **Setup Node.js App**, confirm the app status is **Started**.
+  2. Confirm Application URL is set to `anot.health` with path `api`.
+  3. Check the application log in cPanel or view `/home/username/anot-backend/passenger.log` (or `stderr.log`).
 
-Good luck with your deployment! 🎉
+### Issue 2: Contact Form says "Too many requests"
+* **Cause**: Built-in rate limiter (5 submissions per 15 minutes per IP).
+* **Fix**: Wait 15 minutes or test from a different network/mobile data connection.
+
+### Issue 3: Search Console data shows "Unable to retrieve queries"
+* **Cause**: The service account bot was not added to Google Search Console or domain URL mismatch.
+* **Fix**: Verify Step 3 above. In GSC, the property must match `GSC_SITE_URL=https://anot.health/`.
+
+### Issue 4: Updates pushed to GitHub are not appearing live
+* **Cause**: Namecheap shared hosting does not automatically pull from GitHub unless configured with cPanel Git™ Version Control or manual upload.
+* **Fix**:
+  * **Option A (Manual)**: Re-upload the updated file in cPanel File Manager.
+  * **Option B (Git Version Control)**: In cPanel ➔ **Git™ Version Control** ➔ Click **Manage** next to your repository ➔ Click **Pull or Deploy** ➔ Click **Deploy HEAD Commit**.
+
+---
+
+## 🔒 6. Server Contacts & Security Reference
+
+* **Domain**: `anot.health`
+* **Admin Dashboard**: `https://anot.health/admin-analytics.html`
+* **Primary Notification Email**: `mashikurrahman7@gmail.com`
+* **Secondary Notification Email**: `admin@anot.health`
+* **Repository**: `https://github.com/mashikurrahman/anot-health`
