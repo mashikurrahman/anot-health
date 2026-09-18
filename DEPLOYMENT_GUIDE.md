@@ -38,17 +38,18 @@ Anot Health runs as a high-performance **hybrid application** on Namecheap cPane
 Your GitHub repository (`https://github.com/mashikurrahman/anot-health`) contains all code, **except** secrets protected by `.gitignore`. Before beginning, have these 2 files ready on your computer:
 
 ### 1. `backend/.env` (SMTP & Dashboard Secrets)
-Ensure your local `backend/.env` contains the working credentials:
+Ensure your local `backend/.env` contains your own working credentials, in this shape
+(never commit the real file — it's gitignored on purpose):
 ```env
 PORT=3000
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=465
-SMTP_USER=mashikurrahman7@gmail.com
-SMTP_PASS=qaqozhezancwbegs
-CONTACT_TO=admin@anot.health, mashikurrahman7@gmail.com
-ADMIN_ANALYTICS_PASSWORD=AnotAdmin2026!
+SMTP_USER=<your-sending-gmail-address>
+SMTP_PASS=<your-gmail-app-password>
+CONTACT_TO=<addresses that should receive new leads>
+ADMIN_ANALYTICS_PASSWORD=<a strong, unique password - do not reuse this doc's old default>
 GOOGLE_APPLICATION_CREDENTIALS=./service-account.json
-GA4_PROPERTY_ID=554598931
+GA4_PROPERTY_ID=<your numeric GA4 property ID>
 GSC_SITE_URL=https://anot.health/
 ```
 
@@ -180,7 +181,7 @@ Complete these checks immediately after deployment:
   - Expect: New submission recorded as a JSON lead record.
 - [ ] **Admin Intelligence Dashboard**:
   - Visit `https://anot.health/admin-analytics.html`.
-  - Enter the password: `AnotAdmin2026!`
+  - Enter the `ADMIN_ANALYTICS_PASSWORD` value from your live server's `.env`.
   - Expect: Metrics cards display active GA4 status (`GA4 CONNECTED`), Traffic graphs, Top Visited Pages, and Search Console Keywords.
 - [ ] **Security Shield Audit**:
   - In browser, visit `https://anot.health/backend/.env` ➔ **Must return 403 Forbidden**.

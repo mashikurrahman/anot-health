@@ -1,0 +1,87 @@
+<svg width="720" height="940" viewBox="0 0 720 940" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="opsTitle">
+  <title id="opsTitle">Anot Health's four service pillars, documentation, coding, billing, and payroll, backed by certified human review, supporting practices nationwide</title>
+  <defs>
+    <linearGradient id="opsBg" x1="60" y1="40" x2="660" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#EAF2FF"/>
+    </linearGradient>
+    <linearGradient id="opsAccent" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#2F6FED"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <filter id="opsTileShadow" x="-16%" y="-12%" width="132%" height="128%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.07"/>
+    </filter>
+  </defs>
+
+  <rect width="720" height="940" fill="url(#opsBg)"/>
+  <circle cx="660" cy="60" r="90" fill="#DBEAFE" fill-opacity="0.6"/>
+  <circle cx="50" cy="880" r="90" fill="#BFDBFE" fill-opacity="0.4"/>
+
+  <text x="52" y="90" fill="#0F172A" font-family="'Outfit', Arial, sans-serif" font-size="30" font-weight="700">What we run</text>
+  <text x="52" y="122" fill="#0F172A" font-family="'Outfit', Arial, sans-serif" font-size="30" font-weight="700">for your practice</text>
+  <text x="52" y="154" fill="#64748B" font-family="'Inter', Arial, sans-serif" font-size="17">One partner, full clinical operations stack</text>
+
+  <!-- 2x2 pillar grid -->
+  <g font-family="'Outfit', Arial, sans-serif">
+    <g filter="url(#opsTileShadow)">
+      <rect x="52" y="192" width="286" height="152" rx="26" fill="white" stroke="#E2E8F0"/>
+    </g>
+    <circle cx="195" cy="248" r="26" fill="#EEF4FF"/>
+    <path d="M181 240h6v18h-6zM192 236h6v22h-6zM203 244h6v14h-6z" fill="#8FB8F6"/>
+    <text x="195" y="304" text-anchor="middle" fill="#0F172A" font-size="19" font-weight="700">Documentation</text>
+    <text x="195" y="326" text-anchor="middle" fill="#94A3B8" font-family="'Inter', Arial, sans-serif" font-size="13">AI draft + sign-off</text>
+
+    <g filter="url(#opsTileShadow)">
+      <rect x="382" y="192" width="286" height="152" rx="26" fill="white" stroke="#E2E8F0"/>
+    </g>
+    <circle cx="525" cy="248" r="26" fill="#EAF7EE"/>
+    <rect x="511" y="236" width="28" height="22" rx="5" fill="none" stroke="#16A34A" stroke-width="3"/>
+    <path d="M516 247h3M525 247h3" stroke="#16A34A" stroke-width="3" stroke-linecap="round"/>
+    <text x="525" y="304" text-anchor="middle" fill="#0F172A" font-size="19" font-weight="700">Coding</text>
+    <text x="525" y="326" text-anchor="middle" fill="#94A3B8" font-family="'Inter', Arial, sans-serif" font-size="13">Certified, defensible</text>
+
+    <g filter="url(#opsTileShadow)">
+      <rect x="52" y="364" width="286" height="152" rx="26" fill="white" stroke="#E2E8F0"/>
+    </g>
+    <circle cx="195" cy="420" r="26" fill="#FFF6E8"/>
+    <text x="195" y="429" text-anchor="middle" fill="#F59E0B" font-size="24" font-weight="700">$</text>
+    <text x="195" y="476" text-anchor="middle" fill="#0F172A" font-size="19" font-weight="700">Billing</text>
+    <text x="195" y="498" text-anchor="middle" fill="#94A3B8" font-family="'Inter', Arial, sans-serif" font-size="13">Claim to payment</text>
+
+    <g filter="url(#opsTileShadow)">
+      <rect x="382" y="364" width="286" height="152" rx="26" fill="white" stroke="#E2E8F0"/>
+    </g>
+    <circle cx="525" cy="420" r="26" fill="#F0EAFD"/>
+    <rect x="511" y="411" width="28" height="19" rx="4" fill="none" stroke="#7C3AED" stroke-width="3"/>
+    <circle cx="533" cy="421" r="2.6" fill="#7C3AED"/>
+    <text x="525" y="476" text-anchor="middle" fill="#0F172A" font-size="19" font-weight="700">Payroll</text>
+    <text x="525" y="498" text-anchor="middle" fill="#94A3B8" font-family="'Inter', Arial, sans-serif" font-size="13">On schedule, always</text>
+  </g>
+
+  <!-- trust strip: single column -->
+  <rect x="52" y="546" width="616" height="330" rx="28" fill="url(#opsAccent)"/>
+  <g fill="white" font-family="'Inter', Arial, sans-serif">
+    <circle cx="106" cy="606" r="20" fill="rgba(255,255,255,0.16)"/>
+    <path d="M98 606l5 5 10-11" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="138" y="601" font-family="'Outfit', Arial, sans-serif" font-size="17" font-weight="700">Certified human review</text>
+    <text x="138" y="624" font-size="14" opacity="0.75">Every note and code checked before it ships</text>
+
+    <circle cx="106" cy="672" r="20" fill="rgba(255,255,255,0.16)"/>
+    <path d="M106 661v12l8 5" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="138" y="667" font-family="'Outfit', Arial, sans-serif" font-size="17" font-weight="700">Coverage around the clock</text>
+    <text x="138" y="690" font-size="14" opacity="0.75">Documentation support across time zones</text>
+
+    <circle cx="106" cy="738" r="20" fill="rgba(255,255,255,0.16)"/>
+    <path d="M97 738h18M106 729v18" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <text x="138" y="733" font-family="'Outfit', Arial, sans-serif" font-size="17" font-weight="700">Nationwide practices</text>
+    <text x="138" y="756" font-size="14" opacity="0.75">Private and multisite practices alike</text>
+
+    <circle cx="106" cy="804" r="20" fill="rgba(255,255,255,0.16)"/>
+    <path d="M97 799h18M97 809h18" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <text x="138" y="799" font-family="'Outfit', Arial, sans-serif" font-size="17" font-weight="700">One operations partner</text>
+    <text x="138" y="822" font-size="14" opacity="0.75">Not four separate vendors to manage</text>
+  </g>
+
+  <text x="360" y="908" text-anchor="middle" fill="#94A3B8" font-family="'Inter', Arial, sans-serif" font-size="16" font-weight="500">Multi-specialty clinical operations, run by Anot Health</text>
+</svg>

@@ -72,10 +72,13 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '16kb' }));
 
-// Gracefully handle malformed JSON requests without terminating the process
+// Gracefully handle malformed or oversized request bodies without terminating the process
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         return res.status(400).json({ success: false, error: 'Malformed JSON payload.' });
+    }
+    if (err && err.type === 'entity.too.large') {
+        return res.status(413).json({ success: false, error: 'Request body too large.' });
     }
     next(err);
 });

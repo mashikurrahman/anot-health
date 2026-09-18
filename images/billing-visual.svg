@@ -1,0 +1,86 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="billTitle">
+  <title id="billTitle">A claim moving from submitted to reviewed to paid, with reimbursement trending upward</title>
+  <defs>
+    <linearGradient id="billBg" x1="180" y1="80" x2="1000" y2="1120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#EAF2FF"/>
+    </linearGradient>
+    <linearGradient id="billAccent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2F6FED"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="billBar" x1="0" y1="1" x2="0" y2="0">
+      <stop stop-color="#BFD7FB"/>
+      <stop offset="1" stop-color="#2F6FED"/>
+    </linearGradient>
+    <filter id="billShadow" x="110" y="100" width="980" height="1000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="26" stdDeviation="34" flood-color="#0F172A" flood-opacity="0.10"/>
+    </filter>
+    <filter id="billCardShadow" x="-14" y="-10" width="128" height="122" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="1200" rx="120" fill="url(#billBg)"/>
+  <circle cx="196" cy="216" r="104" fill="#DBEAFE"/>
+  <circle cx="1018" cy="978" r="140" fill="#BFDBFE" fill-opacity="0.55"/>
+
+  <g filter="url(#billShadow)">
+    <rect x="170" y="150" width="860" height="900" rx="64" fill="white"/>
+    <rect x="170" y="150" width="860" height="900" rx="64" stroke="#E1EAF8" stroke-width="2"/>
+  </g>
+
+  <text x="230" y="248" fill="#0F172A" font-family="'Outfit', Arial, sans-serif" font-size="34" font-weight="700">Claim lifecycle</text>
+  <text x="230" y="284" fill="#64748B" font-family="'Inter', Arial, sans-serif" font-size="22">From encounter to reimbursement, tracked end to end</text>
+
+  <!-- 3-stage pipeline -->
+  <g>
+    <rect x="230" y="336" width="200" height="150" rx="28" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <circle cx="330" cy="396" r="26" fill="#EEF4FF"/>
+    <path d="M317 388h26v6h-26zM317 400h26v6h-26zM317 412h18v6h-18z" fill="#93C0F8"/>
+    <text x="330" y="460" text-anchor="middle" fill="#334155" font-family="'Outfit', Arial, sans-serif" font-size="21" font-weight="600">Submitted</text>
+  </g>
+
+  <path d="M440 411h60" stroke="#BFD7FB" stroke-width="6" stroke-linecap="round"/>
+  <path d="M486 396l14 15-14 15" stroke="#BFD7FB" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <g>
+    <rect x="510" y="336" width="200" height="150" rx="28" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <circle cx="610" cy="396" r="26" fill="#FFF6E8"/>
+    <path d="M610 383v14l10 8" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="610" y="460" text-anchor="middle" fill="#334155" font-family="'Outfit', Arial, sans-serif" font-size="21" font-weight="600">Reviewed</text>
+  </g>
+
+  <path d="M720 411h60" stroke="#BFD7FB" stroke-width="6" stroke-linecap="round"/>
+  <path d="M766 396l14 15-14 15" stroke="#BFD7FB" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <g>
+    <rect x="790" y="336" width="200" height="150" rx="28" fill="url(#billAccent)"/>
+    <circle cx="890" cy="396" r="26" fill="rgba(255,255,255,0.18)"/>
+    <path d="M878 397l8 8 16-17" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="890" y="460" text-anchor="middle" fill="white" font-family="'Outfit', Arial, sans-serif" font-size="21" font-weight="600">Paid</text>
+  </g>
+
+  <!-- Reimbursement trend card -->
+  <g filter="url(#billCardShadow)">
+    <rect x="230" y="560" width="740" height="360" rx="32" fill="#F8FAFC" stroke="#E2E8F0"/>
+  </g>
+  <text x="266" y="616" fill="#0F172A" font-family="'Outfit', Arial, sans-serif" font-size="24" font-weight="700">Reimbursement trend</text>
+  <circle cx="778" cy="609" r="7" fill="#16A34A"/>
+  <text x="794" y="615" fill="#16A34A" font-family="'Inter', Arial, sans-serif" font-size="18" font-weight="600">Trending up</text>
+
+  <g fill="url(#billBar)">
+    <rect x="278" y="818" width="56" height="34" rx="12"/>
+    <rect x="358" y="778" width="56" height="74" rx="12"/>
+    <rect x="438" y="744" width="56" height="108" rx="12"/>
+    <rect x="518" y="708" width="56" height="144" rx="12"/>
+    <rect x="598" y="672" width="56" height="180" rx="12"/>
+    <rect x="678" y="698" width="56" height="154" rx="12" fill-opacity="0.55"/>
+    <rect x="758" y="642" width="56" height="210" rx="12"/>
+  </g>
+  <path d="M306 816 386 776 466 742 546 706 626 670 706 696 786 640" stroke="#1D4ED8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.5"/>
+
+  <text x="266" y="898" fill="#64748B" font-family="'Inter', Arial, sans-serif" font-size="20">Aged AR handled the same day it's flagged, not the same quarter.</text>
+
+  <text x="600" y="1032" text-anchor="middle" fill="#94A3B8" font-family="'Inter', Arial, sans-serif" font-size="23" font-weight="500">Every claim tracked from submission to posted payment</text>
+</svg>

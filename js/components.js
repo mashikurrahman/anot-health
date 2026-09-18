@@ -58,13 +58,6 @@
     const pricingUrl = isCanadian ? 'pricing-ca.html' : 'pricing.html';
     const aboutUrl = isCanadian ? 'about-ca.html' : 'about.html';
     const contactUrl = isCanadian ? 'contact-ca.html' : 'contact.html';
-    const phone = isCanadian ? '(888) 555-ANOT' : '(800) 555-ANOT';
-
-    /* tel: URIs must be digits only — letters in a vanity number are not
-       dialable on iOS or Android, so translate them off the keypad. */
-    const KEYPAD = { A: 2, B: 2, C: 2, D: 3, E: 3, F: 3, G: 4, H: 4, I: 4, J: 5, K: 5, L: 5,
-                     M: 6, N: 6, O: 6, P: 7, Q: 7, R: 7, S: 7, T: 8, U: 8, V: 8, W: 9, X: 9, Y: 9, Z: 9 };
-    const telHref = '+1' + phone.toUpperCase().replace(/[A-Z]/g, (c) => KEYPAD[c]).replace(/\D/g, '');
 
     /* Current page: used for active state and for section anchors that only
        exist on the homepage (on inner pages they must jump back to it). */
@@ -99,7 +92,6 @@
             <div class="h2-topbar-inner">
                 <div class="h2-topbar-left">
                     <span class="h2-topbar-item"><i data-lucide="clock" class="icon-xs"></i> ${isCanadian ? '24/7 Canadian Clinical Support' : '24/7 Clinical Operations Support'}</span>
-                    <a href="tel:${telHref}" class="h2-topbar-item h2-topbar-link"><i data-lucide="phone" class="icon-xs"></i> ${phone}</a>
                     <span class="h2-topbar-item h2-topbar-hide-md"><i data-lucide="map-pin" class="icon-xs"></i> ${isCanadian ? 'Serving Clinics Coast-to-Coast Across Canada' : 'Nationwide Support &bull; US-Based'}</span>
                 </div>
                 <div class="h2-topbar-right">
@@ -188,9 +180,9 @@
         ? `&copy; 2026 Anot Health Canada. All rights reserved.`
         : `&copy; 2026 Anot Health. All rights reserved.`;
 
-    /* Short footer, matching the homepages exactly. The region switcher and the
-       phone number both live in the header topbar on every page, so keeping
-       them out of the footer loses no functionality. */
+    /* Short footer, matching the homepages exactly. The region switcher lives
+       in the header topbar on every page, so keeping it out of the footer
+       loses no functionality. Email is the only published contact channel. */
     const footerHTML = `
     <footer class="h2-footer">
         <div class="container">
