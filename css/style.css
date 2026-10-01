@@ -10787,19 +10787,27 @@ body.page-transitioning-out {
 }
 
 .pricing-v2-popular-badge {
-    position: absolute;
-    top: -13px;
-    right: 22px;
-    background: #0F172A;
-    color: #FFFFFF;
-    font-size: 0.68rem;
+    position: absolute !important;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFFFFF;
+    color: #1D4ED8;
+    font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 5px 13px;
+    padding: 6px 18px;
     border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(37, 99, 235, 0.2);
+    white-space: nowrap;
+    z-index: 10 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    pointer-events: none;
 }
 
 /* Pricing Header */
