@@ -10763,6 +10763,7 @@ body.page-transitioning-out {
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: visible !important;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
@@ -10778,6 +10779,7 @@ body.page-transitioning-out {
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 28px 56px -12px rgba(37, 99, 235, 0.42), 0 10px 24px -6px rgba(37, 99, 235, 0.22);
     transform: translateY(-10px);
+    overflow: visible !important;
     z-index: 2;
 }
 

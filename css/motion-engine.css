@@ -85,7 +85,6 @@
 .h2-workflow-card,
 .h2-testimonial-card,
 .h2-pillar-item,
-.pricing-v2-card,
 .pricing-card,
 .proof-card,
 .detail-card,
@@ -97,6 +96,17 @@
 .acc-card {
     position: relative;
     overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: transform 0.35s var(--me-ease-smooth),
+                box-shadow 0.35s var(--me-ease-smooth),
+                border-color 0.25s ease;
+}
+
+/* Pricing V2 Cards must allow floating badges on the card border */
+.pricing-v2-card {
+    position: relative;
+    overflow: visible !important;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     transition: transform 0.35s var(--me-ease-smooth),
