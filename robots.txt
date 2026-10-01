@@ -3,6 +3,7 @@ Allow: /
 
 # Internal tooling and duplicate/staging copies only
 Disallow: /chatbot-admin.html
+Disallow: /seologin
 Disallow: /admin-analytics.html
 Disallow: /homepage-2.html
 Disallow: /homepage-1-archive.html

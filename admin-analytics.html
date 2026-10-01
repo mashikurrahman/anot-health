@@ -8,13 +8,14 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://images.unsplash.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests">
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.country.is https://ipapi.co; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Executive Analytics & SEO Suite | Anot Health</title>
     <meta name="description" content="Executive Analytics & Search Intelligence Cockpit for Anot Health administrators and SEO Managers.">
-    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202606082127">
-    <script src="https://unpkg.com/lucide@0.537.0" defer></script>
-    <link rel="stylesheet" href="css/style.css?v=202609161530">
+    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202609201640">
+    <script src="js/vendor/lucide-0.537.0.min.js" defer></script>
+    <link rel="stylesheet" href="css/style.css?v=202609301640">
+    <link rel="stylesheet" href="css/motion-engine.css?v=202609301630">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -845,6 +846,26 @@
             margin-bottom: 4px;
         }
 
+        /* Google-style round favicon: the site logo inside a light-bordered circle */
+        .serp-favicon {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid #E8EAED;
+        }
+
+        .serp-favicon img {
+            display: block;
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+        }
+
         .serp-title-preview {
             font-size: 1.25rem;
             color: #1A0DAB;
@@ -872,6 +893,65 @@
         .serp-input-field {
             margin-bottom: 14px;
         }
+
+        /* Save / Reset for the snippet previewer */
+        .serp-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .serp-btn {
+            border: 1px solid transparent;
+            border-radius: 40px;
+            padding: 9px 20px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+        }
+
+        .serp-btn-primary {
+            background: var(--accent-lime);
+            color: var(--dark-forest);
+            box-shadow: 0 4px 12px rgba(152, 236, 85, 0.35);
+        }
+
+        .serp-btn-primary:not(:disabled):hover {
+            background: var(--accent-lime-light);
+        }
+
+        .serp-btn-secondary {
+            background: #ffffff;
+            border-color: #CBD5E1;
+            color: #334155;
+        }
+
+        .serp-btn-secondary:not(:disabled):hover {
+            background: #F8FAFC;
+            border-color: #94A3B8;
+        }
+
+        .serp-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .serp-save-status {
+            margin: 10px 0 0;
+            min-height: 1.3em;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #64748B;
+        }
+
+        .serp-save-status[data-state="dirty"] { color: #B45309; }
+        .serp-save-status[data-state="saved"] { color: #15803D; }
+        .serp-save-status[data-state="error"] { color: #E11D48; }
 
         .serp-input-field label {
             display: flex;
@@ -966,6 +1046,11 @@
             text-align: center;
         }
     </style>
+    <noscript><style>
+        /* Scroll reveals are switched on by JS; without it, show everything. */
+        .reveal, .reveal-left, .reveal-right, .reveal-scale,
+        .hero-animate { opacity: 1 !important; transform: none !important; animation: none !important; }
+    </style></noscript>
 </head>
 
 <body>
@@ -997,6 +1082,13 @@
 
         <!-- MASTER CANVAS -->
         <div id="dashboardContent" class="exec-canvas" style="display: none;">
+
+            <!-- Shown whenever the numbers below are sample data rather than live Google data -->
+            <div id="sampleDataBanner" role="alert" hidden
+                style="margin: 0 0 20px; padding: 14px 18px; border-radius: 12px; background: #FEF3C7; border: 1px solid #F59E0B; color: #78350F; font-size: 0.92rem; line-height: 1.5;">
+                <strong>Sample data - not your real traffic.</strong>
+                <span id="sampleDataReason"></span>
+            </div>
 
             <!-- Top Header Bar -->
             <header class="exec-topbar">
@@ -1054,7 +1146,7 @@
                                 </div>
                             </div>
 
-                            <p class="metric-eyebrow">Active Visitors (GA4 Realtime)</p>
+                            <p class="metric-eyebrow">Active Users (selected period)</p>
                             <div class="metric-hero-val">
                                 <span id="heroActiveUsers">1,420</span>
                                 <button type="button" class="btn-eye-toggle" id="btnToggleMask" title="Toggle Privacy Mask">
@@ -1066,8 +1158,8 @@
                         <div class="card-active-footer">
                             <div class="footer-action-group">
                                 <button type="button" class="btn-dark-pill" id="btnActionRefresh">
-                                    <i data-lucide="activity" class="icon-xs" style="color: var(--accent-lime);"></i>
-                                    Live Stream
+                                    <i data-lucide="refresh-cw" class="icon-xs" style="color: var(--accent-lime);"></i>
+                                    Refresh
                                 </button>
                                 <button type="button" class="btn-light-pill" id="btnExportCsv">
                                     <i data-lucide="download" class="icon-xs"></i>
@@ -1091,7 +1183,7 @@
                             <div class="brand-accent-top">
                                 <span class="badge-live-stream">
                                     <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-lime);"></span>
-                                    GA4 CONNECTED
+                                    <span id="connectionBadgeText">CHECKING...</span>
                                 </span>
                                 <div style="display: flex; gap: 6px;">
                                     <button type="button" aria-label="More search performance options" style="background: rgba(255,255,255,0.4); border: none; border-radius: 50%; width: 32px; height: 32px; color: var(--dark-forest); display: flex; align-items: center; justify-content: center; cursor: pointer;">
@@ -1103,9 +1195,6 @@
                             <p style="font-size: 0.85rem; color: #27561B; margin: 0 0 6px; font-weight: 600;">Organic Google Impressions</p>
                             <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
                                 <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; margin: 0; line-height: 1; color: var(--dark-forest);" id="heroSearchViews">24,600</h2>
-                                <span style="background: rgba(255,255,255,0.7); color: var(--dark-forest); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.4);" id="heroGrowthBadge">
-                                    +18% this month
-                                </span>
                             </div>
                         </div>
 
@@ -1193,7 +1282,6 @@
 
                         <div style="margin-bottom: 16px;">
                             <h3 style="font-family: 'Outfit', sans-serif; font-size: 2.1rem; font-weight: 800; margin: 0; color: #0F172A;" id="earningTotalViews">5,890</h3>
-                            <span style="font-size: 0.78rem; color: #16A34A; font-weight: 600;">+18% engagement vs last period</span>
                         </div>
 
                         <div class="progress-list" id="progressList">
@@ -1413,7 +1501,7 @@
                                     <option value="billing">Medical Billing &amp; RCM</option>
                                     <option value="scribing">Clinical Medical Scribing</option>
                                     <option value="pricing">Pricing &amp; ROI</option>
-                                    <option value="custom">Custom Custom Page...</option>
+                                    <option value="specialties">Medical Specialties</option>
                                 </select>
                             </div>
 
@@ -1422,14 +1510,14 @@
                                     <span>Meta Title</span>
                                     <span class="char-counter" id="titleCharCount">0 / 60 chars</span>
                                 </label>
-                                <input type="text" id="serpTitleInput" value="Anot Health | Medical Billing &amp; Clinical Solutions">
+                                <input type="text" id="serpTitleInput">
                             </div>
 
                             <div class="serp-input-field">
                                 <label for="serpUrlInput">
                                     <span>Target URL Slug</span>
                                 </label>
-                                <input type="text" id="serpUrlInput" value="https://anot.health/billing.html">
+                                <input type="text" id="serpUrlInput">
                             </div>
 
                             <div class="serp-input-field">
@@ -1437,8 +1525,14 @@
                                     <span>Meta Description</span>
                                     <span class="char-counter" id="descCharCount">0 / 155 chars</span>
                                 </label>
-                                <textarea id="serpDescInput" rows="3">Human-verified medical billing, certified coding, and PIPEDA/HIPAA compliant clinical scribes for healthcare practices in the US and Canada.</textarea>
+                                <textarea id="serpDescInput" rows="3"></textarea>
                             </div>
+
+                            <div class="serp-actions">
+                                <button type="button" class="serp-btn serp-btn-primary" id="serpSaveBtn" disabled>Save changes</button>
+                                <button type="button" class="serp-btn serp-btn-secondary" id="serpResetBtn" disabled>Reset to live</button>
+                            </div>
+                            <p class="serp-save-status" id="serpSaveStatus" role="status" aria-live="polite"></p>
                         </div>
 
                         <!-- Live SERP Render -->
@@ -1449,18 +1543,18 @@
 
                             <div class="serp-card-box">
                                 <div class="serp-url-row">
-                                    <div style="width: 18px; height: 18px; border-radius: 50%; background: #0F172A; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 0.65rem; font-weight: 700;">
-                                        AH
-                                    </div>
+                                    <!-- Same favicon the site declares in <link rel="icon">, which is what Google shows -->
+                                    <span class="serp-favicon" aria-hidden="true">
+                                        <img src="images/logo-markss.webp?v=202609201640" alt="" width="22" height="22" decoding="async">
+                                    </span>
                                     <div>
                                         <span style="font-weight: 600; color: #202124;">Anot Health</span>
-                                        <span style="color: #5f6368; font-size: 0.78rem;" id="serpRenderUrl">https://anot.health &gt; billing.html</span>
+                                        <span style="color: #5f6368; font-size: 0.78rem;" id="serpRenderUrl">https://anot.health</span>
                                     </div>
                                 </div>
-                                <h3 class="serp-title-preview" id="serpRenderTitle">Anot Health | Medical Billing &amp; Clinical Solutions</h3>
+                                <h3 class="serp-title-preview" id="serpRenderTitle">Page Title Here</h3>
                                 <p class="serp-desc-preview" id="serpRenderDesc">
-                                    Human-verified medical billing, certified coding, and PIPEDA/HIPAA compliant clinical scribes for healthcare practices in the US and Canada.
-                                </p>
+                                    Meta description preview will appear here...</p>
                             </div>
 
                             <div style="margin-top: 18px; font-size: 0.82rem; line-height: 1.6; color: #64748B;">
@@ -1476,7 +1570,7 @@
             <footer class="exec-info-bar">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981;"></span>
-                    <span id="footerStatusMsg">Connected to Google Analytics 4 (Property 554598931). Live data streaming active.</span>
+                    <span id="footerStatusMsg">Checking Google connection...</span>
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
                     <span style="font-size: 0.8rem; color: #94A3B8;">Anot Health Operations v2026.1</span>
@@ -1489,9 +1583,18 @@
     <div id="footer-mount"></div>
     <div id="scroll-top-mount"></div>
 
-    <script src="js/components.js?v=202609161530"></script>
-    <script src="js/main.js?v=202609161530" defer></script>
-    <script src="js/admin-analytics.js?v=2026091703" defer></script>
+    <script src="js/components.js?v=202609301630"></script>
+    <script src="js/vendor/lenis.min.js?v=202609201640"></script>
+    <script src="js/main.js?v=202609301640" defer></script>
+    <script src="js/motion-engine.js?v=202609301630" defer></script>
+    <script src="js/admin-analytics.js?v=2026092002" defer></script>
 </body>
 
 </html>
+
+
+
+
+
+
+

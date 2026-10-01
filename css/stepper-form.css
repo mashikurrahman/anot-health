@@ -1,0 +1,1153 @@
+/* ==========================================================================
+   Anot Health - Premium Clinical Consultation Experience
+   Brand: Precision Medical Blue (#2563EB, #1D4ED8), Slate & Clean Surface
+   Motion Principle: "Motion should explain the interface, not decorate it."
+   Timing: 150-250ms (micro), 250-400ms (transitions) | cubic-bezier(0.22, 1, 0.36, 1)
+   ========================================================================== */
+
+:root {
+    --anot-primary: #2563EB;
+    --anot-primary-hover: #1D4ED8;
+    --anot-primary-surface: #EFF6FF;
+    --anot-primary-border: #BFDBFE;
+    --anot-text-heading: #0F172A;
+    --anot-text-body: #334155;
+    --anot-text-muted: #64748B;
+    --anot-text-subtle: #94A3B8;
+    --anot-border-default: #E2E8F0;
+    --anot-border-focus: #2563EB;
+    --anot-surface-card: #FFFFFF;
+    --anot-surface-alt: #F8FAFC;
+    --anot-error: #DC2626;
+    --anot-error-surface: #FEF2F2;
+    --anot-error-border: #FECACA;
+    --anot-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --anot-duration-fast: 180ms;
+    --anot-duration-base: 280ms;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ----------------------------------------------------
+   Section Container & Atmosphere
+   ---------------------------------------------------- */
+.stepper-form-section {
+    padding: 56px 0 96px;
+    background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 40%, #F8FAFC 100%);
+    min-height: 80vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle, heavily dampened ambient light */
+.stepper-form-section::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, rgba(248, 250, 252, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stepper-form-container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------
+   Intro Staggered Appearance
+   ---------------------------------------------------- */
+.stepper-intro-heading {
+    animation: anotFadeUp 420ms var(--anot-ease) forwards;
+}
+
+.stepper-intro-sub {
+    animation: anotFadeUp 420ms var(--anot-ease) 60ms forwards;
+    opacity: 0;
+}
+
+.stepper-card {
+    background: var(--anot-surface-card);
+    border-radius: 20px;
+    padding: 44px 48px;
+    box-shadow: 0 16px 40px -12px rgba(15, 23, 42, 0.06),
+                0 0 0 1px rgba(226, 232, 240, 0.9);
+    position: relative;
+    overflow: hidden;
+    animation: anotCardAppear 460ms var(--anot-ease) 100ms forwards;
+    opacity: 0;
+}
+
+@keyframes anotFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes anotCardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ----------------------------------------------------
+   Card Header & Progress Feedback
+   ---------------------------------------------------- */
+.stepper-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.stepper-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--anot-text-heading);
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+}
+
+.stepper-subtitle {
+    font-size: 0.95rem;
+    color: var(--anot-text-muted);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* ----------------------------------------------------
+   Stepper Navigation Bar (3 Purposeful Steps)
+   ---------------------------------------------------- */
+.stepper-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 36px;
+    padding: 0 24px;
+}
+
+.stepper-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: default;
+    font-family: inherit;
+}
+
+.stepper-step.is-clickable {
+    cursor: pointer;
+}
+
+/* Connecting Progress Line */
+.stepper-line {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--anot-border-default);
+    z-index: 1;
+    transition: background-color var(--anot-duration-base) var(--anot-ease);
+}
+
+.stepper-step:last-child .stepper-line {
+    display: none;
+}
+
+.stepper-step.is-completed .stepper-line {
+    background: var(--anot-primary);
+}
+
+/* Step Node Circle */
+.stepper-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: var(--anot-surface-card);
+    border: 2px solid var(--anot-border-default);
+    color: var(--anot-text-subtle);
+    transition: all var(--anot-duration-base) var(--anot-ease);
+    position: relative;
+    z-index: 2;
+}
+
+.stepper-step.is-completed .stepper-circle {
+    background: var(--anot-primary);
+    border-color: var(--anot-primary);
+    color: #FFFFFF;
+}
+
+.stepper-step.is-active .stepper-circle {
+    background: var(--anot-surface-card);
+    border-color: var(--anot-primary);
+    color: var(--anot-primary);
+    box-shadow: 0 0 0 4px var(--anot-primary-surface);
+    font-weight: 700;
+}
+
+.stepper-step-label {
+    margin-top: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--anot-text-muted);
+    transition: color var(--anot-duration-fast) var(--anot-ease);
+    white-space: nowrap;
+}
+
+.stepper-step.is-active .stepper-step-label {
+    color: var(--anot-primary);
+    font-weight: 600;
+}
+
+.stepper-step.is-completed .stepper-step-label {
+    color: var(--anot-text-heading);
+    font-weight: 500;
+}
+
+/* ----------------------------------------------------
+   Directional Step Panes
+   ---------------------------------------------------- */
+.stepper-pane {
+    display: none;
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.stepper-pane.is-active {
+    display: block;
+    opacity: 1;
+}
+
+/* Purposeful slide transitions */
+.stepper-pane.is-entering-next {
+    animation: paneSlideNext var(--anot-duration-base) var(--anot-ease) forwards;
+}
+
+.stepper-pane.is-entering-prev {
+    animation: paneSlidePrev var(--anot-duration-base) var(--anot-ease) forwards;
+}
+
+@keyframes paneSlideNext {
+    from {
+        opacity: 0;
+        transform: translateX(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes paneSlidePrev {
+    from {
+        opacity: 0;
+        transform: translateX(-14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Section Header inside Pane */
+.stepper-section-head {
+    margin-bottom: 24px;
+}
+
+.stepper-section-tag {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--anot-primary);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.stepper-section-sub {
+    font-size: 0.94rem;
+    color: var(--anot-text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.stepper-divider {
+    border: none;
+    height: 1px;
+    background: #F1F5F9;
+    margin: 12px 0 24px 0;
+}
+
+/* ----------------------------------------------------
+   Tactile Input Fields
+   ---------------------------------------------------- */
+.stepper-field {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.stepper-field-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--anot-text-body);
+    margin-bottom: 7px;
+}
+
+.stepper-field-label .required-dot {
+    color: var(--anot-primary);
+    margin-left: 2px;
+}
+
+.stepper-input,
+.stepper-select,
+.stepper-textarea {
+    width: 100%;
+    background: var(--anot-surface-card);
+    border: 1px solid var(--anot-border-default);
+    border-radius: 9px;
+    padding: 12px 16px;
+    font-size: 0.94rem;
+    color: var(--anot-text-heading);
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--anot-duration-fast) var(--anot-ease),
+                box-shadow var(--anot-duration-fast) var(--anot-ease),
+                background-color var(--anot-duration-fast) var(--anot-ease);
+    box-sizing: border-box;
+}
+
+.stepper-input::placeholder,
+.stepper-textarea::placeholder {
+    color: var(--anot-text-subtle);
+}
+
+.stepper-input:hover,
+.stepper-select:hover,
+.stepper-textarea:hover {
+    border-color: #CBD5E1;
+}
+
+.stepper-input:focus,
+.stepper-select:focus,
+.stepper-textarea:focus {
+    border-color: var(--anot-border-focus);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 0 0 3.5px rgba(37, 99, 235, 0.12);
+    background: #FFFFFF;
+}
+
+.stepper-input.has-error,
+.stepper-select.has-error,
+.stepper-textarea.has-error {
+    border-color: var(--anot-error) !important;
+    background-color: var(--anot-error-surface);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+}
+
+.stepper-field-error {
+    font-size: 0.82rem;
+    color: var(--anot-error);
+    margin-top: 5px;
+    display: none;
+    line-height: 1.4;
+}
+
+.stepper-field-error.is-visible {
+    display: block;
+    animation: anotFadeUp 200ms var(--anot-ease) forwards;
+}
+
+.stepper-textarea {
+    resize: vertical;
+    min-height: 84px;
+    line-height: 1.5;
+}
+
+/* 2-Column Responsive Form Row */
+.stepper-row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* ----------------------------------------------------
+   Pill Selection Groups (Role & Practice Size)
+   ---------------------------------------------------- */
+.stepper-pill-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.stepper-pill {
+    background: var(--anot-surface-alt);
+    border: 1px solid var(--anot-border-default);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--anot-text-body);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    font-family: inherit;
+}
+
+.stepper-pill:hover {
+    border-color: var(--anot-primary-border);
+    background: var(--anot-primary-surface);
+    color: var(--anot-primary);
+}
+
+.stepper-pill:focus-visible {
+    outline: none;
+    border-color: var(--anot-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.stepper-pill.is-active {
+    background: var(--anot-primary-surface);
+    border-color: var(--anot-primary);
+    color: var(--anot-primary-hover);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+}
+
+/* ----------------------------------------------------
+   Service Selection Cards
+   ---------------------------------------------------- */
+.stepper-service-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.stepper-service-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--anot-surface-card);
+    border: 1.5px solid var(--anot-border-default);
+    border-radius: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    text-align: left;
+    font-family: inherit;
+    width: 100%;
+}
+
+.stepper-service-card:hover {
+    border-color: var(--anot-primary-border);
+    background: #FAFBFD;
+}
+
+.stepper-service-card:focus-visible {
+    outline: none;
+    border-color: var(--anot-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.stepper-service-card.is-active {
+    border-color: var(--anot-primary);
+    background: var(--anot-primary-surface);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.stepper-service-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stepper-service-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--anot-text-heading);
+}
+
+.stepper-service-desc {
+    font-size: 0.81rem;
+    color: var(--anot-text-muted);
+}
+
+.stepper-service-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--anot-border-default);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+.stepper-service-card.is-active .stepper-service-check {
+    background: var(--anot-primary);
+    border-color: var(--anot-primary);
+    color: #FFFFFF;
+}
+
+/* ----------------------------------------------------
+   Smart Conditional Field Transition (EHR field)
+   ---------------------------------------------------- */
+.stepper-conditional {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-8px);
+    transition: max-height 320ms var(--anot-ease),
+                opacity 240ms ease,
+                transform 280ms var(--anot-ease),
+                margin 300ms var(--anot-ease);
+    margin-top: 0;
+}
+
+.stepper-conditional.is-revealed {
+    max-height: 180px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 18px;
+}
+
+/* ----------------------------------------------------
+   Calendar Day Strip (Horizontal Business Days)
+   ---------------------------------------------------- */
+.stepper-day-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.stepper-day-card {
+    background: var(--anot-surface-card);
+    border: 1px solid var(--anot-border-default);
+    border-radius: 10px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-family: inherit;
+}
+
+.stepper-day-card:hover {
+    border-color: var(--anot-primary-border);
+    background: #FAFBFD;
+    transform: translateY(-1px);
+}
+
+.stepper-day-card:focus-visible {
+    outline: none;
+    border-color: var(--anot-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.stepper-day-card.is-active {
+    border-color: var(--anot-primary);
+    background: var(--anot-primary-surface);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+}
+
+.stepper-day-name {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--anot-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stepper-day-card.is-active .stepper-day-name {
+    color: var(--anot-primary);
+}
+
+.stepper-day-number {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--anot-text-heading);
+    line-height: 1.2;
+}
+
+.stepper-day-card.is-active .stepper-day-number {
+    color: var(--anot-primary-hover);
+}
+
+.stepper-day-month {
+    font-size: 0.72rem;
+    color: var(--anot-text-muted);
+}
+
+/* ----------------------------------------------------
+   Time Slot Grid (Morning & Afternoon)
+   ---------------------------------------------------- */
+.stepper-slot-block {
+    margin-bottom: 18px;
+}
+
+.stepper-slot-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--anot-text-muted);
+    margin-bottom: 8px;
+}
+
+.stepper-slot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.stepper-slot-btn {
+    background: var(--anot-surface-alt);
+    border: 1px solid var(--anot-border-default);
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--anot-text-body);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: inherit;
+    min-height: 44px;
+}
+
+.stepper-slot-btn:hover {
+    border-color: var(--anot-primary-border);
+    background: var(--anot-primary-surface);
+    color: var(--anot-primary);
+    transform: translateY(-1px);
+}
+
+.stepper-slot-btn:focus-visible {
+    outline: none;
+    border-color: var(--anot-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.stepper-slot-btn.is-active {
+    background: var(--anot-primary);
+    border-color: var(--anot-primary);
+    color: #FFFFFF;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* ----------------------------------------------------
+   Trust Reassurance Note
+   ---------------------------------------------------- */
+.stepper-trust-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.84rem;
+    color: var(--anot-text-muted);
+    margin-top: 18px;
+    padding: 10px 16px;
+    background: var(--anot-surface-alt);
+    border-radius: 8px;
+    border: 1px solid var(--anot-border-default);
+}
+
+/* ----------------------------------------------------
+   Fast Streamlined Form Elements (1-Screen Frictionless Experience)
+   ---------------------------------------------------- */
+.stepper-service-chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.stepper-service-chip {
+    background: var(--anot-surface-alt);
+    border: 1px solid var(--anot-border-default);
+    border-radius: 9px;
+    padding: 9px 12px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--anot-text-body);
+    cursor: pointer;
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    min-height: 40px;
+    font-family: inherit;
+}
+
+.stepper-service-chip:hover {
+    border-color: var(--anot-primary-border);
+    background: var(--anot-primary-surface);
+    color: var(--anot-primary);
+}
+
+.stepper-service-chip:focus-visible {
+    outline: none;
+    border-color: var(--anot-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.stepper-service-chip.is-active {
+    background: #EFF6FF;
+    border-color: #2563EB;
+    color: #1D4ED8;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+}
+
+.stepper-service-chip-check {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 1.5px solid #CBD5E1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: transparent;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    margin-left: 6px;
+}
+
+.stepper-service-chip.is-active .stepper-service-chip-check {
+    background: #2563EB;
+    border-color: #2563EB;
+    color: #FFFFFF;
+}
+
+.stepper-note-details {
+    margin-top: 10px;
+    margin-bottom: 16px;
+}
+
+.stepper-note-summary {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #2563EB;
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+}
+
+.stepper-note-summary::-webkit-details-marker {
+    display: none;
+}
+
+.stepper-note-summary:hover {
+    text-decoration: underline;
+}
+
+.stepper-note-details textarea {
+    margin-top: 8px;
+    width: 100%;
+    min-height: 60px;
+}
+
+.stepper-btn-submit-unified {
+    width: 100%;
+    padding: 13px 22px;
+    background: #2563EB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+    transition: all 0.2s var(--anot-ease);
+}
+
+.stepper-btn-submit-unified:hover {
+    background: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+.stepper-btn-submit-unified:active {
+    transform: scale(0.98);
+}
+
+/* ----------------------------------------------------
+   Footer Navigation Controls
+   ---------------------------------------------------- */
+.stepper-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.stepper-btn-prev {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--anot-text-muted);
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    font-family: inherit;
+    min-height: 44px;
+}
+
+.stepper-btn-prev:hover {
+    color: var(--anot-text-heading);
+    background: #F1F5F9;
+}
+
+.stepper-btn-prev:focus-visible {
+    outline: none;
+    border-color: var(--anot-primary);
+}
+
+.stepper-btn-prev[disabled],
+.stepper-btn-prev.is-hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.stepper-btn-next.is-hidden,
+.stepper-btn-submit.is-hidden {
+    display: none !important;
+}
+
+.stepper-btn-next,
+.stepper-btn-submit {
+    background: var(--anot-primary);
+    color: #FFFFFF;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 26px;
+    border-radius: 9px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22);
+    transition: all var(--anot-duration-fast) var(--anot-ease);
+    font-family: inherit;
+    min-height: 44px;
+}
+
+.stepper-btn-next:hover,
+.stepper-btn-submit:hover {
+    background: var(--anot-primary-hover);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.32);
+}
+
+.stepper-btn-next:hover i,
+.stepper-btn-submit:hover i {
+    transform: translateX(3px);
+}
+
+.stepper-btn-next i,
+.stepper-btn-submit i {
+    transition: transform var(--anot-duration-fast) var(--anot-ease);
+}
+
+.stepper-btn-next:active,
+.stepper-btn-submit:active {
+    transform: scale(0.99);
+}
+
+.stepper-btn-submit[disabled] {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ----------------------------------------------------
+   Completion & Success Experience (Line-Draw Check)
+   ---------------------------------------------------- */
+.stepper-success-view {
+    text-align: center;
+    padding: 28px 10px;
+    animation: anotFadeUp 380ms var(--anot-ease) forwards;
+}
+
+.stepper-success-icon-wrap {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stepper-check-svg {
+    width: 68px;
+    height: 68px;
+}
+
+.stepper-check-circle {
+    stroke: var(--anot-primary);
+    stroke-width: 2.5;
+    stroke-miterlimit: 10;
+    fill: var(--anot-primary-surface);
+    animation: circleDraw 400ms var(--anot-ease) forwards;
+}
+
+.stepper-check-path {
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: var(--anot-primary);
+    fill: none;
+    animation: checkDraw 360ms var(--anot-ease) 180ms forwards;
+}
+
+@keyframes circleDraw {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes checkDraw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.stepper-success-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--anot-text-heading);
+    margin-bottom: 10px;
+}
+
+.stepper-success-copy {
+    font-size: 0.98rem;
+    color: var(--anot-text-muted);
+    max-width: 500px;
+    margin: 0 auto 24px auto;
+    line-height: 1.6;
+}
+
+.stepper-success-details {
+    background: var(--anot-surface-alt);
+    border: 1px solid var(--anot-border-default);
+    border-radius: 12px;
+    padding: 20px 24px;
+    max-width: 480px;
+    margin: 0 auto 28px auto;
+    text-align: left;
+    font-size: 0.88rem;
+    color: var(--anot-text-body);
+}
+
+.stepper-success-details strong {
+    color: var(--anot-text-heading);
+}
+
+.stepper-success-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.stepper-success-actions .btn-primary {
+    background: var(--anot-primary);
+    border: none;
+    color: #FFFFFF;
+}
+
+/* ----------------------------------------------------
+   Accessibility & Reduced Motion
+   ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .stepper-pane.is-entering-next,
+    .stepper-pane.is-entering-prev {
+        animation: none !important;
+        transform: none !important;
+    }
+
+    .stepper-card,
+    .stepper-intro-heading,
+    .stepper-intro-sub,
+    .stepper-success-view {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .stepper-check-path {
+        stroke-dashoffset: 0 !important;
+        animation: none !important;
+    }
+}
+
+/* ----------------------------------------------------
+   Responsive Adjustments
+   ---------------------------------------------------- */
+@media (max-width: 768px) {
+    .stepper-card {
+        padding: 32px 24px;
+    }
+
+    .stepper-nav {
+        padding: 0 8px;
+        margin-bottom: 28px;
+    }
+
+    .stepper-row-2col {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .stepper-pill-group {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stepper-day-strip {
+        gap: 6px;
+    }
+
+    .stepper-day-card {
+        padding: 10px 4px;
+    }
+
+    .stepper-day-number {
+        font-size: 1.1rem;
+    }
+
+    .stepper-slot-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .stepper-form-section {
+        padding: 36px 0 64px;
+    }
+
+    .stepper-card {
+        padding: 24px 16px;
+        border-radius: 16px;
+    }
+
+    .stepper-step-label {
+        font-size: 0.74rem;
+    }
+
+    .stepper-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.82rem;
+    }
+
+    .stepper-pill-group {
+        grid-template-columns: 1fr;
+    }
+
+    .stepper-service-chips {
+        grid-template-columns: 1fr;
+    }
+
+    .stepper-slot-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stepper-actions {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .stepper-btn-prev,
+    .stepper-btn-next,
+    .stepper-btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+}

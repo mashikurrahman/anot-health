@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,17 +8,23 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests">
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.country.is https://ipapi.co; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Chatbot Admin | Anot Health</title>
     <meta name="description" content="Local review panel for the Anot Health no-API chatbot brain, chat memory, and feedback.">
-    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202606082127">
-    <script src="https://unpkg.com/lucide@0.537.0" defer></script>
-    <link rel="stylesheet" href="css/style.css?v=202609161530">
+    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202609201640">
+    <script src="js/vendor/lucide-0.537.0.min.js" defer></script>
+    <link rel="stylesheet" href="css/style.css?v=202609301640">
+    <link rel="stylesheet" href="css/motion-engine.css?v=202609301630">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <meta name="robots" content="noindex, nofollow">
+    <noscript><style>
+        /* Scroll reveals are switched on by JS; without it, show everything. */
+        .reveal, .reveal-left, .reveal-right, .reveal-scale,
+        .hero-animate { opacity: 1 !important; transform: none !important; animation: none !important; }
+    </style></noscript>
 </head>
 
 <body>
@@ -196,12 +202,21 @@
     <div id="footer-mount"></div>
     <div id="scroll-top-mount"></div>
 
-    <script src="js/components.js?v=202609161530"></script>
-    <script src="js/main.js?v=202609161530" defer></script>
+    <script src="js/components.js?v=202609301630"></script>
+    <script src="js/vendor/lenis.min.js?v=202609201640"></script>
+    <script src="js/main.js?v=202609301640" defer></script>
+    <script src="js/motion-engine.js?v=202609301630" defer></script>
     <script src="js/chatbot-admin.js?v=202606082127" defer></script>
 </body>
 
 </html>
+
+
+
+
+
+
+
 
 
 

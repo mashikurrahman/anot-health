@@ -13,17 +13,19 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anot Health Canada | Book a Demo for Your Canadian Practice</title>
+    <title>Anot Health | Book a Practice Walkthrough</title>
     <meta name="description"
-        content="Request a live 15-minute consultation. See how certified Canadian medical scribes and provincial billing specialists eliminate documentation backlogs in Accuro, Telus, and OSCAR.">
-    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202606082127">
+        content="Book a 15-minute consultation: see how certified Canadian scribes and provincial billing specialists clear documentation backlogs in Accuro, Telus and OSCAR.">
+    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202609201640">
     <link rel="canonical" href="https://anot.health/contact-ca.html">
     <meta name="robots" content="index, follow">
-    <script src="https://unpkg.com/lucide@0.537.0" defer></script>
+    <script src="js/vendor/lucide-0.537.0.min.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=202609161530">
+    <link rel="stylesheet" href="css/style.css?v=202609301640">
+    <link rel="stylesheet" href="css/motion-engine.css?v=202609301630">
+    <link rel="stylesheet" href="css/stepper-form.css?v=202609201640">
     <script src="js/geo-switcher.js"></script>
     <script type="application/ld+json">
     {
@@ -45,14 +47,19 @@
     <meta property="og:url" content="https://anot.health/contact-ca.html">
     <meta property="og:title" content="Anot Health Canada | Book a Demo for Your Canadian Practice">
     <meta property="og:description" content="Request a live 15-minute consultation. See how certified Canadian medical scribes and provincial billing specialists eliminate documentation backlogs in Accuro, Telus, and OSCAR.">
-    <meta property="og:image" content="https://anot.health/images/hero-platform-center.webp?v=202606082127">
+    <meta property="og:image" content="https://anot.health/images/hero-platform-center.webp?v=202609201640">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="Anot Health Canada | Book a Demo for Your Canadian Practice">
     <meta property="twitter:description" content="Request a live 15-minute consultation. See how certified Canadian medical scribes and provincial billing specialists eliminate documentation backlogs in Accuro, Telus, and OSCAR.">
-    <meta property="twitter:image" content="https://anot.health/images/hero-platform-center.webp?v=202606082127">
+    <meta property="twitter:image" content="https://anot.health/images/hero-platform-center.webp?v=202609201640">
     <link rel="alternate" hreflang="en-us" href="https://anot.health/contact.html">
     <link rel="alternate" hreflang="en-ca" href="https://anot.health/contact-ca.html">
     <link rel="alternate" hreflang="x-default" href="https://anot.health/contact.html">
+    <noscript><style>
+        /* Scroll reveals are switched on by JS; without it, show everything. */
+        .reveal, .reveal-left, .reveal-right, .reveal-scale,
+        .hero-animate { opacity: 1 !important; transform: none !important; animation: none !important; }
+    </style></noscript>
 </head>
 
 <body>
@@ -60,158 +67,147 @@
     <div id="header-mount"></div>
 
     <main id="main-content" tabindex="-1">
-        <section class="hero hero-page">
+
+        <section class="section stepper-form-section" id="demo-form">
             <div class="container">
-                <div class="hero-grid">
-                    <div class="hero-content hero-page-wide">
-                        <div class="hero-badge reveal" style="display: inline-flex; align-items: center; gap: 6px;">
-                            <span class="flag">🇨🇦</span> <span>Canadian Clinic Operations</span>
-                        </div>
-                        <h1 class="hero-title reveal delay-100">Schedule your Canadian <span class="text-gradient">clinic walkthrough</span></h1>
-                        <p class="hero-subtitle reveal delay-200 hero-subtitle-wide">See how our certified scribes deliver sign-off ready SOAP notes straight into Accuro, Telus PS Suite, Med Access, or OSCAR Pro &mdash; and how our billing specialists eliminate provincial rejection loops.</p>
-                        <div class="hero-actions reveal delay-300">
-                            <a href="#demo-form" class="btn btn-cyan">Jump to Booking Form</a>
-                            <a href="homepage-ca.html#accuracy" class="btn btn-outline">See Accuracy Benchmark</a>
-                        </div>
-                    </div>
-                    <div class="hero-visual reveal-scale">
-                        <div class="hero-image-wrap parallax-layer" data-speed="0.02">
-                            <div class="bg-morph">
-                                <div class="blob blob-1"></div>
-                                <div class="blob blob-2"></div>
-                            </div>
-                            <img src="images/hero-platform-center.webp?v=202606082127"
-                                alt="Anot platform preview for Canadian clinical operations"
-                                class="hero-image" loading="lazy">
-                            <div class="hero-image-caption">
-                                <i data-lucide="monitor-smartphone" class="icon-xs"></i> <span>Live preview customized to your Canadian EMR and provincial fee schedule</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="section-header reveal text-center" style="max-width: 680px; margin: 0 auto 32px auto;">
+                    <h1 class="section-title stepper-intro-heading">Schedule Your <span class="text-gradient">Clinical Walkthrough</span></h1>
+                    <p class="section-subtitle stepper-intro-sub">A focused, 15-minute consultation tailored to your EMR (Accuro, Telus, OSCAR) and provincial billing requirements.</p>
                 </div>
-            </div>
-        </section>
 
-        <section class="section">
-            <div class="container">
-                <div class="contact-grid">
-                    <div class="contact-text reveal-left">
-                        <div class="mt-48 flex-column gap-28">
-                            <div class="items-center gap-16">
-                                <div class="card-icon-box contact-icon-box"><i data-lucide="mail" class="icon-md"></i></div>
-                                <div>
-                                    <div class="contact-info-label">Email Us</div>
-                                    <a href="mailto:admin@anot.health" class="contact-info-value">admin@anot.health</a>
-                                </div>
-                            </div>
-                            <div class="items-center gap-16">
-                                <div class="card-icon-box contact-icon-box"><i data-lucide="map-pin" class="icon-md"></i></div>
-                                <div>
-                                    <div class="contact-info-label">Coverage</div>
-                                    <div class="contact-info-value">Coast-to-Coast Across Canada (ON, BC, AB, QC, Atlantic)</div>
-                                </div>
-                            </div>
-                            <div class="items-center gap-16">
-                                <div class="card-icon-box contact-icon-box"><i data-lucide="shield-check" class="icon-md"></i></div>
-                                <div>
-                                    <div class="contact-info-label">Compliance &amp; Residency</div>
-                                    <div class="contact-info-value">AWS Canada Central &bull; PIPEDA, PHIPA, HIA, PIPA</div>
-                                </div>
-                            </div>
-                            <div class="items-center gap-16">
-                                <div class="card-icon-box contact-icon-box"><i data-lucide="clock-3" class="icon-md"></i></div>
-                                <div>
-                                    <div class="contact-info-label">Response Time</div>
-                                    <div class="contact-info-value">Within 1 business day</div>
-                                </div>
-                            </div>
+                <div class="stepper-form-container">
+                    <div class="stepper-card">
+                        <!-- Card Header -->
+                        <div class="stepper-header">
+                            <h3 class="stepper-title">Request a Practice Walkthrough</h3>
+                            <p class="stepper-subtitle">A focused 15-minute review tailored to your EMR and provincial billing requirements</p>
                         </div>
-                    </div>
 
-                    <div class="contact-form reveal-right">
-                        <form class="premium-card p-52" id="demo-form" data-demo-form data-submit-provider="backend"
-                            action="/api/contact" method="POST">
-                            <input type="hidden" name="subject" value="Canadian Clinic Demo Request" data-subject-field>
+                        <!-- 1-Screen Fast Consultation Form -->
+                        <form id="stepperForm" action="/api/contact" method="POST" novalidate>
+                            <input type="hidden" name="source" value="contact-ca.html">
                             <input type="hidden" name="region" value="Canada">
+                            <input type="hidden" name="role" value="Lead Physician">
+                            <input type="hidden" name="practice_size" value="2-5 Providers">
+                            <input type="hidden" name="service" id="service" value="Clinical Scribing (Ambient AI + Certified Scribe)">
+                            <input type="hidden" name="preferred_date" id="preferred_date" value="">
+                            <input type="hidden" name="time_slot" id="time_slot" value="10:30 AM ET">
                             <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
 
-                            <h2 class="card-title mb-8">Request Your Canadian Clinic Demo</h2>
-                            <p class="card-text mb-28">We will tailor the conversation to your EMR, provincial billing rules, and workflow goals.</p>
+                            <!-- Name & Email Row -->
+                            <div class="stepper-row-2col" style="margin-bottom: 14px;">
+                                <div class="stepper-field" style="margin-bottom: 0;">
+                                    <label for="name" class="stepper-field-label">Physician / Lead Name <span class="required-dot">*</span></label>
+                                    <input type="text" id="name" name="name" class="stepper-input" placeholder="e.g. Dr. Robert Chen, MD, CCFP" autocomplete="name" required>
+                                </div>
+                                <div class="stepper-field" style="margin-bottom: 0;">
+                                    <label for="email" class="stepper-field-label">Clinic Email Address <span class="required-dot">*</span></label>
+                                    <input type="email" id="email" name="email" class="stepper-input" placeholder="doctor@clinic.ca" autocomplete="email" required>
+                                </div>
+                            </div>
 
-                            <label for="name" class="sr-only">Full Name</label>
-                            <input type="text" id="name" name="name" placeholder="Full Name & Title (e.g. Dr. Jane Smith, MD)" class="form-input" required>
+                            <!-- Clinic Name & EMR Row -->
+                            <div class="stepper-row-2col" style="margin-bottom: 16px;">
+                                <div class="stepper-field" style="margin-bottom: 0;">
+                                    <label for="practice" class="stepper-field-label">Clinic / FHT Name <span class="required-dot">*</span></label>
+                                    <input type="text" id="practice" name="practice" class="stepper-input" placeholder="e.g. Toronto Health Collective / BC Medical" autocomplete="organization" required>
+                                </div>
+                                <div class="stepper-field" style="margin-bottom: 0;">
+                                    <label for="ehr" class="stepper-field-label">Primary Clinic EMR</label>
+                                    <select id="ehr" name="ehr" class="stepper-select">
+                                        <option value="QHR Accuro EMR">QHR Accuro EMR</option>
+                                        <option value="TELUS PS Suite / Med Access">TELUS PS Suite / Med Access</option>
+                                        <option value="OSCAR Pro / WELL Health">OSCAR Pro / WELL Health</option>
+                                        <option value="Epic Systems">Epic Systems</option>
+                                        <option value="Cerner / Oracle Health">Cerner / Oracle Health</option>
+                                        <option value="Other Clinic EMR">Other Clinic EMR</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                            <label for="email" class="sr-only">Work Email</label>
-                            <input type="email" id="email" name="email" placeholder="Clinic Email Address" class="form-input" required>
+                            <!-- Service Interest Chips -->
+                            <div class="stepper-field" style="margin-bottom: 16px;">
+                                <label class="stepper-field-label">Primary Service Focus</label>
+                                <div class="stepper-service-chips" id="serviceGrid" role="radiogroup" aria-label="Select service focus">
+                                    <button type="button" class="stepper-service-chip is-active" data-service="Clinical Scribing (Ambient AI + Certified Scribe)" role="radio" aria-checked="true">
+                                        <span>Clinical Scribing</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
+                                    <button type="button" class="stepper-service-chip" data-service="Provincial Medical Billing &amp; RA Reconciliation" role="radio" aria-checked="false">
+                                        <span>Provincial Billing &amp; RA</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
+                                    <button type="button" class="stepper-service-chip" data-service="Clinical Coding &amp; Provincial Compliance" role="radio" aria-checked="false">
+                                        <span>Clinical Coding &amp; Audit</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
+                                    <button type="button" class="stepper-service-chip" data-service="Full Practice Operations Suite" role="radio" aria-checked="false">
+                                        <span>Full Practice Suite</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
+                                </div>
+                            </div>
 
-                            <label for="practice" class="sr-only">Practice / Clinic Name</label>
-                            <input type="text" id="practice" name="practice" placeholder="Clinic / Practice Name" class="form-input" required>
+                            <!-- Preferred Date & Time (Next Available Business Days) -->
+                            <div class="stepper-field" style="margin-bottom: 16px;">
+                                <label class="stepper-field-label">Preferred Date &amp; Time (Eastern Time)</label>
+                                <div class="stepper-day-strip" id="stepperDayStrip" role="radiogroup" aria-label="Select preferred consultation date" style="margin-bottom: 12px;"></div>
+                                <div class="stepper-slot-grid" id="timeSlotGrid" role="radiogroup" aria-label="Select consultation time slot">
+                                    <button type="button" class="stepper-slot-btn" data-slot="09:30 AM ET" role="radio" aria-checked="false">09:30 AM ET</button>
+                                    <button type="button" class="stepper-slot-btn is-active" data-slot="10:30 AM ET" role="radio" aria-checked="true">10:30 AM ET</button>
+                                    <button type="button" class="stepper-slot-btn" data-slot="02:00 PM ET" role="radio" aria-checked="false">02:00 PM ET</button>
+                                    <button type="button" class="stepper-slot-btn" data-slot="03:30 PM ET" role="radio" aria-checked="false">03:30 PM ET</button>
+                                </div>
+                            </div>
 
-                            <!-- Canadian Province Selector -->
-                            <label for="province" class="sr-only">Province / Territory</label>
-                            <select id="province" name="province" class="form-input" required title="Select your Canadian province or territory">
-                                <option value="" disabled selected>Select Province / Territory</option>
-                                <option value="Ontario">Ontario (OHIP)</option>
-                                <option value="British Columbia">British Columbia (MSP / Teleplan)</option>
-                                <option value="Alberta">Alberta (AHCIP)</option>
-                                <option value="Quebec">Quebec (RAMQ)</option>
-                                <option value="Nova Scotia">Nova Scotia (MSI)</option>
-                                <option value="Manitoba">Manitoba (Manitoba Health)</option>
-                                <option value="Saskatchewan">Saskatchewan (eHealth)</option>
-                                <option value="New Brunswick">New Brunswick (Medicare)</option>
-                                <option value="Newfoundland">Newfoundland &amp; Labrador (MCP)</option>
-                                <option value="Prince Edward Island">Prince Edward Island (Health PEI)</option>
-                                <option value="Territories">Northwest Territories / Yukon / Nunavut</option>
-                            </select>
+                            <!-- Optional Note / Question -->
+                            <details class="stepper-note-details">
+                                <summary class="stepper-note-summary">+ Add provincial notes or EMR questions (optional)</summary>
+                                <textarea id="message" name="message" class="stepper-textarea" aria-label="Anything else we should know before the walkthrough (optional)" placeholder="Specify your province (e.g. Ontario OHIP, BC MSP, Alberta AHCIP), clinic specialty, or billing questions..."></textarea>
+                            </details>
 
-                            <!-- Canadian EMR Selector -->
-                            <label for="emr" class="sr-only">Primary Clinic EMR</label>
-                            <select id="emr" name="emr" class="form-input" required title="Select your primary Canadian EMR">
-                                <option value="" disabled selected>Primary Clinic EMR</option>
-                                <option value="Accuro">Accuro EMR (QHR Technologies)</option>
-                                <option value="Telus PS Suite">Telus Health &mdash; PS Suite</option>
-                                <option value="Telus Med Access">Telus Health &mdash; Med Access</option>
-                                <option value="OSCAR Pro">OSCAR Pro / OSCAR McMaster</option>
-                                <option value="Epic Canada">Epic Canada</option>
-                                <option value="Cerner Canada">Oracle Health / Cerner Canada</option>
-                                <option value="Profile">Profile EMR (Intrahealth)</option>
-                                <option value="Other">Other Canadian EMR</option>
-                            </select>
+                            <!-- Primary Submit Button -->
+                            <button type="submit" class="stepper-btn-submit-unified" id="stepperSubmitBtn">
+                                Confirm Walkthrough Request <i data-lucide="arrow-right" class="icon-xs"></i>
+                            </button>
 
-                            <label for="service" class="sr-only">Service of Interest</label>
-                            <select id="service" name="service" class="form-input" required title="Select service of interest">
-                                <option value="" disabled selected>Service of Interest</option>
-                                <option value="documentation">Clinical Scribing (Ambient AI + Certified Scribe)</option>
-                                <option value="billing">Provincial Medical Billing &amp; RA Reconciliation</option>
-                                <option value="coding">Clinical Coding &amp; Compliance (Provincial)</option>
-                                <option value="payroll">Practice Payroll &amp; Locum Accounting</option>
-                                <option value="multiple">Multiple / Full Operations Bundle</option>
-                            </select>
-
-                            <label for="specialty" class="sr-only">Clinical Specialty</label>
-                            <select id="specialty" name="specialty" class="form-input" required title="Select clinical specialty">
-                                <option value="" disabled selected>Select Clinical Specialty</option>
-                                <option value="family-medicine">Family Medicine / General Practice</option>
-                                <option value="internal-medicine">Internal Medicine</option>
-                                <option value="pediatrics">Pediatrics</option>
-                                <option value="cardiology">Cardiology</option>
-                                <option value="orthopedics">Orthopedics / Sports Medicine</option>
-                                <option value="dermatology">Dermatology</option>
-                                <option value="psychiatry">Psychiatry / Mental Health</option>
-                                <option value="urgent-care">Walk-in / Urgent Care</option>
-                                <option value="surgical">Surgical Subspecialty</option>
-                                <option value="multi-specialty">Multi-Specialty Family Health Team (FHT)</option>
-                                <option value="other">Other Specialty</option>
-                            </select>
-
-                            <label for="message" class="sr-only">Message</label>
-                            <textarea id="message" name="message" placeholder="Tell us about your current documentation or billing bottlenecks..." class="form-input" rows="3" required></textarea>
-
-                            <button type="submit" class="btn btn-cyan btn-full" data-form-submit>Book Canadian Clinic Consultation</button>
-                            <p class="form-status" data-form-status role="status" aria-live="polite" tabindex="-1">
-                                Submissions are routed directly to our Canadian clinical onboarding desk.
-                            </p>
+                            <div class="stepper-trust-note" style="margin-top: 14px; padding: 10px 14px;">
+                                <i data-lucide="lock" class="icon-xs" style="color: #2563EB;"></i>
+                                <span>PIPEDA &amp; PHIPA compliant data handling. 15-minute focused discussion. Zero sales pressure.</span>
+                            </div>
                         </form>
+
+                        <!-- Success View Screen (Line-Draw Check) -->
+                        <div id="stepperSuccessView" class="stepper-success-view" style="display: none;">
+                            <div class="stepper-success-icon-wrap">
+                                <svg class="stepper-check-svg" viewBox="0 0 52 52" aria-hidden="true">
+                                    <circle class="stepper-check-circle" cx="26" cy="26" r="24"/>
+                                    <path class="stepper-check-path" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                                </svg>
+                            </div>
+                            <h3 class="stepper-success-title">Consultation Request Received</h3>
+                            <p class="stepper-success-copy">
+                                Thank you for reaching out, <strong data-success-name>Doctor</strong>. We have received your consultation request for <strong data-success-practice>your clinic</strong>.
+                            </p>
+                            <div class="stepper-success-details">
+                                <div style="margin-bottom: 8px;">
+                                    <strong>Requested Time:</strong> <span data-success-date>Upcoming business day</span> at <span data-success-time>10:30 AM ET</span>
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <strong>Next Step:</strong> We'll confirm by sending a calendar invitation to <strong data-success-email>your email</strong>.
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <strong>Preparation:</strong> Our clinical workflow team will review your provincial billing schedule and EMR profile.
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <strong>Direct Inquiries:</strong> <a href="mailto:admin@anot.health" style="color: #2563EB; font-weight: 600;">admin@anot.health</a>
+                                </div>
+                            </div>
+                            <div class="stepper-success-actions">
+                                <a href="homepage-ca.html" class="btn btn-primary">Return to Homepage</a>
+                                <a href="pipeda.html" class="btn btn-secondary">Review PIPEDA Compliance</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -222,7 +218,7 @@
             <div class="container">
                 <div class="section-header reveal">
                     <h2 class="section-title">What to Expect During the <span class="text-gradient">First Consultation</span></h2>
-                    <p class="section-subtitle">A focused, 15-minute practical conversation with a Canadian clinical workflow specialist.</p>
+                    <p class="section-subtitle">A focused, 15-minute practical conversation with a dedicated clinical workflow specialist.</p>
                 </div>
                 <div class="contact-support-grid">
                     <article class="premium-card reveal">
@@ -248,11 +244,22 @@
     <div id="footer-mount"></div>
     <div id="scroll-top-mount"></div>
 
-    <script src="js/components.js?v=202609161530"></script>
-    <script src="js/main.js?v=202609161530" defer></script>
+    <script src="js/components.js?v=202609301630"></script>
+    <script src="js/vendor/lenis.min.js?v=202609201640"></script>
+    <script src="js/main.js?v=202609301640" defer></script>
+    <script src="js/motion-engine.js?v=202609301630" defer></script>
+    <script src="js/chatbot-v2.js?v=202609201640" defer></script>
+    <script src="js/stepper-form.js?v=202609201640" defer></script>
 </body>
 
 </html>
+
+
+
+
+
+
+
 
 
 

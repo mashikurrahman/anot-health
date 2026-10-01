@@ -1,3 +1,5 @@
+@import url("stepper-form.css?v=202609181438");
+
 /* Fonts moved to HTML header for faster loading */
 
 :root {
@@ -79,7 +81,48 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
+    /* Mobile browsers ignore overflow-x on body alone, so off-screen reveal
+       animations (.reveal-right starts 40px to the right) widened the page.
+       clip, unlike hidden, doesn't create a scroll container and so keeps
+       position: sticky working. */
+    overflow-x: clip;
+}
+
+/* ── Lenis Smooth Scrolling Core ── */
+html.lenis,
+html.lenis body,
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+    pointer-events: none;
+}
+
+html, body {
+    overscroll-behavior-y: none;
+}
+
+/* Hardware accelerated scroll layers */
+
+.ambient-glow,
+[class*="-glow"],
+.h2-ring-field,
+.hero-bg-canvas {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: paint;
+    pointer-events: none;
 }
 
 /* Ensure fixed header does not obscure section targets when clicking anchor links */
@@ -113,6 +156,88 @@ section[id],
     }
 }
 
+/* ── Accuracy Highlight Cards ── */
+.acc-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 16px;
+    padding: 28px 26px 26px;
+    box-shadow: 0 2px 12px -4px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15,23,42,0.04);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.acc-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.12), 0 4px 10px rgba(15,23,42,0.05);
+}
+
+.acc-card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--acc-color, #2563eb);
+    border-radius: 16px 16px 0 0;
+}
+
+.acc-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.acc-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.acc-card-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.acc-card-stat {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3.4rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+}
+
+.acc-card-unit {
+    font-size: 2rem;
+    font-weight: 700;
+    vertical-align: top;
+    margin-top: 6px;
+    display: inline-block;
+}
+
+.acc-card-divider {
+    height: 1px;
+    background: rgba(226, 232, 240, 0.9);
+    margin-bottom: 14px;
+}
+
+.acc-card-desc {
+    font-size: 0.855rem;
+    color: #64748b;
+    line-height: 1.55;
+    margin: 0;
+}
+
+
 body {
     font-family: 'Inter', sans-serif;
     background:
@@ -120,8 +245,20 @@ body {
         linear-gradient(180deg, #f8fbff 0%, #f8fafc 42%, #eef4fb 100%);
     color: var(--text);
     line-height: 1.6;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Accessible Universal Focus Rings (WCAG 2.4.7 AA) ── */
+:focus-visible {
+    outline: 2.5px solid #2563EB !important;
+    outline-offset: 2px !important;
+}
+
+/* ── Accessible Placeholder Contrast (WCAG 1.4.3 AA: 4.7:1) ── */
+::placeholder {
+    color: #64748B !important;
+    opacity: 0.92 !important;
 }
 
 body::before {
@@ -246,49 +383,84 @@ img {
     color: var(--cyan)
 }
 
-/* ── Scroll Reveal System ── */
+/* ── Scroll Reveal System (Butter-Smooth Motion) ── */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity var(--anim-speed) var(--ease), transform var(--anim-speed) var(--ease)
+    transform: translateY(28px);
+    transition: opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1), transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .reveal.visible {
     opacity: 1;
-    transform: translateY(0)
+    transform: translateY(0);
+    will-change: auto;
 }
 
 .reveal-left {
     opacity: 0;
-    transform: translateX(-40px);
-    transition: opacity var(--anim-speed) var(--ease), transform var(--anim-speed) var(--ease)
+    transform: translateX(-32px);
+    transition: opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1), transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .reveal-left.visible {
     opacity: 1;
-    transform: translateX(0)
+    transform: translateX(0);
+    will-change: auto;
 }
 
 .reveal-right {
     opacity: 0;
-    transform: translateX(40px);
-    transition: opacity var(--anim-speed) var(--ease), transform var(--anim-speed) var(--ease)
+    transform: translateX(32px);
+    transition: opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1), transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .reveal-right.visible {
     opacity: 1;
-    transform: translateX(0)
+    transform: translateX(0);
+    will-change: auto;
 }
 
 .reveal-scale {
     opacity: 0;
     transform: scale(0.94);
-    transition: opacity var(--anim-speed) var(--ease), transform var(--anim-speed) var(--ease)
+    transition: opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1), transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .reveal-scale.visible {
     opacity: 1;
-    transform: scale(1)
+    transform: scale(1);
+    will-change: auto;
+}
+
+/* Modern Card Butter Reveals & Micro-Motions */
+.motion-enhanced .acc-card,
+.motion-enhanced .h2-workflow-card,
+.motion-enhanced .h2-bento-card,
+.motion-enhanced .h2-testimonial-card {
+    opacity: 0;
+    transform: translateY(18px);
+    will-change: opacity, transform;
+}
+
+.motion-enhanced .acc-card.visible,
+.motion-enhanced .h2-workflow-card.visible,
+.motion-enhanced .h2-bento-card.visible,
+.motion-enhanced .h2-testimonial-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    will-change: auto;
 }
 
 @keyframes heroFadeUp {
@@ -651,7 +823,7 @@ img {
     -webkit-text-fill-color: currentcolor;
 }
 
-/* ── Buttons ── */
+/* ── Buttons (Standardized States, Hover Lift & Tactile Feedback) ── */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -660,55 +832,83 @@ img {
     min-height: 48px;
     border-radius: var(--r-full);
     font-weight: 700;
-    font-size: .9rem;
+    font-size: .92rem;
     line-height: 1.25;
     text-align: center;
     white-space: normal;
     text-wrap: balance;
     font-family: inherit;
-    cursor: default;
+    cursor: pointer;
     border: none;
-    transition: .4s var(--ease);
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease;
     position: relative;
     overflow: hidden;
-    gap: 8px
+    gap: 8px;
+    -webkit-user-select: none;
+    user-select: none;
+    text-decoration: none;
+}
+
+.btn:active,
+.pricing-v2-btn:active,
+.h2-btn-primary:active,
+.stepper-btn-next:active,
+.stepper-btn-submit:active {
+    transform: scale(0.98) !important;
+}
+
+.btn:disabled,
+.btn[disabled],
+button:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .btn-primary {
     background: var(--violet);
-    color: #fff;
+    color: #ffffff;
     border: none;
     box-shadow: var(--glow);
 }
 
 .btn-primary:hover {
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
-    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+    transform: translateY(-2px);
+    background: #1E293B;
 }
 
 .btn-cyan {
-    background: var(--cyan);
-    color: #fff;
-    box-shadow: var(--liquid-shadow)
+    background: #2563EB;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.28);
 }
 
 .btn-cyan:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2)
+    background: #1D4ED8;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.38);
 }
 
 .btn-ghost {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
 }
 
 .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: #fff;
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    transform: translateY(-2px);
 }
 
 .cta-actions {
@@ -722,16 +922,18 @@ img {
 }
 
 .btn-outline {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: #ffffff;
+    border: 1.5px solid #CBD5E1;
+    color: #0F172A;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
 .btn-outline:hover {
-    border-color: var(--cyan);
-    background: rgba(37, 99, 235, 0.05);
-    color: var(--cyan);
+    border-color: #2563EB;
+    background: #EFF6FF;
+    color: #1D4ED8;
     transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
 }
 
 .btn svg,
@@ -761,17 +963,23 @@ img {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 1);
-    padding: 8px 18px;
+    background: #EFF6FF;
+    padding: 7px 18px;
     border-radius: var(--r-full);
-    font-size: .72rem;
+    font-size: .74rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .06em;
-    border: 1px solid var(--border);
-    color: var(--text);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid #BFDBFE;
+    color: #1D4ED8;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
     margin-bottom: 24px;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+}
+
+.hero-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.14);
 }
 
 .hero-title {
@@ -1473,6 +1681,11 @@ img {
     margin: 0 auto 18px;
     border-radius: 999px;
     background: linear-gradient(90deg, rgba(15, 23, 42, 0.15), rgba(37, 99, 235, 0.8), rgba(188, 72, 0, 0.75));
+}
+
+/* Contact page: hide the gradient bar above the stepper form heading */
+.stepper-form-section .section-header::before {
+    display: none;
 }
 
 .section-title {
@@ -3844,6 +4057,18 @@ body.video-modal-open {
 .faq-item {
     padding: 0;
     overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.faq-item:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+}
+
+.faq-item[open] {
+    border-color: #BFDBFE;
+    background: #FFFFFF;
+    box-shadow: 0 20px 48px rgba(37, 99, 235, 0.08);
 }
 
 .faq-item summary {
@@ -3859,27 +4084,35 @@ body.video-modal-open {
     font-weight: 600;
 }
 
+.faq-item summary:focus-visible {
+    outline: 2.5px solid #2563EB;
+    outline-offset: -2px;
+    border-radius: 26px;
+}
+
 .faq-item summary::-webkit-details-marker {
     display: none;
 }
 
 .faq-symbol {
     flex: 0 0 auto;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(37, 99, 235, 0.1);
-    color: var(--cyan);
-    font-size: 1.2rem;
-    transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+    background: #EFF6FF;
+    color: #2563EB;
+    font-size: 1.25rem;
+    font-weight: 600;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, color 0.2s ease;
 }
 
 .faq-item[open] .faq-symbol {
     transform: rotate(45deg);
-    background: rgba(188, 72, 0, 0.14);
+    background: #2563EB;
+    color: #FFFFFF;
 }
 
 .faq-item p {
@@ -4304,9 +4537,18 @@ body.video-modal-open {
     margin: 36px 0;
 }
 
+/* The shared header sits in the page flow above this section, so the top padding
+   is breathing room only (it was 200px, sized for an old fixed header). */
 .hero-page {
-    padding-top: 200px;
+    padding-top: 88px;
     padding-bottom: 100px;
+}
+
+@media (max-width: 768px) {
+    .hero-page {
+        padding-top: 48px;
+        padding-bottom: 64px;
+    }
 }
 
 .hero-page-wide {
@@ -5119,11 +5361,15 @@ body.video-modal-open {
         flex-direction: column;
     }
 
-    .hero-image-caption {
-        width: calc(100% - 24px);
+    /* Extra class for specificity: the base .hero-image-caption rule comes later in this file. */
+    .hero-image-wrap .hero-image-caption {
+        width: auto;
+        max-width: calc(100% - 24px);
         left: 12px;
-        right: 12px;
         bottom: 12px;
+        padding: 7px 12px;
+        font-size: 0.74rem;
+        line-height: 1.35;
     }
 
     .p-52 {
@@ -5187,6 +5433,8 @@ body.video-modal-open {
     gap: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.5);
+    /* .hero-image-wrap img sits at z-index 2; without this the photo covers the caption. */
+    z-index: 3;
 }
 
 .hero-image-caption i {
@@ -5260,6 +5508,7 @@ body.page-transitioning-out {
     border-radius: 9999px;
     background: rgba(37, 99, 235, 0.06);
     border: 1px solid rgba(37, 99, 235, 0.18);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     font-size: 0.8rem;
     font-weight: 600;
@@ -6088,11 +6337,20 @@ body.page-transitioning-out {
 .h2-navbar {
     background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
-    padding: 14px 0;
+    padding: 12px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+    transition: background 0.3s ease,
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+}
+
+.h2-navbar.scrolled {
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
 }
 
 .h2-nav-inner {
@@ -6111,11 +6369,24 @@ body.page-transitioning-out {
 }
 
 .h2-logo-img {
-    height: 40px;
+    height: 42px;
     width: auto;
     object-fit: contain;
     display: block;
     flex-shrink: 0;
+}
+
+.h2-navbar.scrolled .h2-logo-img {
+    height: 42px;
+}
+
+.h2-navbar .h2-btn-primary {
+    transition: padding 0.35s cubic-bezier(0.16, 1, 0.3, 1), font-size 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.h2-navbar.scrolled .h2-btn-primary {
+    padding: 8px 18px;
+    font-size: 0.85rem;
 }
 
 .h2-logo-text {
@@ -6143,13 +6414,25 @@ body.page-transitioning-out {
 }
 
 .h2-nav-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: inherit;
     font-size: 0.9rem;
     font-weight: 600;
     color: #334155;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
     transition: color 0.2s ease;
     white-space: nowrap;
     text-decoration: none;
     padding: 4px 0;
+    margin: 0;
+    cursor: pointer;
+    line-height: inherit;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .h2-nav-link:hover,
@@ -6159,26 +6442,57 @@ body.page-transitioning-out {
 
 .h2-nav-dropdown {
     position: relative;
+    display: inline-flex;
+    align-items: center;
 }
 
 .h2-dropdown-toggle {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-family: inherit !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    color: #334155;
+    padding: 4px 0;
+    margin: 0;
+    cursor: pointer;
+    line-height: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.h2-dropdown-toggle:hover,
+.h2-dropdown-toggle.active,
+.h2-nav-dropdown.is-open > .h2-dropdown-toggle {
+    color: #1d4ed8 !important;
+    background: transparent !important;
 }
 
 .h2-dropdown-toggle::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 4px solid currentColor;
-    transition: transform 0.2s ease;
+    display: none;
 }
 
-.h2-nav-dropdown:hover .h2-dropdown-toggle::after {
-    transform: rotateZ(180deg);
+.h2-nav-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    color: #64748b;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+    pointer-events: none;
+}
+
+.h2-dropdown-toggle:hover .h2-nav-arrow,
+.h2-nav-dropdown.is-open .h2-nav-arrow {
+    transform: rotate(180deg);
+    color: #1d4ed8;
 }
 
 .h2-dropdown-menu {
@@ -6186,27 +6500,232 @@ body.page-transitioning-out {
     top: 100%;
     left: 0;
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 18px;
-    margin-top: 14px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 16px;
+    margin-top: 12px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    transform: translateY(-6px);
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 1001;
-    box-shadow: 0 28px 64px rgba(15, 23, 42, 0.18);
+    box-shadow: 0 20px 48px -10px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.04);
     overflow: hidden;
 }
 
-.h2-nav-dropdown:hover .h2-dropdown-menu {
+/* Invisible bridge so mouse does not drop hover across gap */
+.h2-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 0;
+    right: 0;
+    height: 16px;
+}
+
+.h2-nav-dropdown.is-open .h2-dropdown-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
 }
 
-/* ── Services Mega Menu ── */
-.h2-mega-menu {
-    width: 600px;
+/* ── Services Mega Menu ──────────────────────────────────────────────────────
+   Three grouped columns: two link lists plus a Trust & compliance panel. Grouped
+   columns with visible headings are what make a menu this size scannable - a flat
+   list of the same links reads as a wall. Kept to 8 destinations, well inside the
+   range a person can take in at a glance.
+   The panel is centred under the trigger rather than left-aligned, so a ~900px
+   menu opening from a nav item mid-bar cannot run off the right edge.            */
+/* Anchored to the nav row, not to the "Services" item. Centring a ~920px panel on a
+   nav item that sits mid-bar pushed its right edge past the viewport (measured: right
+   edge 1522px at a 1425px viewport). Positioning against .h2-nav-inner centres it in
+   the header instead, which is itself inside .container, so it cannot overflow. */
+@media (min-width: 1001px) {
+    .h2-nav-inner {
+        position: relative;
+    }
+
+    .h2-nav-dropdown {
+        position: static;
+    }
+
+    .h2-mega-menu {
+        width: min(920px, calc(100vw - 32px));
+        left: 50%;
+        transform: translate(-50%, -6px);
+    }
+
+    .h2-nav-dropdown.is-open .h2-dropdown-menu.h2-mega-menu {
+        transform: translate(-50%, 0);
+    }
+
+    /* The hover bridge spans the whole panel width, so the pointer can travel from
+       the trigger into the panel without crossing a dead gap. */
+    .h2-mega-menu::before {
+        left: 0;
+        right: 0;
+    }
+}
+
+.h2-mega-cols {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr 0.95fr;
+    gap: 6px 14px;
+    padding: 12px 14px 14px;
+}
+
+.h2-mega-col {
+    min-width: 0;
+}
+
+.h2-mega-col-title {
+    margin: 0 0 6px;
+    padding: 0 13px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #94a3b8;
+}
+
+.h2-mega-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Marks the page you are already on, so the menu orients as well as navigates. */
+.h2-mega-item.active {
+    background: #eff6ff;
+}
+
+.h2-mega-item.active .h2-mega-item-body strong {
+    color: #1d4ed8;
+}
+
+/* ── Trust & compliance panel ── */
+.h2-mega-col-feature {
+    border-left: 1px solid #f1f5f9;
+    padding-left: 14px;
+}
+
+.h2-mega-feature {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 14px;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #f8fbff 0%, #eff6ff 100%);
+    border: 1px solid #dbeafe;
+    text-decoration: none;
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.h2-mega-feature:hover {
+    border-color: #bfdbfe;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -10px rgba(29, 78, 216, 0.28);
+}
+
+.h2-mega-feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    color: #1d4ed8;
+}
+
+.h2-mega-feature-icon i,
+.h2-mega-feature-icon svg {
+    width: 17px;
+    height: 17px;
+}
+
+.h2-mega-feature-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.3;
+}
+
+.h2-mega-feature-text {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #475569;
+}
+
+.h2-mega-feature-points {
+    list-style: none;
+    margin: 2px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.h2-mega-feature-points li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+.h2-mega-feature-points i,
+.h2-mega-feature-points svg {
+    width: 13px;
+    height: 13px;
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+.h2-mega-feature-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 3px;
+    font-size: 0.79rem;
+    font-weight: 600;
+    color: #1d4ed8;
+}
+
+.h2-mega-feature-cta i,
+.h2-mega-feature-cta svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.18s ease;
+}
+
+.h2-mega-feature:hover .h2-mega-feature-cta i,
+.h2-mega-feature:hover .h2-mega-feature-cta svg {
+    transform: translateX(3px);
+}
+
+/* Narrower desktops and tablets: the trust panel drops under the two link
+   columns rather than squeezing all three. */
+@media (max-width: 1150px) {
+    .h2-mega-menu {
+        width: min(660px, calc(100vw - 32px));
+    }
+
+    .h2-mega-cols {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .h2-mega-col-feature {
+        grid-column: 1 / -1;
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 10px;
+        margin-top: 4px;
+    }
 }
 
 .h2-mega-head {
@@ -6214,67 +6733,71 @@ body.page-transitioning-out {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 14px 20px 12px;
-    border-bottom: 1px solid #eef2f7;
+    padding: 12px 18px 10px;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .h2-mega-head-eyebrow {
     font-family: 'Outfit', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #1d4ed8;
 }
 
 .h2-mega-head-note {
-    font-size: 0.76rem;
+    font-size: 0.74rem;
     color: #94a3b8;
+    font-weight: 500;
 }
 
 .h2-mega-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4px;
-    padding: 14px;
+    padding: 10px;
 }
 
 .h2-mega-item {
     display: flex;
-    align-items: center;
-    gap: 13px;
-    padding: 12px 13px;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 13px;
     border-radius: 12px;
     text-decoration: none;
-    transition: background-color 0.2s ease;
+    background: transparent;
+    transition: background-color 0.18s ease, transform 0.18s ease;
 }
 
 .h2-mega-item:hover {
-    background: #f0f7ff;
+    background: #f8fafc;
+    transform: translateY(-1px);
 }
 
 .h2-mega-item-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 11px;
-    background: #eef4ff;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #eff6ff;
     color: #1d4ed8;
     flex-shrink: 0;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .h2-mega-item-icon i,
 .h2-mega-item-icon svg {
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
 }
 
 .h2-mega-item:hover .h2-mega-item-icon {
     background: #1d4ed8;
     color: #ffffff;
+    transform: scale(1.05);
 }
 
 .h2-mega-item-body {
@@ -6282,50 +6805,78 @@ body.page-transitioning-out {
     flex-direction: column;
     gap: 2px;
     min-width: 0;
+    flex: 1;
+}
+
+.h2-mega-item-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
 }
 
 .h2-mega-item-body strong {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: #0f172a;
     line-height: 1.3;
+    transition: color 0.18s ease;
+}
+
+.h2-mega-item:hover .h2-mega-item-body strong {
+    color: #1d4ed8;
 }
 
 .h2-mega-item-body small {
-    font-size: 0.77rem;
+    font-size: 0.76rem;
     color: #64748b;
     line-height: 1.35;
+}
+
+.h2-mega-arrow {
+    width: 13px;
+    height: 13px;
+    color: #1d4ed8;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    flex-shrink: 0;
+}
+
+.h2-mega-item:hover .h2-mega-arrow {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .h2-mega-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
-    padding: 13px 20px;
+    gap: 12px;
+    padding: 10px 18px;
     background: #f8fafc;
-    border-top: 1px solid #eef2f7;
+    border-top: 1px solid #f1f5f9;
     text-decoration: none;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.18s ease;
 }
 
 .h2-mega-bar:hover {
-    background: #f0f7ff;
+    background: #f1f5f9;
 }
 
 .h2-mega-bar-text {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
+    gap: 7px;
+    font-size: 0.78rem;
     font-weight: 500;
     color: #64748b;
 }
 
 .h2-mega-bar-text i,
 .h2-mega-bar-text svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     color: #1d4ed8;
     flex-shrink: 0;
 }
@@ -6333,22 +6884,22 @@ body.page-transitioning-out {
 .h2-mega-bar-cta {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.82rem;
-    font-weight: 700;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 600;
     color: #1d4ed8;
     white-space: nowrap;
-    transition: gap 0.2s ease;
+    transition: gap 0.18s ease;
 }
 
 .h2-mega-bar:hover .h2-mega-bar-cta {
-    gap: 10px;
+    gap: 8px;
 }
 
 .h2-mega-bar-cta i,
 .h2-mega-bar-cta svg {
-    width: 15px;
-    height: 15px;
+    width: 13px;
+    height: 13px;
 }
 
 @media (max-width: 1040px) {
@@ -6564,7 +7115,7 @@ body.page-transitioning-out {
 
 .h2-services-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-bottom: 40px;
 }
@@ -6854,11 +7405,10 @@ body.page-transitioning-out {
 }
 
 .h2-footer-logo img {
-    height: 38px;
+    height: 68px;
     width: auto;
     display: block;
-    /* the mark is dark-on-transparent; knock it to white for the navy footer */
-    filter: brightness(0) invert(1);
+    object-fit: contain;
 }
 
 .h2-footer-nav {
@@ -6873,6 +7423,10 @@ body.page-transitioning-out {
 .h2-footer-nav a {
     color: #cbd5e1;
     transition: color 0.2s ease;
+    /* Keep each link at least 24px tall for touch (WCAG 2.5.8). */
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
 }
 
 .h2-footer-nav a:hover,
@@ -6909,13 +7463,16 @@ body.page-transitioning-out {
     padding: 0;
     margin: 0;
     font: inherit;
+    font-size: 0.76rem;
     color: inherit;
+    opacity: 0.55;
     cursor: pointer;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .h2-region-link:hover {
+    opacity: 0.95;
     color: #cbd5e1;
     text-decoration: underline;
 }
@@ -6923,6 +7480,7 @@ body.page-transitioning-out {
 .h2-region-link:focus-visible {
     outline: 2px solid #38bdf8;
     outline-offset: 3px;
+    opacity: 1;
     color: #ffffff;
 }
 
@@ -6953,7 +7511,7 @@ body.page-transitioning-out {
 /* Responsive Styles for Homepage 2 */
 @media (max-width: 1100px) {
     .h2-services-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
     .h2-split-grid {
         grid-template-columns: 1fr 1fr;
@@ -7003,9 +7561,6 @@ body.page-transitioning-out {
     }
     .h2-ribbon-grid {
         grid-template-columns: 1fr;
-    }
-    .h2-nav-links {
-        display: none;
     }
 }
 
@@ -7205,7 +7760,15 @@ body.page-transitioning-out {
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.h2-testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+    border-color: #cbd5e1;
 }
 
 .h2-testimonial-stars {
@@ -7339,15 +7902,17 @@ body.page-transitioning-out {
     padding: 28px 22px;
     position: relative;
     box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
-    transition: all 0.25s ease;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
     display: flex;
     flex-direction: column;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .h2-workflow-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     border-color: #93c5fd;
-    box-shadow: 0 14px 30px rgba(29, 78, 216, 0.08);
+    box-shadow: 0 16px 36px rgba(29, 78, 216, 0.09);
 }
 
 .h2-workflow-step-badge {
@@ -7840,11 +8405,13 @@ body.page-transitioning-out {
     border: 1px solid #e2e8f0;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
-    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .h2-bento-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
     box-shadow: 0 18px 44px rgba(15, 23, 42, 0.09);
 }
 
@@ -8334,12 +8901,33 @@ body.page-transitioning-out {
     transform: translateY(-1px);
 }
 
+/* Nested arcs that carry the monograms. The SVG spans the stage plus 30% above it, in the same percentage space
+   as the tiles' --x/--y, so a tile stays on its arc at any width. */
+.h2-int-arcs {
+    position: absolute;
+    top: -30%;
+    left: 0;
+    width: 100%;
+    height: 130%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.h2-int-arc {
+    fill: none;
+    stroke: url(#h2IntArcFade);
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+    opacity: var(--o, 1);
+}
+
 /* Floating EHR monograms */
 .h2-int-badge {
     position: absolute;
     left: var(--x);
     top: var(--y);
-    transform: translate(-50%, -50%);
+    transform: translate3d(-50%, -50%, 0);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8352,6 +8940,9 @@ body.page-transitioning-out {
     animation: h2IntFloat 5.5s ease-in-out infinite;
     animation-delay: var(--d);
     z-index: 1;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .h2-int-badge b {
@@ -8366,11 +8957,11 @@ body.page-transitioning-out {
 
     0%,
     100% {
-        transform: translate(-50%, -50%);
+        transform: translate3d(-50%, -50%, 0);
     }
 
     50% {
-        transform: translate(-50%, calc(-50% - 10px));
+        transform: translate3d(-50%, calc(-50% - 10px), 0);
     }
 }
 
@@ -8536,6 +9127,11 @@ body.page-transitioning-out {
     .h2-int-badge:nth-of-type(5) {
         display: none;
     }
+
+    /* the second arc carries the two hidden tiles */
+    .h2-int-arc-2 {
+        display: none;
+    }
 }
 
 @media (max-width: 860px) {
@@ -8548,6 +9144,11 @@ body.page-transitioning-out {
         flex-direction: column;
         gap: 22px;
         margin-bottom: 28px;
+    }
+
+    /* the badges become a plain row here, so the arcs go */
+    .h2-int-arcs {
+        display: none;
     }
 
     .h2-int-badge {
@@ -8902,268 +9503,270 @@ body.page-transitioning-out {
 }
 
 /* ==========================================================================
-   ONE WINDOW CONSULTATION CTA (concentric rings)
+   CONSULTATION CTA (GLUE REFERENCE DESIGN)
+   Centred card: pill -> display headline -> subtitle with inline app-icon
+   badges -> blue button with a keycap. The brush-stroke ribbon art is
+   images/cta-ribbons.svg (wide card) and images/cta-ribbons-tall.svg (phones).
    ========================================================================== */
-
 .h2-ring-section {
     position: relative;
-    padding: 104px 0 110px;
-    background: #ffffff;
+    padding: 80px 0 95px;
+    background: #f8fafc;
     border-bottom: 1px solid #e2e8f0;
     overflow: hidden;
 }
 
-.h2-ring-field {
-    position: absolute;
-    left: 50%;
-    top: 54%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
-.h2-ring {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: var(--s);
-    height: var(--s);
-    border-radius: 50%;
-    border: 1px solid rgba(37, 99, 235, 0.16);
-    background: radial-gradient(circle at 50% 32%, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0) 70%);
-}
-
-.h2-ring-inner {
+.h2-ring-card {
     position: relative;
-    z-index: 2;
+    isolation: isolate;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 300px;
+    max-width: 1040px;
+    min-height: 440px;
+    margin: 0 auto;
+    padding: 92px 40px 88px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 28px 56px -28px rgba(15, 23, 42, 0.14);
+    overflow: hidden;
+}
+
+/* Ribbon art. The transform / contain / pointer-events come from the shared
+   hardware-accelerated layer rule near the top of this file. */
+.h2-ring-field {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url("../images/cta-ribbons.svg?v=202609201521") center / cover no-repeat;
+}
+
+/* Ribbons drift in after the card itself reveals (main.js adds .visible). */
+.h2-ring-card.reveal-scale .h2-ring-field {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0) scale(1.05);
+}
+
+.h2-ring-card.reveal-scale.visible .h2-ring-field {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    transition: opacity 1.1s ease 0.2s, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
 }
 
 .h2-ring-copy {
-    max-width: 640px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
     text-align: center;
 }
 
-.h2-ring-eyebrow {
-    display: inline-block;
-    padding: 6px 15px;
-    margin-bottom: 20px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 999px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #64748b;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+/* Pill (reference: "Slacked out? Try Glue."). Static label, so no hover state. */
+.h2-cta-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    background: var(--blue-soft);
+    color: #475569;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.86rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
 }
 
+/* Display headline (reference: "Smarter work chat"). One line on desktop,
+   balanced onto two below that. */
 .h2-ring-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: clamp(1.7rem, 3.6vw, 2.6rem);
-    font-weight: 800;
+    max-width: 100%;
+    margin: 0 0 18px;
+    font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: clamp(2.2rem, 4.9vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
     color: #0f172a;
-    letter-spacing: -0.035em;
-    line-height: 1.16;
-    margin-bottom: 16px;
+    text-align: center;
+    text-wrap: balance;
 }
 
 .h2-ring-desc {
-    font-size: 0.97rem;
-    line-height: 1.7;
-    color: #64748b;
-    margin-bottom: 28px;
+    max-width: 30em;
+    margin: 0 auto 32px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 1.0625rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5c6b7f;
+    text-align: center;
+    text-wrap: balance;
 }
 
+/* Inline glossy app-icon badges. Sized in em so they track the text. */
+.cta-inline-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.45em;
+    height: 1.2em;
+    margin: 0 0.12em;
+    border-radius: 0.38em;
+    color: #ffffff;
+    vertical-align: -0.26em;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cta-inline-badge:hover {
+    transform: translateY(-1px) rotate(-6deg) scale(1.08);
+}
+
+.cta-inline-badge svg {
+    width: 0.72em;
+    height: 0.72em;
+    stroke-width: 2.4;
+}
+
+/* Flat tiles in the logo's two colours, like the site's other icon tiles. */
+.cta-badge-blue {
+    background: #1d4ed8;
+    box-shadow: 0 1px 2px rgba(29, 78, 216, 0.3);
+}
+
+.cta-badge-navy {
+    background: #0f172a;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.3);
+}
+
+/* Button. Reuses the site's primary button (.h2-btn-primary: #1d4ed8, 8px radius,
+   bold, hover #1e40af), so it always matches the header "Book Demo". Only the
+   hero-scale sizing and the arrow tile live here. */
 .h2-ring-actions {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.h2-ring-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 15px 30px;
-    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
-    border-radius: 999px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #ffffff;
-    text-decoration: none;
-    box-shadow: 0 14px 32px rgba(29, 78, 216, 0.3);
-    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
-}
-
-.h2-ring-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 42px rgba(29, 78, 216, 0.38);
-    color: #ffffff;
-}
-
-.h2-ring-arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: #ffffff;
-    border: 1px solid #dbe4f0;
-    color: #1d4ed8;
-    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
-    transition: transform 0.25s var(--ease), border-color 0.2s ease;
-}
-
-.h2-ring-arrow i,
-.h2-ring-arrow svg {
-    width: 20px;
-    height: 20px;
-}
-
-.h2-ring-arrow:hover {
-    transform: translateY(-2px) rotate(45deg);
-    border-color: #1d4ed8;
-    color: #1d4ed8;
-}
-
-.h2-ring-note {
-    margin-top: 20px;
-    font-size: 0.79rem;
-    color: #94a3b8;
-}
-
-/* Floating proof cards */
-.h2-ring-float {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 12px 16px;
-    background: #ffffff;
-    border: 1px solid #e8eef7;
-    border-radius: 14px;
-    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
-    animation: h2RingFloat 6s ease-in-out infinite;
-    z-index: 2;
-}
-
-.h2-ring-float-l {
-    left: 0;
-    top: 16%;
-}
-
-.h2-ring-float-r {
-    right: 0;
-    bottom: 12%;
-    animation-delay: 1.8s;
-}
-
-.h2-ring-float-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: #eef4ff;
-    color: #1d4ed8;
+    margin: 0;
+}
+
+.h2-ring-cta {
+    gap: 14px;
+    min-height: 48px;
+    padding: 9px 9px 9px 24px;
+    font-size: 1rem;
+}
+
+.h2-ring-cta-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.h2-ring-float-icon i,
-.h2-ring-float-icon svg {
-    width: 18px;
-    height: 18px;
+.h2-ring-cta-arrow svg {
+    width: 16px;
+    height: 16px;
 }
 
-.h2-ring-float-body {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
+.h2-ring-cta:hover .h2-ring-cta-arrow {
+    background: rgba(255, 255, 255, 0.24);
+    transform: translateX(2px);
 }
 
-.h2-ring-float-body strong {
-    font-size: 0.84rem;
-    font-weight: 700;
-    color: #0f172a;
-    white-space: nowrap;
-}
-
-.h2-ring-float-body small {
-    font-size: 0.73rem;
-    color: #94a3b8;
-    white-space: nowrap;
-}
-
-@keyframes h2RingFloat {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-11px);
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .h2-ring-card {
+        padding: 80px 28px 76px;
+        border-radius: 26px;
     }
 }
 
-@media (max-width: 1080px) {
-
-    .h2-ring-float-l {
-        top: 4%;
-    }
-
-    .h2-ring-float-r {
-        bottom: 2%;
-    }
-}
-
-@media (max-width: 880px) {
+@media (max-width: 768px) {
     .h2-ring-section {
-        padding: 72px 0 76px;
+        padding: 52px 0 60px;
     }
 
-    .h2-ring-float {
-        position: static;
-        animation: none;
+    .h2-ring-card {
+        min-height: 0;
+        padding: 68px 22px 60px;
+        border-radius: 24px;
     }
 
-    .h2-ring-inner {
-        flex-direction: column;
-        gap: 16px;
-        min-height: auto;
-    }
-
-    .h2-ring-copy {
-        order: -1;
-    }
-
-    .h2-ring-float-l,
-    .h2-ring-float-r {
-        margin-top: 4px;
+    .h2-ring-desc {
+        margin-bottom: 28px;
+        font-size: 1rem;
     }
 }
 
-@media (max-width: 420px) {
-    .h2-ring-actions {
-        flex-direction: column;
-        width: 100%;
+@media (max-width: 560px) {
+    .h2-ring-section {
+        padding: 36px 0 44px;
     }
 
-    .h2-ring-btn {
-        width: 100%;
-        justify-content: center;
+    .h2-ring-card {
+        padding: 56px 18px 50px;
+        border-radius: 22px;
+    }
+
+    /* Portrait card: swap to the tall composition so the loops stay in frame. */
+    .h2-ring-field {
+        background-image: url("../images/cta-ribbons-tall.svg?v=202609201521");
+    }
+
+    .h2-cta-badge {
+        margin-bottom: 20px;
+        padding: 5px 14px;
+        font-size: 0.8rem;
+    }
+
+    .h2-ring-title {
+        font-size: 2rem;
+    }
+
+    .h2-ring-desc {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .h2-ring-title {
+        font-size: 1.7rem;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .h2-ring-float {
-        animation: none;
+    .h2-ring-card.reveal-scale .h2-ring-field,
+    .h2-ring-card.reveal-scale.visible .h2-ring-field {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .h2-ring-cta,
+    .h2-ring-cta-arrow,
+    .cta-inline-badge {
+        transition: none;
+    }
+}
+
+@media (forced-colors: active) {
+    .h2-ring-cta {
+        border: 1px solid ButtonText;
+    }
+
+    .h2-ring-cta-arrow {
+        border: 1px solid currentColor;
     }
 }
 
@@ -9171,15 +9774,17 @@ body.page-transitioning-out {
    QA REMEDIATION — accessibility, contrast and tap targets
    ========================================================================== */
 
-/* 1. Services mega menu was hover-only: keyboard users could never open it.
-      (The shared components.js header already uses :focus-within.) */
-.h2-nav-dropdown:focus-within .h2-dropdown-menu {
+/* 1. Services mega menu open state. This was once :hover + :focus-within only, which
+      left aria-expanded saying "false" while the panel was on screen and made the
+      closed panel tabbable. The toggle is now a real <button> and components.js owns
+      the .is-open class, so markup and appearance cannot disagree. */
+.h2-nav-dropdown.is-open .h2-dropdown-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
 }
 
-.h2-nav-dropdown:focus-within .h2-dropdown-toggle::after {
+.h2-nav-dropdown.is-open .h2-dropdown-toggle::after {
     transform: rotateZ(180deg);
 }
 
@@ -9318,6 +9923,7 @@ body.page-transitioning-out {
 .h2-topbar-link {
     text-decoration: none;
     transition: color 0.2s ease;
+    min-height: 28px;
 }
 
 .h2-topbar-link:hover {
@@ -9405,35 +10011,204 @@ body.page-transitioning-out {
     }
 
     .h2-nav-link {
-        display: block;
-        padding: 11px 12px;
-        font-size: 0.92rem;
-        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        font-size: 0.94rem;
+        font-weight: 600;
+        color: #1e293b;
+        border-radius: 10px;
+        transition: background 0.15s ease, color 0.15s ease;
     }
 
-    .h2-nav-link:hover {
+    .h2-nav-link:hover,
+    .h2-nav-link.active {
         background: #f0f7ff;
+        color: #1d4ed8;
     }
 
-    /* dropdown becomes an inline, always-open block on mobile */
+    /* Services dropdown toggle on mobile */
+    .h2-dropdown-toggle {
+        width: 100%;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        padding: 12px 14px;
+        text-align: left;
+    }
+
+    .h2-nav-dropdown.is-open > .h2-dropdown-toggle {
+        background: #eff6ff !important;
+        color: #1d4ed8 !important;
+    }
+
+    .h2-nav-arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        margin-left: auto;
+        color: #64748b;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+    }
+
+    .h2-nav-dropdown.is-open > .h2-dropdown-toggle .h2-nav-arrow {
+        transform: rotate(180deg);
+        color: #1d4ed8;
+    }
+
+    /* Submenu accordion: hidden by default on mobile, revealed on tap */
     .h2-dropdown-menu {
+        display: none;
         position: static;
         width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        margin: 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    .h2-nav-dropdown.is-open > .h2-dropdown-menu {
+        display: block;
         opacity: 1;
         visibility: visible;
-        transform: none;
-        margin: 4px 0 8px;
-        box-shadow: none;
-        border-color: #e6eef9;
+        margin: 6px 0 10px 8px;
+        padding: 10px 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-left: 3px solid #2563eb;
+        border-radius: 12px;
+        animation: mobileSubMenuSlide 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes mobileSubMenuSlide {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .h2-mega-menu {
         width: 100%;
+        /* The panel is statically positioned in the mobile accordion, so the
+           desktop centring offset must be undone or it shifts off-screen. */
+        left: auto;
+        transform: none;
+    }
+
+    .h2-nav-dropdown.is-open .h2-dropdown-menu.h2-mega-menu {
+        transform: none;
+    }
+
+    /* One column: grouped headings still separate the sections while scrolling. */
+    .h2-mega-cols {
+        grid-template-columns: 1fr;
+        gap: 2px;
+        padding: 4px 0 0;
+    }
+
+    .h2-mega-col + .h2-mega-col {
+        margin-top: 10px;
+    }
+
+    .h2-mega-col-title {
+        padding: 0 6px;
+    }
+
+    .h2-mega-col-feature {
+        grid-column: auto;
+        border-left: none;
+        border-top: 1px solid #e2e8f0;
+        padding-left: 0;
+        padding-top: 10px;
+    }
+
+    .h2-mega-feature {
+        padding: 12px;
+    }
+
+    .h2-mega-head {
+        padding: 6px 6px 8px;
+        margin-bottom: 6px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .h2-mega-head-eyebrow {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #2563eb;
+    }
+
+    .h2-mega-head-note {
+        display: block;
+        font-size: 0.74rem;
+        color: #64748b;
     }
 
     .h2-mega-grid {
         grid-template-columns: 1fr;
-        padding: 8px;
+        padding: 0;
+        gap: 6px;
+    }
+
+    .h2-mega-item {
+        padding: 10px 12px;
+        background: #ffffff;
+        border: 1px solid #edf2f7;
+        border-radius: 8px;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .h2-mega-item:hover,
+    .h2-mega-item:active {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+    }
+
+    .h2-mega-item-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        background: #eff6ff;
+        color: #2563eb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .h2-mega-item-body strong {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .h2-mega-item-body small {
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+    .h2-mega-bar {
+        margin-top: 8px;
+        padding: 10px 12px;
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        border-radius: 8px;
     }
 
     .h2-dropdown-toggle::after {
@@ -9453,7 +10228,7 @@ body.page-transitioning-out {
     }
 
     .h2-logo-img {
-        height: 34px;
+        height: 36px;
     }
 }
 
@@ -9628,25 +10403,29 @@ body.page-transitioning-out {
 .comparison-details {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 16px;
+    border-left: 3px solid #2563eb;
+    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 2px 12px -4px rgba(15, 23, 42, 0.07), 0 1px 3px rgba(15,23,42,0.04);
     margin-bottom: 28px;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.22s ease;
 }
 
 .comparison-details:hover {
-    border-color: #cbd5e1;
+    border-left-color: #1d4ed8;
+    box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.11);
+    transform: translateY(-2px);
 }
 
 .comparison-details[open] {
-    border-color: #93c5fd;
+    border-left-color: #1d4ed8;
     box-shadow: 0 10px 30px rgba(29, 78, 216, 0.08);
+    transform: none;
 }
 
 .comparison-summary {
-    padding: 20px 24px;
-    background: #f8fafc;
+    padding: 18px 22px;
+    background: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -9654,8 +10433,9 @@ body.page-transitioning-out {
     gap: 14px;
     cursor: pointer;
     list-style: none;
+    -webkit-user-select: none;
     user-select: none;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.18s ease;
 }
 
 .comparison-summary::-webkit-details-marker {
@@ -9663,7 +10443,7 @@ body.page-transitioning-out {
 }
 
 .comparison-summary:hover {
-    background: #f1f5f9;
+    background: #f8fafc;
 }
 
 .comparison-details[open] .comparison-summary {
@@ -9678,12 +10458,12 @@ body.page-transitioning-out {
 }
 
 .comparison-summary-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: #eff6ff;
-    border: 1.5px solid #dbeafe;
-    color: #1d4ed8;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -9691,16 +10471,18 @@ body.page-transitioning-out {
 }
 
 .comparison-summary-title {
-    font-size: 1.02rem;
+    font-size: 0.975rem;
     font-weight: 700;
     color: #0f172a;
     line-height: 1.3;
+    letter-spacing: -0.01em;
 }
 
 .comparison-summary-sub {
-    font-size: 0.82rem;
-    color: #64748b;
+    font-size: 0.8rem;
+    color: #94a3b8;
     margin-top: 3px;
+    letter-spacing: 0.01em;
 }
 
 .comparison-summary-right {
@@ -9710,13 +10492,14 @@ body.page-transitioning-out {
 }
 
 .comparison-pill-tested {
-    font-size: 0.78rem;
-    color: #475569;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    padding: 6px 14px;
+    font-size: 0.75rem;
+    color: #2563eb;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 5px 13px;
     border-radius: 9999px;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     white-space: nowrap;
 }
 
@@ -9905,9 +10688,9 @@ body.page-transitioning-out {
 }
 
 .pricing-toggle-btn.active {
-    background: #4355E8;
+    background: #2563EB;
     color: #FFFFFF;
-    box-shadow: 0 4px 16px rgba(67, 85, 232, 0.38);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.38);
 }
 
 .pricing-discount-badge {
@@ -9926,19 +10709,55 @@ body.page-transitioning-out {
     color: #FFFFFF;
 }
 
+/* Region line and notes under the pricing heading (the page has no hero) */
+.pricing-v2-region {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 14px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: #EFF6FF;
+    border: 1px solid #DBEAFE;
+    color: #1D4ED8;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.pricing-v2-note {
+    max-width: 640px;
+    margin: 12px auto 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: #64748B;
+}
+
+.pricing-v2-note a {
+    color: #1D4ED8;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+#pricing-plans {
+    padding-top: 56px;
+}
+
 /* 3-Card Grid with Elevated Center Card */
 .pricing-v2-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
+    gap: 22px;
     align-items: stretch;
-    margin-bottom: 44px;
+    max-width: 1060px;
+    margin: 0 auto 36px;
 }
 
 .pricing-v2-card {
     background: #FFFFFF;
-    border-radius: 28px;
-    padding: 42px 34px;
+    border-radius: 22px;
+    padding: 30px 26px 26px;
     border: 1px solid #E8EEF5;
     box-shadow: 0 12px 36px rgba(15, 23, 42, 0.04);
     display: flex;
@@ -9954,39 +10773,38 @@ body.page-transitioning-out {
 
 /* Featured / Most Popular Center Card */
 .pricing-v2-card.is-featured {
-    background: linear-gradient(172deg, #536DFE 0%, #4355E8 100%);
+    background: linear-gradient(172deg, #2563EB 0%, #1D4ED8 100%);
     color: #FFFFFF;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 28px 56px -12px rgba(67, 85, 232, 0.46), 0 10px 24px -6px rgba(67, 85, 232, 0.25);
-    transform: translateY(-14px);
+    box-shadow: 0 28px 56px -12px rgba(37, 99, 235, 0.42), 0 10px 24px -6px rgba(37, 99, 235, 0.22);
+    transform: translateY(-10px);
     z-index: 2;
 }
 
 .pricing-v2-card.is-featured:hover {
-    transform: translateY(-18px);
-    box-shadow: 0 34px 68px -12px rgba(67, 85, 232, 0.55), 0 14px 28px -6px rgba(67, 85, 232, 0.3);
+    transform: translateY(-14px);
+    box-shadow: 0 34px 68px -12px rgba(37, 99, 235, 0.52), 0 14px 28px -6px rgba(37, 99, 235, 0.28);
 }
 
 .pricing-v2-popular-badge {
     position: absolute;
-    top: 26px;
-    right: 26px;
-    background: rgba(255, 255, 255, 0.22);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    top: -13px;
+    right: 22px;
+    background: #0F172A;
     color: #FFFFFF;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 5px 14px;
+    padding: 5px 13px;
     border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.3);
 }
 
 /* Pricing Header */
 .pricing-v2-price-wrap {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .pricing-v2-price-row {
@@ -9998,7 +10816,7 @@ body.page-transitioning-out {
 }
 
 .pricing-v2-amount {
-    font-size: 3.2rem;
+    font-size: 2.6rem;
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.04em;
@@ -10010,7 +10828,7 @@ body.page-transitioning-out {
 }
 
 .pricing-v2-period {
-    font-size: 1rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: #64748B;
 }
@@ -10039,10 +10857,10 @@ body.page-transitioning-out {
 
 .pricing-v2-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.65rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: #0F172A;
-    margin: 8px 0 6px;
+    margin: 6px 0 4px;
     letter-spacing: -0.02em;
 }
 
@@ -10051,11 +10869,11 @@ body.page-transitioning-out {
 }
 
 .pricing-v2-desc {
-    font-size: 0.94rem;
-    line-height: 1.55;
+    font-size: 0.88rem;
+    line-height: 1.5;
     color: #64748B;
-    margin-bottom: 28px;
-    min-height: 48px;
+    margin-bottom: 18px;
+    min-height: 4.5em;
 }
 
 .pricing-v2-card.is-featured .pricing-v2-desc {
@@ -10066,19 +10884,19 @@ body.page-transitioning-out {
 .pricing-v2-features {
     list-style: none;
     padding: 0;
-    margin: 0 0 34px;
+    margin: 0 0 22px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 11px;
     flex-grow: 1;
 }
 
 .pricing-v2-feature-item {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    font-size: 0.94rem;
-    line-height: 1.45;
+    gap: 10px;
+    font-size: 0.9rem;
+    line-height: 1.42;
     color: #334155;
     font-weight: 500;
 }
@@ -10089,15 +10907,15 @@ body.page-transitioning-out {
 
 .pricing-v2-check {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-top: 1px;
-    background: #EEF2FF;
-    color: #4355E8;
+    background: #EFF6FF;
+    color: #2563EB;
 }
 
 .pricing-v2-card.is-featured .pricing-v2-check {
@@ -10108,11 +10926,11 @@ body.page-transitioning-out {
 /* CTA Buttons matching reference design */
 .pricing-v2-btn {
     width: 100%;
-    padding: 15px 24px;
+    padding: 12px 20px;
     border-radius: 9999px;
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
-    font-size: 0.96rem;
+    font-size: 0.92rem;
     text-align: center;
     text-decoration: none;
     display: inline-flex;
@@ -10120,28 +10938,28 @@ body.page-transitioning-out {
     justify-content: center;
     gap: 8px;
     transition: all 0.25s ease;
-    background: #EEF2FF;
-    color: #4355E8;
+    background: #EFF6FF;
+    color: #2563EB;
     border: 1px solid transparent;
 }
 
 .pricing-v2-btn:hover {
-    background: #4355E8;
+    background: #2563EB;
     color: #FFFFFF;
     transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(67, 85, 232, 0.28);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.28);
 }
 
 .pricing-v2-card.is-featured .pricing-v2-btn {
     background: #FFFFFF;
-    color: #4355E8;
+    color: #1D4ED8;
     border: none;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .pricing-v2-card.is-featured .pricing-v2-btn:hover {
     background: #F8FAFC;
-    color: #3444C9;
+    color: #1E40AF;
     transform: translateY(-2px);
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
 }
@@ -10171,9 +10989,9 @@ body.page-transitioning-out {
 }
 
 .btn-expand-pricing:hover {
-    border-color: #4355E8;
-    color: #4355E8;
-    box-shadow: 0 6px 20px rgba(67, 85, 232, 0.15);
+    border-color: #2563EB;
+    color: #2563EB;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
     transform: translateY(-1px);
 }
 
@@ -10218,4 +11036,438 @@ body.page-transitioning-out {
     }
 }
 
+/* ==========================================================================
+   Universal Pop-Up Consultation Modal (Anot Health)
+   Calm, clinical, accessible modal dialog for all non-contact pages.
+   ========================================================================== */
 
+.anot-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 999999 !important;
+    background: rgba(15, 23, 42, 0.75) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+    overscroll-behavior: contain !important;
+}
+
+.anot-modal-overlay.is-open {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+body.anot-modal-locked {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+}
+
+.anot-modal-dialog {
+    background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(15, 23, 42, 0.08);
+    width: 100%;
+    max-width: 680px;
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    transform: scale(0.95) translateY(12px);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    padding: 34px 38px 28px 38px;
+    box-sizing: border-box;
+}
+
+.anot-modal-overlay.is-open .anot-modal-dialog {
+    transform: scale(1) translateY(0);
+}
+
+.anot-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 50%;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 0;
+    z-index: 10;
+}
+
+.anot-modal-close:hover,
+.anot-modal-close:focus-visible {
+    background: #F1F5F9;
+    color: #0F172A;
+    border-color: #CBD5E1;
+    transform: scale(1.05);
+    outline: none;
+}
+
+.anot-modal-dialog .stepper-nav {
+    padding: 0 12px;
+    margin-bottom: 24px;
+}
+
+.anot-modal-dialog .stepper-header {
+    margin-bottom: 20px;
+    padding-right: 28px;
+}
+
+.anot-modal-dialog .stepper-actions {
+    margin-top: 24px;
+    padding-top: 18px;
+}
+
+@media (max-width: 640px) {
+    .anot-modal-dialog {
+        padding: 24px 18px 20px 18px;
+        max-height: calc(100vh - 20px);
+        border-radius: 16px;
+    }
+    .anot-modal-dialog .stepper-nav {
+        padding: 0 4px;
+        margin-bottom: 20px;
+    }
+    .anot-modal-dialog .stepper-step-label {
+        font-size: 0.72rem;
+    }
+    .anot-modal-dialog .stepper-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.82rem;
+    }
+    .anot-modal-dialog .stepper-row-2col {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .anot-modal-dialog .stepper-day-strip {
+        gap: 6px;
+    }
+    .anot-modal-dialog .stepper-actions {
+        flex-direction: column-reverse;
+        gap: 10px;
+        align-items: stretch;
+    }
+    .anot-modal-dialog .stepper-actions > div {
+        margin-left: 0 !important;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .anot-modal-dialog .stepper-btn-next,
+    .anot-modal-dialog .stepper-btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+    .anot-modal-dialog .stepper-btn-prev {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+
+
+
+/* ==========================================================================
+   MOBILE OPTIMIZATION LAYER
+   Kept last in the file on purpose: it corrects earlier rules of equal
+   specificity, several of which previously lost to rules declared after them.
+   Findings behind each block come from a page-by-page audit at 320-1024px.
+   ========================================================================== */
+
+/* ---- Tablet and below --------------------------------------------------- */
+@media (max-width: 768px) {
+    /* Section rhythm: desktop spacing (80-120px) roughly doubled page length. */
+    .section {
+        padding: 64px 0;
+    }
+
+    .h2-section,
+    .h2-split-section,
+    .h2-relief-section,
+    .h2-team-section,
+    .h2-testimonials-section,
+    .h2-faq-section,
+    .h2-workflow-section,
+    .h2-ehr-section,
+    .h2-flow-section,
+    .h2-bento-section,
+    .h2-int-section {
+        padding-top: 56px;
+        padding-bottom: 56px;
+    }
+
+    /* Numbered steps (billing/coding/scribing): the stacked synergy grid centres
+       its text, which squeezed each "01 + text" row into a ~110px column. */
+    .synergy-grid .step-row {
+        text-align: left;
+        align-items: flex-start;
+    }
+
+    .synergy-grid .step-row > div:not(.step-num) {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .synergy-grid .step-row > .step-num {
+        flex: none;
+    }
+
+    /* iOS zooms the page when a focused field is under 16px. */
+    input:not([type=checkbox]):not([type=radio]):not([type=range]),
+    select,
+    textarea {
+        font-size: 16px;
+    }
+
+    /* Region switcher in the footer was a 16px-tall tap target. */
+    .h2-region-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 4px;
+    }
+
+    /* Desktop product mockups carry text that is unreadable at phone size and
+       push the page's real content (e.g. the contact form) far down. */
+    .hide-on-phone {
+        display: none !important;
+    }
+
+    /* Pipeline chips: two per row instead of one full-width chip per line. */
+    .h2-flow-chip {
+        flex: 1 1 calc(50% - 5px);
+        min-width: 0;
+    }
+}
+
+/* ---- Phones ------------------------------------------------------------- */
+@media (max-width: 600px) {
+    /* Header: the two-row top bar plus navbar took 147px (18% of the screen).
+       Keep only the email/social row. */
+    .h2-topbar-left {
+        display: none;
+    }
+
+    .h2-topbar {
+        padding: 4px 0;
+    }
+
+    /* Headings sized for desktop wrapped to 4-6 lines at 35px. */
+    .section-title,
+    .synergy-title,
+    main h2:not([class]) {
+        font-size: clamp(1.55rem, 6.4vw, 1.9rem);
+        line-height: 1.18;
+    }
+
+    .cta-title {
+        font-size: clamp(1.5rem, 6.2vw, 1.8rem);
+    }
+
+    /* Hero buttons: equal full-width stack instead of two ragged widths. */
+    .h2-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .h2-hero-actions > a {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Metrics band: 2x2 instead of four ~150px-tall rows. */
+    .h2-metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px 12px;
+    }
+
+    .h2-metric-num {
+        font-size: 2rem;
+    }
+
+    .h2-metric-label {
+        font-size: 0.8rem;
+    }
+
+    /* Service cards: icon beside text instead of a tall centred stack. */
+    .h2-service-box {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        column-gap: 14px;
+        align-items: start;
+        text-align: left;
+        padding: 18px;
+    }
+
+    .h2-service-box .h2-service-icon-circle {
+        grid-row: 1 / span 3;
+        width: 48px;
+        height: 48px;
+        margin: 0;
+    }
+
+    .h2-service-box .h2-service-name {
+        margin-bottom: 4px;
+    }
+
+    .h2-service-box .h2-service-desc {
+        margin-bottom: 8px;
+    }
+
+    /* Contact pages: the intro above the form repeats the form card's own
+       header ("Request Your Walkthrough" / "A focused 15-minute review"), so on
+       phones the form follows the hero directly. */
+    .stepper-form-section > .container > .section-header {
+        display: none;
+    }
+
+    .stepper-form-section {
+        padding-top: 8px;
+    }
+
+    /* Contact form: an extra 20px side padding inside the page container left
+       the inputs 270px wide on a 390px screen. */
+    /* Section-qualified: css/stepper-form.css loads after this file. */
+    .stepper-form-section .stepper-form-container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* Nothing readable below 12px. */
+    .flag,
+    .matrix-badge-lead,
+    .matrix-badge-none,
+    .matrix-badge-warn,
+    .pricing-discount-badge,
+    .pricing-v2-currency-tag,
+    .pricing-v2-popular-badge,
+    .stepper-service-chip-check {
+        font-size: 0.75rem;
+    }
+}
+
+/* ---- Mobile layer, second pass ------------------------------------------ */
+/* Small controls get a usable tap area at every width. */
+.h2-region-link {
+    min-height: 24px;
+}
+
+.stepper-note-summary {
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    /* Several fields set their own font-size with class selectors that outrank
+       the generic rule above; iOS zooms on anything under 16px. */
+    .h2-form-input,
+    .h2-form-select,
+    .stepper-input,
+    .stepper-select,
+    .stepper-textarea,
+    #adminPass {
+        font-size: 16px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Numbered steps: at 320-360px the row padding plus the number column left
+       under 180px for the text. */
+    .synergy-grid .step-row {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .synergy-grid .step-num {
+        min-width: 26px;
+        font-size: 1.2rem;
+    }
+
+    /* Genuinely small text (under ~11.3px) raised to 12px. Uppercase labels at
+       11.5-11.8px are left as designed; they stay legible. */
+    .h2-bento-heat-row span,
+    .h2-int-pill,
+    .h2-int-card-tag,
+    .h2-ring-eyebrow {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* The glass card around the synergy sections kept 40px side padding at
+       every width, leaving 150px for content on a 320px phone. */
+    .synergy-wrap {
+        margin: 0;
+        padding: 28px 16px;
+    }
+}
+
+@media (max-width: 360px) {
+    /* Two pipeline chips per row no longer fit on the narrowest phones. */
+    .h2-flow-chip {
+        flex-basis: 100%;
+    }
+
+    /* The stacked relief grid's single column was sized to its widest child
+       (the photo badge) and overflowed by 12px at 320px. */
+    .h2-relief-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Photo badge ran past the card edge and was clipped at 320px. */
+    .h2-relief-badge {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        padding: 8px 12px;
+        font-size: 0.78rem;
+    }
+
+    /* Long call-to-action labels ("Book a 15-Minute Consultation") could not
+       wrap and ran past a 272px column. */
+    .h2-relief-grid .h2-btn-primary {
+        width: 100%;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+    }
+
+    /* Five date cards need tighter spacing to fit a 320px screen. */
+    .stepper-day-strip {
+        gap: 4px;
+    }
+
+    .stepper-day-card {
+        min-width: 0;
+        padding: 8px 2px;
+    }
+}

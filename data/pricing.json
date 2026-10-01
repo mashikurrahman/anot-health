@@ -1,0 +1,17 @@
+{
+  "_note": "Source of truth for plan prices. USD covers US and international practices; CAD covers Canadian practices. The two are set independently - Canadian prices are NOT derived from the USD prices, so do not 'correct' one to match a conversion of the other. The pages, the chatbot and its tests all check against this file: change a number here, then run `npm test` in backend/ and fix whatever it reports.",
+  "usd": {
+    "aiScribe": 199,
+    "verified": 899,
+    "aiScribeYearly": 169,
+    "verifiedYearly": 764,
+    "yearlyDiscountPercent": 15
+  },
+  "cad": {
+    "aiScribe": 139,
+    "verified": 839,
+    "aiScribeYearly": 118,
+    "verifiedYearly": 713,
+    "yearlyDiscountPercent": 15
+  }
+}

@@ -4,6 +4,8 @@ const fs = require('fs');
 // Cache storage
 const cache = new Map();
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
+// GA4 events the site fires when a visitor submits a lead form.
+const LEAD_EVENT_NAMES = ['generate_lead', 'form_submission', 'contact_submit', 'demo_request'];
 
 function getCached(key) {
     const item = cache.get(key);
@@ -20,6 +22,34 @@ function setCache(key, data) {
         timestamp: Date.now(),
         data
     });
+}
+
+// Neither the GA4 client nor the Search Console client takes a request timeout, and a
+// dashboard call makes up to eight of them in sequence. Without a ceiling, a stalled
+// Google response leaves the admin request hanging for as long as the socket stays open
+// and the browser just spins. Measured on this site: a warm call is ~5s and a cached one
+// is instant, while the first call of a process is far slower because the gRPC/protobuf
+// client is loaded and the service-account token is exchanged. The default leaves room
+// for that cold start and still guarantees the request ends.
+const ANALYTICS_TIMEOUT_MS = Math.max(5000, Number(process.env.ANALYTICS_TIMEOUT_MS || 90000));
+
+class AnalyticsTimeoutError extends Error {
+    constructor(label, ms) {
+        super(`${label} did not respond within ${Math.round(ms / 1000)}s.`);
+        this.name = 'AnalyticsTimeoutError';
+        this.isTimeout = true;
+    }
+}
+
+// The work carries on in the background if it ever completes - there is no way to cancel
+// an in-flight client call - but the caller is released either way.
+function withTimeout(label, promise) {
+    let timer;
+    const ceiling = new Promise((_resolve, reject) => {
+        timer = setTimeout(() => reject(new AnalyticsTimeoutError(label, ANALYTICS_TIMEOUT_MS)), ANALYTICS_TIMEOUT_MS);
+        if (typeof timer.unref === 'function') timer.unref();
+    });
+    return Promise.race([promise, ceiling]).finally(() => clearTimeout(timer));
 }
 
 function getCredentialsPath() {
@@ -303,7 +333,7 @@ async function fetchGa4Overview({ days = 30, forceRefresh = false } = {}) {
                     filter: {
                         fieldName: 'eventName',
                         inListFilter: {
-                            values: ['generate_lead', 'form_submission', 'contact_submit', 'demo_request']
+                            values: LEAD_EVENT_NAMES
                         }
                     }
                 }
@@ -319,20 +349,65 @@ async function fetchGa4Overview({ days = 30, forceRefresh = false } = {}) {
             console.warn('Could not fetch specific lead events from GA4:', e.message);
         }
 
-        // 5. Acquisition Channels (Estimated from active channels or defaults)
-        const channels = [
-            { channel: 'Organic Search', sessions: Math.max(Math.round(sessions * 0.60), 1), pct: 60.0, leads: Math.round(leadsGenerated * 0.65) },
-            { channel: 'Direct', sessions: Math.max(Math.round(sessions * 0.25), 1), pct: 25.0, leads: Math.round(leadsGenerated * 0.20) },
-            { channel: 'Referral', sessions: Math.max(Math.round(sessions * 0.10), 0), pct: 10.0, leads: Math.round(leadsGenerated * 0.10) },
-            { channel: 'Organic Social', sessions: Math.max(Math.round(sessions * 0.05), 0), pct: 5.0, leads: Math.round(leadsGenerated * 0.05) }
-        ];
+        // 5. Acquisition Channels and 6. Device Categories, both measured by GA4.
+        // (These used to be fixed 60/25/10/5 and 64/33/3 splits of the totals.)
+        const pct = (part, whole) => (whole ? Number(((part / whole) * 100).toFixed(1)) : 0);
 
-        // 6. Device Categories
-        const devices = [
-            { device: 'Desktop', pct: 64.0, sessions: Math.max(Math.round(sessions * 0.64), 1) },
-            { device: 'Mobile', pct: 33.0, sessions: Math.max(Math.round(sessions * 0.33), 1) },
-            { device: 'Tablet', pct: 3.0, sessions: Math.max(Math.round(sessions * 0.03), 0) }
-        ];
+        const [[channelReport], [channelLeadReport], [deviceReport]] = await Promise.all([
+            analyticsDataClient.runReport({
+                property: `properties/${propertyId}`,
+                dateRanges: [{ startDate, endDate }],
+                dimensions: [{ name: 'sessionDefaultChannelGroup' }],
+                metrics: [{ name: 'sessions' }],
+                orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+                limit: 8
+            }),
+            analyticsDataClient.runReport({
+                property: `properties/${propertyId}`,
+                dateRanges: [{ startDate, endDate }],
+                dimensions: [{ name: 'sessionDefaultChannelGroup' }],
+                metrics: [{ name: 'eventCount' }],
+                dimensionFilter: {
+                    filter: {
+                        fieldName: 'eventName',
+                        inListFilter: { values: LEAD_EVENT_NAMES }
+                    }
+                }
+            }).catch((e) => {
+                console.warn('Could not fetch leads by channel from GA4:', e.message);
+                return [{ rows: [] }];
+            }),
+            analyticsDataClient.runReport({
+                property: `properties/${propertyId}`,
+                dateRanges: [{ startDate, endDate }],
+                dimensions: [{ name: 'deviceCategory' }],
+                metrics: [{ name: 'sessions' }],
+                orderBys: [{ metric: { metricName: 'sessions' }, desc: true }]
+            })
+        ]);
+
+        const leadsByChannel = new Map((channelLeadReport.rows || []).map(row => [
+            row.dimensionValues[0]?.value || '',
+            Number(row.metricValues[0]?.value || 0)
+        ]));
+        const channelRows = (channelReport.rows || []).map(row => ({
+            channel: row.dimensionValues[0]?.value || 'Unassigned',
+            sessions: Number(row.metricValues[0]?.value || 0)
+        }));
+        const channelTotal = channelRows.reduce((sum, row) => sum + row.sessions, 0);
+        const channels = channelRows.map(row => ({
+            ...row,
+            pct: pct(row.sessions, channelTotal),
+            leads: leadsByChannel.get(row.channel) || 0
+        }));
+
+        const deviceRows = (deviceReport.rows || []).map(row => ({
+            // GA4 reports lowercase names ("desktop"); the dashboard shows "Desktop".
+            device: String(row.dimensionValues[0]?.value || 'other').replace(/^./, c => c.toUpperCase()),
+            sessions: Number(row.metricValues[0]?.value || 0)
+        }));
+        const deviceTotal = deviceRows.reduce((sum, row) => sum + row.sessions, 0);
+        const devices = deviceRows.map(row => ({ ...row, pct: pct(row.sessions, deviceTotal) }));
 
         const result = {
             configured: true,
@@ -499,8 +574,11 @@ async function fetchGscKeywords({ days = 30, forceRefresh = false } = {}) {
 }
 
 module.exports = {
-    fetchGa4Overview,
-    fetchGscKeywords,
+    // Exported through the timeout wrapper so every caller gets the ceiling, rather
+    // than each route having to remember to apply one.
+    fetchGa4Overview: (options) => withTimeout('Google Analytics', fetchGa4Overview(options)),
+    fetchGscKeywords: (options) => withTimeout('Google Search Console', fetchGscKeywords(options)),
     hasCredentials,
-    getClientEmail
+    getClientEmail,
+    AnalyticsTimeoutError
 };

@@ -52,9 +52,31 @@
     RewriteEngine On
     RewriteBase /
 
+    # One canonical origin: https://anot.health (matches every <link rel="canonical">).
+    # Both rules only fire on the production hostnames, so staging hosts are untouched.
+    # X-Forwarded-Proto covers a TLS-terminating proxy such as Cloudflare, where
+    # %{HTTPS} is "off" even for secure requests and would otherwise loop.
+    RewriteCond %{HTTP_HOST} ^www\.anot\.health$ [NC]
+    RewriteRule ^ https://anot.health%{REQUEST_URI} [R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^anot\.health$ [NC]
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+    RewriteRule ^ https://anot.health%{REQUEST_URI} [R=301,L]
+
     # Belt and braces: refuse the backend folder even if its own
     # .htaccess is lost during upload.
     RewriteRule ^backend/ - [F,L]
+
+    # SEO dashboard: the address to use is https://anot.health/seologin (the page file is
+    # admin-analytics.html). It has to stay at the site root because the page loads css/ and
+    # js/ by relative path, so the trailing-slash form forwards to the clean address. The old
+    # file name forwards too. THE_REQUEST holds what the visitor actually typed, so it does not
+    # match the internal rewrite below and cannot loop.
+    RewriteRule ^seologin/$ /seologin [R=301,L,NC]
+    RewriteRule ^seologin$ admin-analytics.html [L,NC]
+    RewriteCond %{THE_REQUEST} \s/+admin-analytics(\.html)?[\s?] [NC]
+    RewriteRule ^ /seologin [R=301,L]
 
     # Regional page pairs, kept in step with PAIRS_US_TO_CA in js/geo-switcher.js.
     # Six pages follow the "<name>.html <-> <name>-ca.html" convention and are
@@ -129,7 +151,7 @@
 # one, so the two never conflict.
 # ==========================================================
 <IfModule mod_headers.c>
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.web3forms.com https://api.country.is https://ipapi.co; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.country.is https://ipapi.co; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'none'; upgrade-insecure-requests"
 
     # Legacy equivalent of frame-ancestors, for older browsers.
     Header always set X-Frame-Options "DENY"
@@ -191,3 +213,11 @@
 </IfModule>
 
 FileETag MTime Size
+
+# Branded page for missing URLs instead of the host's default error screen.
+ErrorDocument 404 /404.html
+
+# Compress text assets. style.css alone is ~10,000 lines; gzip cuts it by ~80%.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript text/javascript application/json application/xml image/svg+xml application/manifest+json
+</IfModule>

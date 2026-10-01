@@ -15,16 +15,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anot Health | Clean &amp; Human-Centered Healthcare Operations</title>
     <meta name="description"
-        content="Streamlined clinical documentation, medical coding, revenue cycle, and payroll support for healthcare teams. Clean, human-led operations with advanced AI assistance.">
+        content="Clinical documentation, medical coding, revenue cycle and payroll support for healthcare teams — human-led operations with advanced AI assistance.">
     <link rel="canonical" href="https://anot.health/">
-    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202606082127">
-    <script src="https://unpkg.com/lucide@0.537.0" defer></script>
+    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202609201640">
+    <script src="js/vendor/lucide-0.537.0.min.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=202609161530">
+    <link rel="stylesheet" href="css/style.css?v=202609301640">
+    <link rel="stylesheet" href="css/motion-engine.css?v=202609301630">
     <script src="js/geo-switcher.js?v=202606082127"></script>
     <meta name="robots" content="noindex, nofollow">
+    <noscript><style>
+        /* Scroll reveals are switched on by JS; without it, show everything. */
+        .reveal, .reveal-left, .reveal-right, .reveal-scale,
+        .hero-animate { opacity: 1 !important; transform: none !important; animation: none !important; }
+    </style></noscript>
 </head>
 
 <body style="background: #ffffff; color: #0f172a;">
@@ -146,22 +152,6 @@
                         <h3 class="h2-service-name">Payroll Admin</h3>
                         <p class="h2-service-desc">Reconciled provider hours, RVU bonuses, and clean payroll exports.</p>
                         <a href="payroll.html" class="h2-service-link" aria-label="Learn more about Payroll Admin">Learn More &rarr;</a>
-                    </article>
-
-                    <!-- Service 5 -->
-                    <article class="h2-service-box">
-                        <div class="h2-service-icon-circle"><i data-lucide="stethoscope" class="icon-md"></i></div>
-                        <h3 class="h2-service-name">50+ Specialties</h3>
-                        <p class="h2-service-desc">Tailored workflows for Cardiology, Orthopedics, Family Med &amp; more.</p>
-                        <a href="specialties.html" class="h2-service-link" aria-label="Learn more about 50+ Specialties">Learn More &rarr;</a>
-                    </article>
-
-                    <!-- Service 6 -->
-                    <article class="h2-service-box">
-                        <div class="h2-service-icon-circle"><i data-lucide="shield-alert" class="icon-md"></i></div>
-                        <h3 class="h2-service-name">QPS Safety Audit</h3>
-                        <p class="h2-service-desc">Two-stage human review firewall eliminates AI hallucinations.</p>
-                        <a href="hipaa.html" class="h2-service-link" aria-label="Learn more about QPS Safety Audit">Learn More &rarr;</a>
                     </article>
                 </div>
 
@@ -476,7 +466,7 @@
                     </div>
 
                     <div class="h2-flow-hub">
-                        <img src="images/logo-markss.webp?v=202606082127" alt="" class="h2-flow-hub-mark">
+                        <img src="images/logo-markss.webp?v=202609201640" alt="" class="h2-flow-hub-mark">
                     </div>
                     <div class="h2-flow-hub-caption">
                         <strong>Anot Operations Layer</strong>
@@ -970,10 +960,15 @@
                             </div>
 
                             <div class="h2-form-group">
-                                <i data-lucide="calendar" class="icon-xs h2-input-icon" aria-hidden="true"></i>
-                                <label for="h2qf-date" class="sr-only">Preferred callback date</label>
-                                <input id="h2qf-date" name="preferred_date" type="date" class="h2-form-input">
+                                <i data-lucide="clock" class="icon-xs h2-input-icon" aria-hidden="true"></i>
+                                <label for="h2qf-slot" class="sr-only">Preferred consultation time window</label>
+                                <select id="h2qf-slot" name="time_slot" class="h2-form-select">
+                                    <option value="Morning (9:00 AM - 12:00 PM ET)" selected>Morning (9 AM - 12 PM ET)</option>
+                                    <option value="Afternoon (1:00 PM - 5:00 PM ET)">Afternoon (1 PM - 5 PM ET)</option>
+                                    <option value="Earliest Available Slot">Earliest Available Slot</option>
+                                </select>
                             </div>
+
 
                             <button type="submit" class="h2-btn-primary" style="width: 100%; justify-content: center; padding: 13px; font-size: 0.95rem;">
                                 Submit Request
@@ -1049,49 +1044,41 @@
             </div>
         </section>
 
-        <!-- ONE WINDOW CONSULTATION CTA (CONCENTRIC RINGS) -->
-        <section class="h2-ring-section" id="consultation">
-            <div class="h2-ring-field" aria-hidden="true">
-                <span class="h2-ring" style="--s: 360px"></span>
-                <span class="h2-ring" style="--s: 540px"></span>
-                <span class="h2-ring" style="--s: 730px"></span>
-                <span class="h2-ring" style="--s: 940px"></span>
-            </div>
-
+        <!-- ONE WINDOW CONSULTATION CTA (GLUE REFERENCE DESIGN) -->
+        <section class="h2-ring-section" id="consultation" aria-labelledby="consultation-title">
             <div class="container">
-                <div class="h2-ring-inner">
-                    <!-- Floating proof cards -->
-                    <div class="h2-ring-float h2-ring-float-l">
-                        <span class="h2-ring-float-icon"><i data-lucide="shield-check"></i></span>
-                        <span class="h2-ring-float-body">
-                            <strong>HIPAA secure</strong>
-                            <small>BAA on day one</small>
-                        </span>
-                    </div>
+                <div class="h2-ring-card reveal-scale">
+                    <!-- Brush-stroke ribbon art: images/cta-ribbons*.svg, wired up in css/style.css -->
+                    <div class="h2-ring-field" aria-hidden="true"></div>
 
-                    <div class="h2-ring-float h2-ring-float-r">
-                        <span class="h2-ring-float-icon"><i data-lucide="timer"></i></span>
-                        <span class="h2-ring-float-body">
-                            <strong>Fastest turnaround time</strong>
-                            <small>Guaranteed in writing</small>
-                        </span>
-                    </div>
-
+                    <!-- Centered Copy & CTA -->
                     <div class="h2-ring-copy">
-                        <span class="h2-ring-eyebrow">One partner, one contract</span>
-                        <h2 class="h2-ring-title">Clinical, financial and administrative operations<br><span class="accent-blue">&mdash; all in one window</span></h2>
-                        <p class="h2-ring-desc">Stop stitching together a scribe vendor, a coding firm, a billing company, and a payroll consultant. One team owns the whole chain &mdash; and one person answers for it.</p>
+                        <div class="h2-cta-badge">Admin overload? Try Anot Health.</div>
+
+                        <h2 class="h2-ring-title" id="consultation-title">Smarter healthcare operations</h2>
+
+                        <p class="h2-ring-desc">
+                            Anot Health is the modern way for your team to practice while staying
+                            <span class="cta-inline-badge cta-badge-blue" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                            </span>&nbsp;focused and
+                            <span class="cta-inline-badge cta-badge-navy" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                </svg>
+                            </span>&nbsp;productive.
+                        </p>
 
                         <div class="h2-ring-actions">
-                            <a href="contact.html?focus=demo#demo-form" class="h2-ring-btn">
-                                Get a consultation
-                            </a>
-                            <a href="contact.html?focus=demo#demo-form" class="h2-ring-arrow" aria-label="Get a consultation">
-                                <i data-lucide="arrow-up-right"></i>
+                            <a href="contact.html?focus=demo#demo-form" class="h2-btn-primary h2-ring-cta" data-open-contact-modal="true" onclick="if(window.openContactModal){window.openContactModal();return false;}">
+                                Book a Demo
+                                <span class="h2-ring-cta-arrow" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </span>
                             </a>
                         </div>
-
-                        <p class="h2-ring-note">15 minutes &bull; no obligation &bull; we review your actual payer mix</p>
                     </div>
                 </div>
             </div>
@@ -1148,11 +1135,21 @@
             }
         });
     </script>
-    <script src="js/components.js?v=202609161530"></script>
-    <script src="js/main.js?v=202609161530" defer></script>
+    <script src="js/components.js?v=202609301630"></script>
+    <script src="js/vendor/lenis.min.js?v=202609201640"></script>
+    <script src="js/main.js?v=202609301640" defer></script>
+    <script src="js/motion-engine.js?v=202609301630" defer></script>
+    <script src="js/chatbot-v2.js?v=202609201640" defer></script>
 </body>
 
 </html>
+
+
+
+
+
+
+
 
 
 

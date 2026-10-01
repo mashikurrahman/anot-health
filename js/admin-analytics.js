@@ -43,7 +43,6 @@
     // Hero Overview Elements
     const heroActiveUsers = document.getElementById('heroActiveUsers');
     const heroSearchViews = document.getElementById('heroSearchViews');
-    const heroGrowthBadge = document.getElementById('heroGrowthBadge');
     const subClicksVal = document.getElementById('subClicksVal');
     const subCtrVal = document.getElementById('subCtrVal');
 
@@ -101,40 +100,53 @@
     const serpRenderTitle = document.getElementById('serpRenderTitle');
     const serpRenderUrl = document.getElementById('serpRenderUrl');
     const serpRenderDesc = document.getElementById('serpRenderDesc');
+    const serpSaveBtn = document.getElementById('serpSaveBtn');
+    const serpResetBtn = document.getElementById('serpResetBtn');
+    const serpSaveStatus = document.getElementById('serpSaveStatus');
 
-    // SERP Page Presets
+    // SERP page templates: each one is that page's LIVE <title>, canonical URL and meta description,
+    // read from the page itself. billing and scribing have no meta description yet, so their
+    // social-share (og:description) text stands in for it.
     const serpPresets = {
         home: {
-            title: 'Anot Health | Medical Billing & Clinical Solutions',
+            title: 'Anot Health | Clean & Human-Centered Healthcare Operations',
             url: 'https://anot.health/',
-            desc: 'PIPEDA & HIPAA-compliant medical billing, certified coding, and virtual clinical scribes for healthcare practices in the US & Canada.'
+            desc: 'Streamlined clinical documentation, medical coding, revenue cycle, and payroll support for healthcare teams. Clean, human-led operations with advanced AI assistance.'
         },
         'home-ca': {
-            title: 'Anot Health Canada | Canadian Medical Billing & Scribing',
+            title: 'Anot Health | Human-Verified Clinical Operations for Medical Practices',
             url: 'https://anot.health/homepage-ca.html',
-            desc: 'Specialized billing services for Canadian clinics covering OHIP, MSP, and AHCIP with expert human verification and dedicated scribes.'
+            desc: 'Streamlined clinical documentation, Accuro & Telus EMR workflows, provincial billing (OHIP, MSP, AHCIP), and in-country cloud data residency for healthcare teams.'
         },
         billing: {
-            title: 'Medical Billing & RCM Services | Anot Health',
+            title: 'Revenue Cycle Management | Anot Health',
             url: 'https://anot.health/billing.html',
-            desc: 'End-to-end revenue cycle management, denial management, and certified medical billing to maximize clinical collections.'
+            desc: 'AI-assisted billing workflows with trained review to help practices submit cleaner claims and protect revenue.'
         },
         scribing: {
-            title: 'Clinical Medical Scribes & Virtual Support | Anot Health',
+            title: 'Clinical Documentation | Anot Health',
             url: 'https://anot.health/scribing.html',
-            desc: 'Reduce EHR documentation burden by up to 2.5 hours per physician daily with real-time certified clinical scribes.'
+            desc: 'Expert-led clinical documentation powered by advanced AI and validated by experienced specialists before every note is delivered.'
         },
         pricing: {
-            title: 'Transparent Pricing & ROI Calculator | Anot Health',
+            title: 'Pricing | Anot Health \u2014 From $199 per provider',
             url: 'https://anot.health/pricing.html',
-            desc: 'Calculate your practice\'s billing savings and scribe ROI with Anot Health\'s transparent percentage-based models.'
+            desc: 'AI Scribe at $199 per provider per month, Verified Scribe with certified human review at $899, or a custom scope covering billing, coding and payroll.'
         },
-        custom: {
-            title: 'Anot Health | Healthcare Practice Growth',
-            url: 'https://anot.health/specialty.html',
-            desc: 'Tailored billing and clinical workflow optimization for private practices and specialty health centers.'
+        specialties: {
+            title: 'Medical Specialties | Anot Health',
+            url: 'https://anot.health/specialties.html',
+            desc: 'Expert-led clinical support across 50+ medical specialties, using advanced AI helpers for primary care to surgical subspecialties.'
         }
     };
+
+    // Saved SERP snippets. The server keeps whatever the admin edited and saved for each template;
+    // a template with no saved version shows the live page text from serpPresets above.
+    let savedSnippets = {};   // template key -> { title, url, desc, savedAt }
+    let serpActiveKey = serpPageSelect ? serpPageSelect.value : 'home';
+    let serpBaseline = null;  // the fields as last loaded or saved, to spot unsaved edits
+    let serpSaving = false;
+    let serpNotice = null;    // { text, state } shown in place of the normal status, e.g. an error
 
     function getToken() {
         return sessionStorage.getItem('anot_admin_token') || '';
@@ -337,6 +349,8 @@
         const token = getToken();
         if (!token) return;
 
+        loadSavedSnippets();
+
         try {
             // 1. Status Check
             const statusRes = await fetch('/api/admin/analytics/status', {
@@ -352,11 +366,9 @@
             const statusData = await statusRes.json();
             if (statusData.success) {
                 if (footerStatusMsg) {
-                    if (statusData.isFullyConfigured) {
-                        footerStatusMsg.textContent = `Connected to Google Analytics 4 (Property: Active) & Google Search Console. Live streaming.`;
-                    } else {
-                        footerStatusMsg.textContent = `Google Analytics 4 Active (Property 554598931). Search Console ready to verify on deployment.`;
-                    }
+                    footerStatusMsg.textContent = statusData.isFullyConfigured
+                        ? 'Configured for Google Analytics 4 and Google Search Console.'
+                        : 'Not connected: the server is missing Google credentials or IDs (see backend/.env).';
                 }
             }
 
@@ -371,6 +383,7 @@
             }).then(r => r.json());
 
             const [ga4Res, gscRes] = await Promise.all([ga4Promise, gscPromise]);
+            showSampleDataWarning(ga4Res?.data, gscRes?.data);
 
             if (ga4Res.success && ga4Res.data) {
                 cachedOverview = ga4Res.data;
@@ -391,6 +404,32 @@
         }
     }
 
+    // The server substitutes sample numbers when Google isn't connected or a query
+    // fails. Say so plainly, so nobody mistakes them for real traffic.
+    function describeSampleReason(label, data) {
+        if (!data || !data.isMock) return '';
+        if (data.error) return `${label}: Google returned an error (${data.error}).`;
+        const missing = data.missingDetails || {};
+        if (missing.hasCredentialsFile === false) return `${label}: backend/service-account.json is missing.`;
+        if (missing.hasPropertyId === false) return `${label}: GA4_PROPERTY_ID is not set.`;
+        if (missing.hasSiteUrl === false) return `${label}: GSC_SITE_URL is not set.`;
+        return `${label}: not connected.`;
+    }
+
+    function showSampleDataWarning(overview, keywords) {
+        const banner = document.getElementById('sampleDataBanner');
+        const reasonEl = document.getElementById('sampleDataReason');
+        if (!banner || !reasonEl) return;
+        const reasons = [
+            describeSampleReason('Google Analytics', overview),
+            describeSampleReason('Search Console', keywords)
+        ].filter(Boolean);
+        banner.hidden = reasons.length === 0;
+        const badge = document.getElementById('connectionBadgeText');
+        if (badge) badge.textContent = reasons.length ? 'SAMPLE DATA' : 'GOOGLE CONNECTED';
+        reasonEl.textContent = ' ' + reasons.join(' ');
+    }
+
     // Render GA4 Overview Data
     function renderGa4Data(data) {
         const summary = data.summary || {};
@@ -399,7 +438,7 @@
         // Region Filtering for Hero Visitors
         let displayUsers = summary.activeUsers || 0;
         let usUsers = 0, caUsers = 0, otherUsers = 0;
-        let usPct = 59.2, caPct = 30.3;
+        let usPct = 0, caPct = 0, otherPct = 0;
 
         regions.forEach(r => {
             if (r.code === 'US') {
@@ -410,11 +449,12 @@
                 caPct = r.pct;
             } else {
                 otherUsers = r.users;
+                otherPct = r.pct;
             }
         });
 
-        if (selectedRegion === 'US') displayUsers = usUsers || summary.activeUsers;
-        else if (selectedRegion === 'CA') displayUsers = caUsers || Math.round(summary.activeUsers * 0.35);
+        if (selectedRegion === 'US') displayUsers = usUsers;
+        else if (selectedRegion === 'CA') displayUsers = caUsers;
 
         // Hero Visitors Value
         if (heroActiveUsers) {
@@ -427,7 +467,7 @@
 
         // Notification Badge Count
         if (notifBadgeCount) {
-            notifBadgeCount.textContent = `${formatNumber(summary.sessions || 2)} Sessions`;
+            notifBadgeCount.textContent = `${formatNumber(summary.sessions ?? 0)} Sessions`;
         }
 
         // Circular SVG Gauge
@@ -444,11 +484,21 @@
         }
 
         if (gaugeInsightText) {
-            if (usPct >= 50) {
-                gaugeInsightText.innerHTML = `<i data-lucide="sparkles" class="icon-xs" style="color: var(--dark-forest);"></i> <span>US leads traffic by ${(usPct - caPct).toFixed(1)}%</span>`;
+            // Name whichever region really has the most users; say so when it's a tie.
+            const ranked = [
+                { label: 'US', pct: usPct },
+                { label: 'Canada', pct: caPct },
+                { label: 'Other countries', pct: otherPct }
+            ].sort((a, b) => b.pct - a.pct);
+            let insight;
+            if (ranked[0].pct === 0) {
+                insight = 'No regional traffic recorded yet';
+            } else if (ranked[0].pct === ranked[1].pct) {
+                insight = `${ranked[0].label} and ${ranked[1].label} are tied at ${ranked[0].pct}%`;
             } else {
-                gaugeInsightText.innerHTML = `<i data-lucide="sparkles" class="icon-xs" style="color: #E11D48;"></i> <span>Canada leads regional engagement</span>`;
+                insight = `${ranked[0].label} ${ranked[0].label === 'Other countries' ? 'lead' : 'leads'} with ${ranked[0].pct}% of users`;
             }
+            gaugeInsightText.innerHTML = `<i data-lucide="sparkles" class="icon-xs" style="color: var(--dark-forest);"></i> <span>${escapeHtml(insight)}</span>`;
         }
 
         if (legendUsCount) legendUsCount.textContent = formatNumber(usUsers);
@@ -457,7 +507,7 @@
         if (legendLeadsCount) legendLeadsCount.textContent = formatNumber(summary.leadsGenerated || 0);
 
         // Top Pages & Demand
-        const totalViews = summary.screenPageViews || 5890;
+        const totalViews = summary.screenPageViews ?? 0;
         if (earningTotalViews) earningTotalViews.textContent = formatNumber(totalViews);
         if (badgeTotalViews) badgeTotalViews.textContent = `${formatNumber(totalViews)} Views`;
 
@@ -494,15 +544,15 @@
         const queries = data.queries || [];
 
         if (heroSearchViews) {
-            heroSearchViews.textContent = formatNumber(summary.totalImpressions || 24600);
+            heroSearchViews.textContent = formatNumber(summary.totalImpressions ?? 0);
         }
 
         if (subClicksVal) {
-            subClicksVal.textContent = formatNumber(summary.totalClicks || 840);
+            subClicksVal.textContent = formatNumber(summary.totalClicks ?? 0);
         }
 
         if (subCtrVal) {
-            subCtrVal.textContent = (summary.avgCtrPct || 3.4) + '%';
+            subCtrVal.textContent = (summary.avgCtrPct ?? 0) + '%';
         }
 
         // Featured Top Query Box
@@ -710,8 +760,9 @@
         }
 
         // 2. Render Devices Breakdown
-        let deskPct = 64, mobPct = 33, tabPct = 3;
-        let deskSessions = 1400, mobSessions = 715, tabSessions = 65;
+        // A device GA4 didn't report had no sessions; show 0 rather than a placeholder.
+        let deskPct = 0, mobPct = 0, tabPct = 0;
+        let deskSessions = 0, mobSessions = 0, tabSessions = 0;
 
         devices.forEach(d => {
             if (d.device.toLowerCase() === 'desktop') {
@@ -808,8 +859,9 @@
             try {
                 const u = new URL(urlText);
                 const pathParts = u.pathname.replace(/^\//, '').split('/');
-                const breadcrumb = pathParts.filter(Boolean).join(' > ') || 'Home';
-                serpRenderUrl.textContent = `${u.origin} > ${breadcrumb}`;
+                const breadcrumb = pathParts.filter(Boolean).join(' > ');
+                // Google shows just the domain for a homepage, and "domain > page" for inner pages
+                serpRenderUrl.textContent = breadcrumb ? `${u.origin} > ${breadcrumb}` : u.origin;
             } catch (e) {
                 serpRenderUrl.textContent = urlText;
             }
@@ -829,26 +881,222 @@
                 descCharCount.style.color = '#64748B';
             }
         }
+
+        renderSerpStatus();
+    }
+
+    // ── Saving edits ──────────────────────────────────────────────────────
+    function serpFieldsNow() {
+        return {
+            title: serpTitleInput.value.trim(),
+            url: serpUrlInput.value.trim(),
+            desc: serpDescInput.value.trim()
+        };
+    }
+
+    // True when the fields differ from what was last loaded or saved.
+    function serpIsDirty() {
+        if (!serpBaseline || !serpTitleInput || !serpUrlInput || !serpDescInput) return false;
+        const now = serpFieldsNow();
+        return now.title !== serpBaseline.title || now.url !== serpBaseline.url || now.desc !== serpBaseline.desc;
+    }
+
+    function serpSavedAtLabel(iso) {
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return '';
+        return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    }
+
+    // Keeps the status line and the two buttons in step with the fields.
+    function renderSerpStatus() {
+        if (!serpSaveStatus || !serpSaveBtn || !serpResetBtn || !serpBaseline) return;
+        const dirty = serpIsDirty();
+        const saved = savedSnippets[serpActiveKey];
+        let text;
+        let state = 'idle';
+        if (serpSaving) {
+            text = 'Saving...';
+        } else if (serpNotice) {
+            text = serpNotice.text;
+            state = serpNotice.state;
+        } else if (dirty) {
+            text = 'Unsaved changes';
+            state = 'dirty';
+        } else if (saved) {
+            const when = serpSavedAtLabel(saved.savedAt);
+            text = when ? `Saved \u2713 ${when}` : 'Saved \u2713';
+            state = 'saved';
+        } else {
+            text = 'Showing the live page text.';
+        }
+        if (serpSaveStatus.textContent !== text) serpSaveStatus.textContent = text;
+        serpSaveStatus.setAttribute('data-state', state);
+        serpSaveBtn.disabled = serpSaving || !dirty;
+        serpResetBtn.disabled = serpSaving || !(dirty || saved);
+        if (serpPageSelect) serpPageSelect.disabled = serpSaving;
+    }
+
+    // Fill the three fields for a template: the saved version if there is one, else the live page text.
+    // Either way the fields always match what the dropdown says.
+    function applySerpTemplate(key) {
+        const live = serpPresets[key];
+        if (!live || !serpTitleInput || !serpUrlInput || !serpDescInput) return;
+        const source = savedSnippets[key] || live;
+        serpTitleInput.value = source.title;
+        serpUrlInput.value = source.url;
+        serpDescInput.value = source.desc;
+        serpActiveKey = key;
+        serpNotice = null;
+        serpBaseline = serpFieldsNow();
+        updateSerpPreview();
+    }
+
+    // Sends one save or reset request. Resolves with the reply, or throws an Error whose message
+    // is fit to show the admin (sessionExpired is set when they need to log in again).
+    async function serpRequest(path, payload) {
+        let res;
+        try {
+            res = await fetch('/api/admin/seo-snippets' + path, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+                body: JSON.stringify(payload)
+            });
+        } catch (e) {
+            throw new Error('Could not reach the server. Your changes are still here, so try again.');
+        }
+        if (res.status === 401) {
+            const err = new Error('Your session expired. Please log in again.');
+            err.sessionExpired = true;
+            throw err;
+        }
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 404) {
+            throw new Error('The server does not have this feature yet. Upload the latest backend/server.js and restart the backend.');
+        }
+        if (!res.ok || !data.success) {
+            throw new Error(data.error || 'Something went wrong. Please try again.');
+        }
+        return data;
+    }
+
+    function serpFailed(err) {
+        if (err.sessionExpired) {
+            clearToken();
+            checkAuth();
+            return;
+        }
+        serpNotice = { text: err.message, state: 'error' };
+    }
+
+    async function saveSerpSnippet() {
+        if (serpSaving || !serpIsDirty()) return;
+        const key = serpActiveKey;
+        const fields = serpFieldsNow();
+
+        // The same checks the server makes, so the message shows straight away
+        let urlOk = false;
+        try { urlOk = /^https?:$/.test(new URL(fields.url).protocol); } catch (e) { /* not a URL */ }
+        if (!fields.title || !urlOk) {
+            serpNotice = {
+                text: !fields.title
+                    ? 'Enter a meta title before saving.'
+                    : 'Enter the full page address, for example https://anot.health/billing.html',
+                state: 'error'
+            };
+            renderSerpStatus();
+            return;
+        }
+
+        serpSaving = true;
+        serpNotice = null;
+        renderSerpStatus();
+        try {
+            const data = await serpRequest('', { key, ...fields });
+            savedSnippets[key] = data.snippet;
+            applySerpTemplate(key); // shows the server's cleaned-up text and the "Saved" status
+        } catch (err) {
+            serpFailed(err);
+        } finally {
+            serpSaving = false;
+            renderSerpStatus();
+        }
+    }
+
+    async function resetSerpSnippet() {
+        if (serpSaving) return;
+        const key = serpActiveKey;
+        const hasSaved = Boolean(savedSnippets[key]);
+        const question = hasSaved
+            ? 'Remove your saved version and go back to the live page text?'
+            : 'Discard your changes and show the live page text again?';
+        if (!confirm(question)) return;
+
+        if (hasSaved) {
+            serpSaving = true;
+            serpNotice = null;
+            renderSerpStatus();
+            try {
+                await serpRequest('/reset', { key });
+                delete savedSnippets[key];
+            } catch (err) {
+                serpFailed(err);
+                return;
+            } finally {
+                serpSaving = false;
+                renderSerpStatus();
+            }
+        }
+        applySerpTemplate(key);
+    }
+
+    // Fetches the saved snippets once the admin is logged in. If the server can't provide them
+    // (offline, or the backend has not been updated yet) the live page text simply stays on screen.
+    async function loadSavedSnippets() {
+        const token = getToken();
+        if (!token) return;
+        try {
+            const res = await fetch('/api/admin/seo-snippets', { headers: { 'Authorization': 'Bearer ' + token } });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!data.success || !data.snippets) return;
+            savedSnippets = data.snippets;
+            // Never overwrite something the admin has already started typing
+            if (serpIsDirty()) {
+                renderSerpStatus();
+            } else {
+                applySerpTemplate(serpActiveKey);
+            }
+        } catch (e) { /* keep showing the live text */ }
     }
 
     if (serpPageSelect) {
         serpPageSelect.addEventListener('change', function () {
-            const preset = serpPresets[this.value];
-            if (preset) {
-                serpTitleInput.value = preset.title;
-                serpUrlInput.value = preset.url;
-                serpDescInput.value = preset.desc;
-                updateSerpPreview();
+            if (serpIsDirty() && !confirm('You have unsaved changes for this page. Switch anyway and lose them?')) {
+                this.value = serpActiveKey;
+                return;
             }
+            applySerpTemplate(this.value);
         });
     }
 
-    if (serpTitleInput) serpTitleInput.addEventListener('input', updateSerpPreview);
-    if (serpUrlInput) serpUrlInput.addEventListener('input', updateSerpPreview);
-    if (serpDescInput) serpDescInput.addEventListener('input', updateSerpPreview);
+    function onSerpInput() {
+        serpNotice = null;
+        updateSerpPreview();
+    }
 
-    // Initial SERP calculation
-    updateSerpPreview();
+    if (serpTitleInput) serpTitleInput.addEventListener('input', onSerpInput);
+    if (serpUrlInput) serpUrlInput.addEventListener('input', onSerpInput);
+    if (serpDescInput) serpDescInput.addEventListener('input', onSerpInput);
+    if (serpSaveBtn) serpSaveBtn.addEventListener('click', saveSerpSnippet);
+    if (serpResetBtn) serpResetBtn.addEventListener('click', resetSerpSnippet);
+
+    // Initial SERP calculation. Load the selected template first: the fields used to start out
+    // hard-coded to the billing page while the dropdown said Homepage.
+    if (serpPageSelect) {
+        applySerpTemplate(serpPageSelect.value);
+    } else {
+        updateSerpPreview();
+    }
 
     // Export CSV
     if (btnExportCsv) {

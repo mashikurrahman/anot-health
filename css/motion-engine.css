@@ -1,0 +1,430 @@
+/* ══════════════════════════════════════════════════════════════
+   Anot Health — Premium Motion Engine & Living Canvas
+   ──────────────────────────────────────────────────────────────
+   120fps GPU-composited micro-interactions, ambient cursor spotlight,
+   3D specular card tilt, magnetic CTA physics, and cinematic reveals.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Motion Tokens & System Variables ── */
+:root {
+    --me-ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --me-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --me-ease-bounce: cubic-bezier(0.22, 1.25, 0.36, 1);
+    --me-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --me-dur-quick: 0.22s;
+    --me-dur-smooth: 0.42s;
+    --me-dur-cinematic: 0.75s;
+    --me-spotlight-color: rgba(37, 99, 235, 0.055);
+    --me-specular-color: rgba(37, 99, 235, 0.09);
+}
+
+/* ── 1. AMBIENT CURSOR SPOTLIGHT (Living Canvas Atmosphere) ── */
+#meCursorSpotlight {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 650px;
+    height: 650px;
+    margin-top: -325px;
+    margin-left: -325px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(37, 99, 235, 0.06) 0%, rgba(59, 130, 246, 0.02) 42%, transparent 72%);
+    pointer-events: none;
+    z-index: 1;
+    transform: translate3d(-9999px, -9999px, 0);
+    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+#meCursorSpotlight.is-active {
+    opacity: 1;
+}
+
+/* ── 2. HERO CINEMATIC TEXT & VISUAL ENTRANCE ── */
+.h2-hero, .hero-section, .hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.me-line-wrap {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 3px;
+    margin-bottom: -3px;
+}
+
+.me-line {
+    display: block;
+    transform: translateY(115%);
+    opacity: 0;
+    will-change: transform, opacity;
+    transition: transform 0.85s var(--me-ease-smooth), opacity 0.85s var(--me-ease-smooth);
+}
+
+.me-line.is-revealed {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.h2-hero-desc, .hero-desc {
+    transition: transform 0.75s var(--me-ease-smooth), opacity 0.75s var(--me-ease-smooth);
+}
+
+.h2-hero-actions, .hero-actions {
+    transition: transform 0.75s var(--me-ease-smooth), opacity 0.75s var(--me-ease-smooth);
+}
+
+.h2-hero-image-wrap, .hero-platform-stage, .hero-image-wrap {
+    transition: opacity 0.75s var(--me-ease-smooth);
+}
+
+/* ── 3. UNIVERSAL INTERACTIVE CARDS (3D Specular Tilt & Border Sheen) ── */
+.h2-service-box,
+.h2-bento-card,
+.h2-workflow-card,
+.h2-testimonial-card,
+.h2-pillar-item,
+.pricing-v2-card,
+.pricing-card,
+.proof-card,
+.detail-card,
+.icon-detail-card,
+.premium-card,
+.feature-card,
+.comparison-card,
+.brand-note-card,
+.acc-card {
+    position: relative;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: transform 0.35s var(--me-ease-smooth),
+                box-shadow 0.35s var(--me-ease-smooth),
+                border-color 0.25s ease;
+}
+
+.h2-service-box:hover,
+.h2-bento-card:hover,
+.h2-workflow-card:hover,
+.h2-testimonial-card:hover,
+.h2-pillar-item:hover,
+.pricing-v2-card:hover,
+.pricing-card:hover,
+.proof-card:hover,
+.detail-card:hover,
+.icon-detail-card:hover,
+.premium-card:hover,
+.feature-card:hover,
+.comparison-card:hover,
+.brand-note-card:hover,
+.acc-card:hover {
+    will-change: transform;
+}
+
+/* Interactive specular light highlight following cursor */
+.h2-service-box::after,
+.h2-bento-card::after,
+.h2-workflow-card::after,
+.h2-testimonial-card::after,
+.pricing-v2-card::after,
+.pricing-card::after,
+.proof-card::after,
+.detail-card::after,
+.premium-card::after,
+.feature-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(420px circle at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(37, 99, 235, 0.085) 0%, rgba(255, 255, 255, 0.035) 45%, transparent 72%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.h2-service-box:hover::after,
+.h2-bento-card:hover::after,
+.h2-workflow-card:hover::after,
+.h2-testimonial-card:hover::after,
+.pricing-v2-card:hover::after,
+.pricing-card:hover::after,
+.proof-card:hover::after,
+.detail-card:hover::after,
+.premium-card:hover::after,
+.feature-card:hover::after {
+    opacity: 1;
+}
+
+/* Keep card text and interactive elements above the light sheen */
+.h2-service-box > *,
+.h2-bento-card > *,
+.h2-workflow-card > *,
+.h2-testimonial-card > *,
+.pricing-v2-card > *,
+.pricing-card > *,
+.proof-card > *,
+.detail-card > *,
+.premium-card > *,
+.feature-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Hover elevation & subtle glow */
+.h2-service-box:hover,
+.h2-bento-card:hover,
+.h2-workflow-card:hover,
+.pricing-v2-card:hover,
+.pricing-card:hover {
+    box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(37, 99, 235, 0.12);
+}
+
+/* ── 4. MAGNETIC BUTTONS & INTERACTIVE CTAS ── */
+.h2-btn-primary,
+.h2-btn-outline,
+.btn-primary,
+.btn-secondary,
+.pricing-v2-btn,
+.header-cta-btn,
+.h2-service-link,
+.btn-expand-pricing,
+.btn {
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+    transition: transform 0.22s var(--me-ease-smooth),
+                box-shadow 0.22s var(--me-ease-smooth),
+                background-color 0.2s ease,
+                color 0.2s ease;
+}
+
+/* Button shimmering light sweep */
+.h2-btn-primary::after,
+.btn-primary::after,
+.pricing-v2-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -130%;
+    width: 65%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+    animation: me-buttonShimmer 4.2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes me-buttonShimmer {
+    0%, 35% { left: -130%; }
+    60%, 100% { left: 230%; }
+}
+
+.h2-btn-primary:hover,
+.btn-primary:hover,
+.pricing-v2-btn:hover {
+    box-shadow: 0 10px 30px rgba(29, 78, 216, 0.32), 0 0 0 1px rgba(29, 78, 216, 0.2);
+}
+
+.h2-btn-outline:hover,
+.btn-secondary:hover {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.h2-btn-primary:active,
+.h2-btn-outline:active,
+.btn-primary:active,
+.btn-secondary:active,
+.pricing-v2-btn:active {
+    transform: scale(0.96) !important;
+    transition-duration: 0.1s;
+}
+
+/* ── 5. ZERO-CPU GPU-COMPOSITED AMBIENT FLOATING ICONS ── */
+.h2-service-icon-circle {
+    display: inline-flex;
+    animation: me-floatA 4.8s ease-in-out infinite;
+    will-change: transform;
+}
+
+.h2-pillar-icon {
+    display: inline-flex;
+    animation: me-floatB 5.4s ease-in-out infinite;
+    will-change: transform;
+}
+
+.h2-workflow-step-badge {
+    animation: me-floatC 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+.h2-bento-icon {
+    animation: me-floatA 5.2s ease-in-out infinite 0.6s;
+    will-change: transform;
+}
+
+@keyframes me-floatA {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -4.5px, 0); }
+}
+
+@keyframes me-floatB {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -5px, 0); }
+}
+
+@keyframes me-floatC {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -4px, 0); }
+}
+
+/* Interactive hover enhancement on icons */
+.h2-service-box:hover .h2-service-icon-circle,
+.h2-pillar-item:hover .h2-pillar-icon,
+.h2-workflow-card:hover .h2-workflow-step-badge,
+.h2-bento-card:hover .h2-bento-icon {
+    animation-play-state: paused;
+    transform: scale(1.1) translate3d(0, -4px, 0) !important;
+    transition: transform 0.35s var(--me-ease-spring);
+}
+
+/* ── 6. PILLAR / ACCORDION / LIST HOVER DYNAMICS ── */
+.h2-pillar-item {
+    transition: transform 0.3s var(--me-ease-smooth),
+                background 0.25s ease,
+                box-shadow 0.25s ease;
+    border-radius: 14px;
+    padding: 12px 16px;
+}
+
+.h2-pillar-item:hover {
+    background: rgba(37, 99, 235, 0.045);
+    transform: translateY(-2px);
+}
+
+.h2-service-link {
+    transition: gap 0.25s var(--me-ease-smooth), color 0.2s ease;
+}
+
+.h2-service-link:hover {
+    gap: 10px;
+}
+
+/* FAQ item smooth hover & accordion expansion */
+.h2-faq-item, .faq-item {
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s var(--me-ease-smooth);
+}
+
+.h2-faq-item:hover, .faq-item:hover {
+    border-color: rgba(37, 99, 235, 0.22);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.06);
+    transform: translateY(-1.5px);
+}
+
+.h2-faq-item[open] summary, .faq-item[open] summary {
+    color: #1d4ed8;
+}
+
+/* ── 7. GLOWING SCROLL PROGRESS BAR ── */
+.scroll-progress, #scrollProgress {
+    background: linear-gradient(90deg, #2563EB, #3b82f6, #06b6d4);
+    height: 3px;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.45);
+    transition: width 0.05s linear;
+}
+
+/* ── 8. NAV LINK ACTIVE PILL / UNDERLINE ── */
+.nav-link {
+    position: relative;
+    transition: color 0.25s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #2563EB, #3b82f6);
+    border-radius: 2px;
+    transition: width 0.3s var(--me-ease-smooth), left 0.3s var(--me-ease-smooth);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+    left: 0;
+}
+
+/* ── 9. SECTION GLOW / AMBIENT PULSE ── */
+.h2-ring-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.h2-ring-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.045) 0%, transparent 70%);
+    animation: me-ambientGlow 9s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes me-ambientGlow {
+    0% { transform: translate(-4%, -2%) scale(1); }
+    100% { transform: translate(4%, 2%) scale(1.08); }
+}
+
+/* ── 10. METRIC NUMBER HOVER BOUNCE ── */
+.h2-metric-col:hover .h2-metric-value,
+.metric-chip:hover .metric-number {
+    transform: scale(1.06);
+    transition: transform 0.3s var(--me-ease-bounce);
+}
+
+.h2-metric-value,
+.metric-number {
+    transition: transform 0.3s var(--me-ease-smooth);
+}
+
+/* ── 11. ACCESSIBILITY & MOBILE PERFORMANCE (Zero lag guaranteed) ── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+    #meCursorSpotlight,
+    .h2-btn-primary::after,
+    .btn-primary::after,
+    .pricing-v2-btn::after,
+    .h2-ring-section::before {
+        display: none !important;
+    }
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+    #meCursorSpotlight {
+        display: none !important;
+    }
+    .h2-service-box::after,
+    .h2-bento-card::after,
+    .h2-workflow-card::after,
+    .h2-testimonial-card::after,
+    .pricing-v2-card::after,
+    .pricing-card::after {
+        display: none !important;
+    }
+    .h2-service-icon-circle,
+    .h2-pillar-icon,
+    .h2-workflow-step-badge,
+    .h2-bento-icon {
+        animation: none !important;
+    }
+}

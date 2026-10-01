@@ -1,16 +1,106 @@
 {
   "version": 1,
   "synonymGroups": [
-    ["pricing", "price", "prices", "cost", "costs", "plan", "plans", "subscription", "quote", "budget"],
-    ["documentation", "scribe", "scribing", "note", "notes", "chart", "charts", "dictation", "transcript"],
-    ["workflow", "workflows", "process", "processes", "implementation", "rollout", "onboarding", "turnaround"],
-    ["trust", "hipaa", "privacy", "security", "secure", "safeguards", "compliance"],
-    ["revenue", "billing", "claims", "claim", "denials", "collections", "cashflow", "cash", "payer"],
-    ["coding", "codes", "code", "specificity", "audit", "audits", "reimbursement", "compliance"],
-    ["payroll", "compensation", "finance", "hours", "reconciliation", "schedules", "provider pay"],
-    ["specialty", "specialties", "cardiology", "dermatology", "family medicine", "multispecialty", "providers"],
-    ["demo", "contact", "book", "email", "sales", "walkthrough", "meeting"],
-    ["dashboard", "login", "portal", "workspace", "app"]
+    [
+      "pricing",
+      "price",
+      "prices",
+      "cost",
+      "costs",
+      "plan",
+      "plans",
+      "subscription",
+      "quote",
+      "budget"
+    ],
+    [
+      "documentation",
+      "scribe",
+      "scribing",
+      "note",
+      "notes",
+      "chart",
+      "charts",
+      "dictation",
+      "transcript"
+    ],
+    [
+      "workflow",
+      "workflows",
+      "process",
+      "processes",
+      "implementation",
+      "rollout",
+      "onboarding",
+      "turnaround"
+    ],
+    [
+      "trust",
+      "hipaa",
+      "privacy",
+      "security",
+      "secure",
+      "safeguards",
+      "compliance",
+      "pipeda",
+      "phipa",
+      "residency"
+    ],
+    [
+      "revenue",
+      "billing",
+      "claims",
+      "claim",
+      "denials",
+      "collections",
+      "cashflow",
+      "cash",
+      "payer"
+    ],
+    [
+      "coding",
+      "codes",
+      "code",
+      "specificity",
+      "audit",
+      "audits",
+      "reimbursement",
+      "compliance"
+    ],
+    [
+      "payroll",
+      "compensation",
+      "finance",
+      "hours",
+      "reconciliation",
+      "schedules",
+      "provider pay"
+    ],
+    [
+      "specialty",
+      "specialties",
+      "cardiology",
+      "dermatology",
+      "family medicine",
+      "multispecialty",
+      "providers"
+    ],
+    [
+      "demo",
+      "contact",
+      "book",
+      "email",
+      "sales",
+      "walkthrough",
+      "meeting"
+    ],
+    [
+      "dashboard",
+      "login",
+      "portal",
+      "workspace",
+      "app"
+    ]
   ],
   "intents": [
     {
@@ -26,7 +116,13 @@
       ],
       "bestFit": "This is the best starting answer when a buyer is trying to understand whether Anot is a documentation-only vendor or a broader healthcare operations partner.",
       "nextStep": "If you want a narrower answer, ask which service line is the best fit for your current bottleneck.",
-      "sourcePages": ["index.html", "scribing.html", "billing.html", "coding.html", "payroll.html"],
+      "sourcePages": [
+        "index.html",
+        "scribing.html",
+        "billing.html",
+        "coding.html",
+        "payroll.html"
+      ],
       "triggers": [
         "what services do you provide",
         "what does anot do",
@@ -39,84 +135,112 @@
       "id": "pricing-overview",
       "topic": "pricing",
       "title": "Pricing Overview",
-      "summary": "Anot pricing starts at $1,000 per month for Foundation, moves to $1,500 per month for Professional, and uses custom pricing for Enterprise.",
+      "summary": "Anot has three plans: **AI Scribe** at {{price.ai}} per provider per month, **Verified Scribe** at {{price.verified}} per provider per month, and **Custom** pricing for groups that add billing, coding and payroll. {{price.billing}}",
       "highlights": [
-        "Foundation is designed for clearer, more consistent documentation workflows with AI-first note generation and light human QA.",
-        "Professional adds a stronger review layer when documentation complexity or specialty nuance increases.",
-        "Enterprise is scoped for higher-complexity documentation profiles or broader operational support."
+        "AI Scribe ({{price.ai}}/month): ambient AI drafts the SOAP note in your EHR, with suggested ICD-10 and CPT codes. You review and sign.",
+        "Verified Scribe ({{price.verified}}/month): a certified scribe and a QPS clinical auditor check every note, so it arrives sign-ready. Up to 400 reviewed notes per month.",
+        "Custom: for multi-site clinics and health systems bundling documentation with billing, coding and payroll.",
+        "No contracts and no surprise fees. Paying yearly saves 15%."
       ],
-      "bestFit": "This answer is most useful when someone wants the headline pricing structure before getting into specialty, visit length, or workflow complexity.",
-      "nextStep": "Ask which plan fits your specialty or whether your workflow sounds closer to Foundation, Professional, or Enterprise.",
-      "sourcePages": ["pricing.html", "index.html"],
+      "bestFit": "This answer is most useful when someone wants the headline prices before comparing plans.",
+      "nextStep": "See the full comparison on the [pricing page](pricing.html), or [book a pricing walkthrough](contact.html).",
+      "sourcePages": [
+        "pricing.html",
+        "pricing-ca.html"
+      ],
       "triggers": [
         "how much does anot cost",
         "pricing",
         "price",
         "what is the pricing",
-        "how much"
+        "how much",
+        "cost per provider",
+        "monthly fee",
+        "plans",
+        "international pricing",
+        "international price",
+        "international market",
+        "pricing for international"
       ]
     },
     {
-      "id": "foundation-plan",
+      "id": "ai-scribe-plan",
       "topic": "pricing",
-      "title": "Foundation Plan",
-      "summary": "Foundation starts at $1,000 per month and is designed for clear, consistent dictation with AI-first note generation and light human QA.",
+      "title": "AI Scribe Plan",
+      "summary": "AI Scribe is {{price.ai}} per provider per month. Ambient AI captures the visit and drafts a structured SOAP note directly in your EHR; you review and sign it.",
       "highlights": [
-        "It is positioned for cleaner source audio, simpler visit structures, and lower documentation complexity.",
-        "The review model stays relatively light compared with the higher tiers.",
-        "It is usually the best starting point when a practice wants relief without a heavier review layer."
+        "Structured SOAP notes with HPI, ROS, exam and assessment & plan.",
+        "Keeps your EHR template and specialty voice.",
+        "Suggested ICD-10 and CPT codes.",
+        "Unlimited encounters per provider, with no shift limits."
       ],
-      "bestFit": "Foundation is usually the right fit when the documentation profile is relatively straightforward and the team wants the lightest public entry tier.",
-      "nextStep": "If you are unsure whether your workflow is still simple enough for Foundation, ask about note complexity or specialty fit.",
-      "sourcePages": ["pricing.html", "index.html"],
+      "bestFit": "Best when the provider is comfortable checking the AI draft themselves before signing.",
+      "nextStep": "If you want a human to check every note before you see it, ask about Verified Scribe.",
+      "sourcePages": [
+        "pricing.html",
+        "pricing-ca.html"
+      ],
       "triggers": [
-        "foundation plan",
-        "1000 plan",
-        "starter plan",
-        "entry tier",
-        "base pricing"
+        "ai scribe",
+        "ai scribe plan",
+        "199",
+        "139",
+        "cheapest plan",
+        "basic plan",
+        "starter plan"
       ]
     },
     {
-      "id": "professional-plan",
+      "id": "verified-scribe-plan",
       "topic": "pricing",
-      "title": "Professional Plan",
-      "summary": "Professional starts at $1,500 per month and is meant for workflows that need a stronger review layer before the notes are handed off.",
+      "title": "Verified Scribe Plan",
+      "summary": "Verified Scribe is {{price.verified}} per provider per month. Everything in AI Scribe, plus a certified medical scribe and a QPS clinical auditor review every note, so it arrives sign-ready.",
       "highlights": [
-        "It is better suited to moderate complexity, specialty nuance, longer notes, or less predictable source material.",
-        "It adds more human review support than Foundation.",
-        "It is typically selected when a mostly AI-first workflow is no longer enough."
+        "Every note is inspected by a dedicated certified scribe.",
+        "QPS clinical audit checks dosages, laterality and diagnoses.",
+        "ICD-10 and CPT codes are reviewed by a certified coder.",
+        "Includes up to 400 reviewed notes per month, a named onboarding specialist and priority support."
       ],
-      "bestFit": "Professional is usually the best fit when accuracy pressure is higher and the team needs more cleanup, review, or specialty-aware oversight.",
-      "nextStep": "If you want, ask what kinds of documentation patterns usually move a team from Foundation to Professional.",
-      "sourcePages": ["pricing.html", "index.html"],
+      "bestFit": "Best when accuracy has to be checked by people before the note reaches the provider.",
+      "nextStep": "[Book a walkthrough](contact.html) to see a reviewed note for your specialty.",
+      "sourcePages": [
+        "pricing.html",
+        "pricing-ca.html"
+      ],
       "triggers": [
-        "professional plan",
-        "1500 plan",
-        "middle tier",
-        "pro plan",
-        "which plan needs more review"
+        "verified scribe",
+        "verified scribe plan",
+        "899",
+        "839",
+        "human review plan",
+        "most popular plan"
       ]
     },
     {
-      "id": "enterprise-plan",
+      "id": "custom-plan",
       "topic": "pricing",
-      "title": "Enterprise Plan",
-      "summary": "Enterprise uses custom pricing and is reserved for higher-complexity documentation profiles or broader workflow scope beyond the public plan bands.",
+      "title": "Custom Plan",
+      "summary": "Custom is scoped per organization for multi-site clinics, health systems and groups that bundle documentation with billing, coding and payroll.",
       "highlights": [
-        "It is appropriate when visit structures, note density, specialty nuance, or operational scope move beyond the standard tiers.",
-        "The final scope is confirmed during a workflow review rather than implied from one flat public rate.",
-        "Enterprise can also support conversations that span documentation and broader operations."
+        "Everything in Verified Scribe.",
+        "Revenue cycle billing, coding and payroll included in scope.",
+        "Volume discounts across sites and custom EHR integration.",
+        "A dedicated account director with a contractual uptime SLA."
       ],
-      "bestFit": "Enterprise is the right path when the practice has a more complex documentation environment or wants a broader operating partnership.",
-      "nextStep": "Ask for an Enterprise walkthrough if you need a scoped discussion instead of a simple public tier comparison.",
-      "sourcePages": ["pricing.html", "contact.html"],
+      "bestFit": "Best for groups that want one partner for documentation and revenue operations.",
+      "nextStep": "[Contact sales](contact.html) for a scoped quote.",
+      "sourcePages": [
+        "pricing.html",
+        "pricing-ca.html"
+      ],
       "triggers": [
-        "enterprise pricing",
-        "custom pricing",
-        "complex workflow pricing",
-        "large group pricing",
-        "enterprise plan"
+        "custom plan",
+        "enterprise",
+        "enterprise plan",
+        "health system",
+        "multi-site",
+        "group pricing",
+        "volume discount"
       ]
     },
     {
@@ -131,7 +255,11 @@
       ],
       "bestFit": "This is the strongest answer when a buyer is evaluating whether Anot is replacing humans with AI or combining AI with expert oversight.",
       "nextStep": "Ask about turnaround, provider relief, specialty fit, or how the review layer changes by pricing tier.",
-      "sourcePages": ["scribing.html", "index.html", "pricing.html"],
+      "sourcePages": [
+        "scribing.html",
+        "index.html",
+        "pricing.html"
+      ],
       "triggers": [
         "how does anot work",
         "how do the notes work",
@@ -152,7 +280,10 @@
       ],
       "bestFit": "This answer is most useful when a practice wants to know whether Anot helps only with notes or also with financial workflow quality.",
       "nextStep": "Ask whether your main pressure is claim quality, denials, coding follow-up, or collections timing.",
-      "sourcePages": ["billing.html", "index.html"],
+      "sourcePages": [
+        "billing.html",
+        "index.html"
+      ],
       "triggers": [
         "billing support",
         "revenue cycle",
@@ -173,7 +304,10 @@
       ],
       "bestFit": "This answer fits when the buyer is worried about coding quality, audit exposure, or reimbursement logic rather than only note speed.",
       "nextStep": "Ask whether you want clarity around compliance confidence, specificity, or coding workflow fit.",
-      "sourcePages": ["coding.html", "index.html"],
+      "sourcePages": [
+        "coding.html",
+        "index.html"
+      ],
       "triggers": [
         "coding support",
         "compliance support",
@@ -194,7 +328,10 @@
       ],
       "bestFit": "This answer is useful when a buyer wants to know whether Anot extends beyond clinical workflows into administrative operations.",
       "nextStep": "Ask whether your main issue is reconciliation, compensation inputs, or provider-pay workflow coordination.",
-      "sourcePages": ["payroll.html", "index.html"],
+      "sourcePages": [
+        "payroll.html",
+        "index.html"
+      ],
       "triggers": [
         "payroll support",
         "provider compensation",
@@ -215,13 +352,45 @@
       ],
       "bestFit": "This is the right answer when a buyer wants to know whether Anot takes trust and workflow controls seriously before relying on the output.",
       "nextStep": "Ask whether you want the trust answer framed around HIPAA, privacy, or implementation safeguards.",
-      "sourcePages": ["hipaa.html", "privacy.html", "terms.html"],
+      "sourcePages": [
+        "hipaa.html",
+        "privacy.html",
+        "terms.html"
+      ],
       "triggers": [
         "is anot hipaa compliant",
         "is anot secure",
         "is anot safe",
         "privacy",
         "security"
+      ]
+    },
+    {
+      "id": "trust-and-pipeda",
+      "topic": "trust",
+      "title": "Canadian Privacy (PIPEDA)",
+      "summary": "For Canadian clinics, Anot states compliance with PIPEDA and provincial health privacy laws, including PHIPA (Ontario), HIA (Alberta), PIPA (British Columbia) and Quebec Law 25.",
+      "highlights": [
+        "Clinical notes, audio processing and database records are hosted in AWS Canada Central, so PHI stays in Canada.",
+        "Data is encrypted with AES-256 at rest and TLS 1.3 in transit.",
+        "Anot signs Information Manager Agreements (IMAs) and Canadian Data Processing Agreements with each clinic.",
+        "Controls are covered by a SOC 2 Type II report, available to Canadian clinics on request."
+      ],
+      "bestFit": "This answer is most useful for Canadian clinics checking privacy and data residency.",
+      "nextStep": "Read the [PIPEDA Trust Center](pipeda.html) or email admin@anot.health for the compliance documents.",
+      "sourcePages": [
+        "pipeda.html"
+      ],
+      "triggers": [
+        "pipeda",
+        "phipa",
+        "canada privacy",
+        "canadian privacy",
+        "data residency",
+        "hia alberta",
+        "law 25",
+        "is anot pipeda compliant",
+        "are you pipeda compliant"
       ]
     },
     {
@@ -236,7 +405,11 @@
       ],
       "bestFit": "This is the strongest answer when someone asks how the rollout works or how Anot would fit into an existing practice workflow.",
       "nextStep": "Ask about onboarding, turnaround, or which team usually feels the earliest operational impact.",
-      "sourcePages": ["index.html", "about.html", "contact.html"],
+      "sourcePages": [
+        "index.html",
+        "about.html",
+        "contact.html"
+      ],
       "triggers": [
         "implementation",
         "onboarding",
@@ -257,7 +430,11 @@
       ],
       "bestFit": "This answer is useful when the user asks whether Anot can support a specific specialty such as cardiology or a multispecialty group.",
       "nextStep": "Ask about your specialty directly and I can frame the answer around fit, complexity, and likely pricing tier.",
-      "sourcePages": ["specialties.html", "pricing.html", "scribing.html"],
+      "sourcePages": [
+        "specialties.html",
+        "pricing.html",
+        "scribing.html"
+      ],
       "triggers": [
         "what specialties do you support",
         "specialty fit",
@@ -270,15 +447,17 @@
       "id": "dashboard-login",
       "topic": "contact",
       "title": "Dashboard Access",
-      "summary": "The site header includes a Dashboard button that links directly to the Anot Health login experience.",
+      "summary": "Existing customers sign in to the Anot Health dashboard at [app.anot.health](https://app.anot.health).",
       "highlights": [
-        "The dashboard link points to the live login at https://anot-health.vercel.app/login.",
-        "It is separate from the marketing-site chatbot and does not require the chatbot itself to use an external AI API.",
-        "The chatbot is part of the website experience, while the dashboard is a separate application entry point."
+        "The dashboard is a separate application from this website.",
+        "If you need an account, your organization administrator can add you, or email admin@anot.health."
       ],
       "bestFit": "This answer is most useful when someone asks where to log in or how the dashboard relates to the website.",
-      "nextStep": "If you need product access, use the Dashboard button. If you need a sales conversation, use the demo or contact flow instead.",
-      "sourcePages": ["index.html", "contact.html"],
+      "nextStep": "For product access go to [app.anot.health](https://app.anot.health); for a sales conversation, [book a demo](contact.html).",
+      "sourcePages": [
+        "index.html",
+        "contact.html"
+      ],
       "triggers": [
         "where is the dashboard",
         "dashboard login",
@@ -299,7 +478,10 @@
       ],
       "bestFit": "This answer is useful when the user is ready to talk to the team or wants to know the best next step after learning the basics.",
       "nextStep": "Use the demo flow and frame the request around the workflow that needs relief first.",
-      "sourcePages": ["contact.html", "index.html"],
+      "sourcePages": [
+        "contact.html",
+        "index.html"
+      ],
       "triggers": [
         "contact anot",
         "book a demo",

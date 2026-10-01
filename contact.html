@@ -18,19 +18,21 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://unpkg.com 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.country.is https://ipapi.co; object-src 'none'; base-uri 'self'; form-action 'self' mailto: https://api.web3forms.com; frame-ancestors 'none'; upgrade-insecure-requests">
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.country.is https://ipapi.co; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
     <title>Request a Demo | Anot Health</title>
     <meta name="description"
         content="Book a walkthrough of Anot Health's human-validated documentation, coding, billing, payroll, and trust workflows.">
     <link rel="canonical" href="https://anot.health/contact.html">
-    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202606082127">
+    <link rel="icon" type="image/png" href="images/logo-markss.webp?v=202609201640">
     <link rel="apple-touch-icon" href="images/logo-mark.png?v=202606082127">
     <link rel="manifest" href="site.webmanifest?v=202606082127">
     <meta name="theme-color" content="#2563EB">
-    <script src="https://unpkg.com/lucide@0.537.0" defer></script>
-    <link rel="stylesheet" href="css/style.css?v=202609161530">
+    <script src="js/vendor/lucide-0.537.0.min.js" defer></script>
+    <link rel="stylesheet" href="css/style.css?v=202609301640">
+    <link rel="stylesheet" href="css/motion-engine.css?v=202609301630">
+    <link rel="stylesheet" href="css/stepper-form.css?v=202609201640">
     <script src="js/geo-switcher.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,7 +42,7 @@
     <meta property="og:url" content="https://anot.health/contact.html">
     <meta property="og:title" content="Request a Demo | Anot Health">
     <meta property="og:description" content="Book a walkthrough of Anot Health's human-validated documentation, coding, billing, payroll, and trust workflows.">
-    <meta property="og:image" content="https://anot.health/images/hero-platform-center.webp?v=202606082127">
+    <meta property="og:image" content="https://anot.health/images/hero-platform-center.webp?v=202609201640">
     <meta property="og:image:width" content="1895">
     <meta property="og:image:height" content="972">
     <meta property="og:image:alt" content="Anot Health platform dashboard">
@@ -49,7 +51,7 @@
     <meta property="twitter:url" content="https://anot.health/contact.html">
     <meta property="twitter:title" content="Request a Demo | Anot Health">
     <meta property="twitter:description" content="Book a walkthrough of Anot Health's human-validated documentation, coding, billing, payroll, and trust workflows.">
-    <meta property="twitter:image" content="https://anot.health/images/hero-platform-center.webp?v=202606082127">
+    <meta property="twitter:image" content="https://anot.health/images/hero-platform-center.webp?v=202609201640">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -67,6 +69,11 @@
         <link rel="alternate" hreflang="en-us" href="https://anot.health/contact.html">
     <link rel="alternate" hreflang="en-ca" href="https://anot.health/contact-ca.html">
     <link rel="alternate" hreflang="x-default" href="https://anot.health/contact.html">
+    <noscript><style>
+        /* Scroll reveals are switched on by JS; without it, show everything. */
+        .reveal, .reveal-left, .reveal-right, .reveal-scale,
+        .hero-animate { opacity: 1 !important; transform: none !important; animation: none !important; }
+    </style></noscript>
 </head>
 
 <body>
@@ -74,224 +81,134 @@
     <div id="header-mount"></div>
 
     <main id="main-content" tabindex="-1">
-        <section class="hero hero-page">
+
+        <section class="section stepper-form-section" id="demo-form">
             <div class="container">
-                <div class="hero-grid">
-                    <div class="hero-content hero-page-wide">
-                        <div class="hero-badge reveal"><i data-lucide="mail" class="icon-xs"></i><span>Guided Walkthrough</span>
-                        </div>
-                        <h1 class="hero-title reveal delay-100">See how human-validated <br><span class="text-gradient">clinical ops fit your practice</span></h1>
-                        <p class="hero-subtitle reveal delay-200 hero-subtitle-wide">We'll walk you through how Anot
-                            supports documentation, coding, billing, payroll, and trust requirements without asking
-                            your team to compromise on accuracy.</p>
-                    </div>
-                    <div class="hero-visual reveal-scale">
-                        <div class="hero-image-wrap parallax-layer" data-speed="0.02">
-                            <div class="bg-morph">
-                                <div class="blob blob-1"></div>
-                                <div class="blob blob-2"></div>
-                            </div>
-                            <img src="images/hero-platform-center.webp?v=202606082127"
-                                alt="Anot platform preview used during the guided walkthrough"
-                                class="hero-image" loading="lazy">
-                            <div class="hero-image-caption">
-                                <i data-lucide="monitor-smartphone" class="icon-xs"></i> <span>Preview the workflow your team will review during the demo</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="section-header reveal text-center" style="max-width: 680px; margin: 0 auto 32px auto;">
+                    <h1 class="section-title stepper-intro-heading">Schedule Your <span class="text-gradient">Clinical Consultation</span></h1>
+                    <p class="section-subtitle stepper-intro-sub">A focused, 15-minute operational walkthrough customized around your EHR, documentation, and revenue cycle goals.</p>
                 </div>
-            </div>
-        </section>
 
-        <section class="section">
-            <div class="container">
-                <div class="contact-grid">
-                    <div class="contact-text reveal-left">
-                        <div class="mt-48 flex-column gap-28">
-                            <div class="items-center gap-16">
-                                <div class="card-icon-box contact-icon-box"><i data-lucide="mail" class="icon-md"></i>
+                <div class="stepper-form-container">
+                    <div class="stepper-card">
+                        <!-- Card Header -->
+                        <div class="stepper-header">
+                            <h3 class="stepper-title">Request Your Walkthrough</h3>
+                            <p class="stepper-subtitle">A focused 15-minute review tailored to your clinical workflow and practice needs</p>
+                        </div>
+
+                        <!-- 1-Screen Fast Consultation Form -->
+                        <form id="stepperForm" action="/api/contact" method="POST" novalidate>
+                            <input type="hidden" name="source" value="contact.html">
+                            <input type="hidden" name="region" value="US/International">
+                            <input type="hidden" name="role" value="Physician / Provider">
+                            <input type="hidden" name="practice_size" value="2-5 Providers">
+                            <input type="hidden" name="service" id="service" value="Clinical Documentation & Ambient Scribing">
+                            <input type="hidden" name="preferred_date" id="preferred_date" value="">
+                            <input type="hidden" name="time_slot" id="time_slot" value="10:30 AM ET">
+                            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
+
+                            <!-- Name & Email Row -->
+                            <div class="stepper-row-2col" style="margin-bottom: 14px;">
+                                <div class="stepper-field" style="margin-bottom: 0;">
+                                    <label for="name" class="stepper-field-label">Your Name <span class="required-dot">*</span></label>
+                                    <input type="text" id="name" name="name" class="stepper-input" placeholder="e.g. Dr. Jane Smith, MD" autocomplete="name" required>
                                 </div>
-                                <div>
-                                    <div class="contact-info-label">Email Us</div>
-                                    <a href="mailto:admin@anot.health" class="contact-info-value">admin@anot.health</a>
+                                <div class="stepper-field" style="margin-bottom: 0;">
+                                    <label for="email" class="stepper-field-label">Work / Clinic Email <span class="required-dot">*</span></label>
+                                    <input type="email" id="email" name="email" class="stepper-input" placeholder="doctor@clinicname.com" autocomplete="email" required>
                                 </div>
                             </div>
-                            <div class="items-center gap-16">
-                                <div class="card-icon-box contact-icon-box"><i data-lucide="clock-3" class="icon-md"></i>
-                                </div>
-                                <div>
-                                    <div class="contact-info-label">Response Time</div>
-                                    <div class="contact-info-value">Within 1 business day</div>
+
+                            <!-- Practice Name -->
+                            <div class="stepper-field" style="margin-bottom: 16px;">
+                                <label for="practice" class="stepper-field-label">Practice / Organization Name <span class="required-dot">*</span></label>
+                                <input type="text" id="practice" name="practice" class="stepper-input" placeholder="e.g. Metro Specialty Health Partners" autocomplete="organization" required>
+                            </div>
+
+                            <!-- Primary Service Area -->
+                            <div class="stepper-field" style="margin-bottom: 16px;">
+                                <label class="stepper-field-label">Primary Service Area of Interest</label>
+                                <div class="stepper-service-chips" id="serviceGrid" role="radiogroup" aria-label="Select primary service">
+                                    <button type="button" class="stepper-service-chip is-active" data-service="Clinical Documentation & Ambient Scribing" role="radio" aria-checked="true">
+                                        <span>Documentation &amp; Scribing</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
+                                    <button type="button" class="stepper-service-chip" data-service="Revenue Cycle Management & Medical Billing" role="radio" aria-checked="false">
+                                        <span>Medical Billing &amp; RCM</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
+                                    <button type="button" class="stepper-service-chip" data-service="Specialty Clinical Coding & Compliance" role="radio" aria-checked="false">
+                                        <span>Specialty Coding &amp; Audits</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
+                                    <button type="button" class="stepper-service-chip" data-service="Full Operations Suite (Multiple Services)" role="radio" aria-checked="false">
+                                        <span>Full Operations Suite</span>
+                                        <span class="stepper-service-chip-check">&#10003;</span>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="items-center gap-16">
-                                <div class="card-icon-box contact-icon-box"><i data-lucide="presentation" class="icon-md"></i>
+
+                            <!-- Preferred Date & Time (Next Available Business Days) -->
+                            <div class="stepper-field" style="margin-bottom: 16px;">
+                                <label class="stepper-field-label">Preferred Date &amp; Time (Eastern Time)</label>
+                                <div class="stepper-day-strip" id="stepperDayStrip" role="radiogroup" aria-label="Select preferred consultation date" style="margin-bottom: 12px;"></div>
+                                <div class="stepper-slot-grid" id="timeSlotGrid" role="radiogroup" aria-label="Select consultation time slot">
+                                    <button type="button" class="stepper-slot-btn" data-slot="09:30 AM ET" role="radio" aria-checked="false">09:30 AM</button>
+                                    <button type="button" class="stepper-slot-btn is-active" data-slot="10:30 AM ET" role="radio" aria-checked="true">10:30 AM</button>
+                                    <button type="button" class="stepper-slot-btn" data-slot="02:00 PM ET" role="radio" aria-checked="false">02:00 PM</button>
+                                    <button type="button" class="stepper-slot-btn" data-slot="03:30 PM ET" role="radio" aria-checked="false">03:30 PM</button>
+                                </div>
+                            </div>
+
+                            <!-- Optional Note / Question -->
+                            <details class="stepper-note-details">
+                                <summary class="stepper-note-summary">+ Add clinical note or EHR question (optional)</summary>
+                                <textarea id="message" name="message" class="stepper-textarea" aria-label="Anything else we should know before the walkthrough (optional)" placeholder="Tell us about your EHR system, current documentation challenges, or physician preferences..."></textarea>
+                            </details>
+
+                            <!-- Primary Submit Button -->
+                            <button type="submit" class="stepper-btn-submit-unified" id="stepperSubmitBtn">
+                                Confirm Walkthrough Request <i data-lucide="arrow-right" class="icon-xs"></i>
+                            </button>
+
+                            <div class="stepper-trust-note" style="margin-top: 14px; padding: 10px 14px;">
+                                <i data-lucide="lock" class="icon-xs" style="color: #2563EB;"></i>
+                                <span>Confidential &amp; HIPAA-compliant. 15-minute practical review. Zero sales pressure.</span>
+                            </div>
+                        </form>
+
+                        <!-- Refined Healthcare Success Screen (Line-Draw Check) -->
+                        <div id="stepperSuccessView" class="stepper-success-view" style="display: none;">
+                            <div class="stepper-success-icon-wrap">
+                                <svg class="stepper-check-svg" viewBox="0 0 52 52" aria-hidden="true">
+                                    <circle class="stepper-check-circle" cx="26" cy="26" r="24"/>
+                                    <path class="stepper-check-path" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                                </svg>
+                            </div>
+                            <h3 class="stepper-success-title">Consultation Request Received</h3>
+                            <p class="stepper-success-copy">
+                                Thank you for reaching out, <strong data-success-name>Doctor</strong>. We have received your consultation request for <strong data-success-practice>your clinic</strong>.
+                            </p>
+                            <div class="stepper-success-details">
+                                <div style="margin-bottom: 8px;">
+                                    <strong>Requested Time:</strong> <span data-success-date>Upcoming business day</span> at <span data-success-time>10:30 AM ET</span>
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <strong>Next Step:</strong> We'll confirm by sending a calendar invitation to <strong data-success-email>your email</strong>.
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <strong>Preparation:</strong> An Anot clinical onboarding director will review your EHR workflow requirements prior to the session.
                                 </div>
                                 <div>
-                                    <div class="contact-info-label">Demo Format</div>
-                                    <div class="contact-info-value">Tailored to your service line and workflow goals</div>
+                                    <strong>Direct Inquiries:</strong> <a href="mailto:admin@anot.health" style="color: #2563EB; font-weight: 600;">admin@anot.health</a>
                                 </div>
+                            </div>
+                            <div class="stepper-success-actions">
+                                <a href="index.html" class="btn btn-primary">Return to Homepage</a>
+                                <a href="about.html" class="btn btn-secondary">Learn About Our Quality Model</a>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="contact-form reveal-right">
-                        <form class="premium-card p-52" id="demo-form" data-demo-form data-submit-provider="backend"
-                            action="/api/contact" method="POST">
-                            <div class="form-context-banner" data-form-context hidden>
-                                <span class="detail-eyebrow">Selected path</span>
-                                <strong data-context-title>General Anot walkthrough</strong>
-                                <p data-context-copy>We will tailor the conversation to the workflow improvement you care about most.</p>
-                            </div>
-                            <input type="hidden" name="subject" value="New Demo Request" data-subject-field>
-                            <input type="hidden" name="focus" value="General walkthrough" data-focus-field>
-                            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" class="sr-only"
-                                aria-hidden="true">
-                            <h2 class="card-title mb-8" data-form-title>Request Your Demo</h2>
-                            <p class="card-text mb-28" data-form-subtitle>We'll respond within 24 hours with a tailored demo plan.</p>
-                            <div class="form-quick-picks" data-intent-group aria-label="Choose a walkthrough focus">
-                                <button type="button" class="intent-chip" data-intent-button data-service="documentation"
-                                    data-focus="reduce-after-hours-charting">Clinical Documentation</button>
-                                <button type="button" class="intent-chip" data-intent-button data-service="billing"
-                                    data-focus="reduce-denials-and-speed-up-cash">Revenue Cycle Management</button>
-                                <button type="button" class="intent-chip" data-intent-button data-service="coding"
-                                    data-focus="improve-coding-accuracy">Coding &amp; Compliance</button>
-                                <button type="button" class="intent-chip" data-intent-button data-service="payroll"
-                                    data-focus="stabilize-provider-payroll">Payroll Administration</button>
-                                <button type="button" class="intent-chip" data-intent-button data-service="multiple"
-                                    data-focus="connect-documentation-coding-billing-and-payroll">Multi-service</button>
-                            </div>
-                            <label for="name" class="sr-only">Full Name</label>
-                            <input type="text" id="name" name="name" placeholder="Full Name" class="form-input"
-                                required>
-
-                            <label for="email" class="sr-only">Work Email</label>
-                            <input type="email" id="email" name="email" placeholder="Work Email" class="form-input"
-                                required>
-
-                            <label for="practice" class="sr-only">Practice Name</label>
-                            <input type="text" id="practice" name="practice" placeholder="Practice Name"
-                                class="form-input" required>
-
-                            <label for="region_location" class="sr-only">Practice Region / Country</label>
-                            <select id="region_location" name="region_location" class="form-input" required aria-label="Select your practice region" title="Select your practice region">
-                                <option value="" disabled selected>Practice Region / Location</option>
-                                <optgroup label="Canada (Provincial Health Plans)">
-                                    <option value="Ontario">Canada &mdash; Ontario (OHIP)</option>
-                                    <option value="British Columbia">Canada &mdash; British Columbia (MSP)</option>
-                                    <option value="Alberta">Canada &mdash; Alberta (AHCIP)</option>
-                                    <option value="Quebec">Canada &mdash; Quebec (RAMQ)</option>
-                                    <option value="Other-Canada">Canada &mdash; Other Province / Territory</option>
-                                </optgroup>
-                                <optgroup label="United States &amp; International">
-                                    <option value="US-East">United States &mdash; East Coast</option>
-                                    <option value="US-Central">United States &mdash; Central / Midwest</option>
-                                    <option value="US-West">United States &mdash; West Coast / Pacific</option>
-                                    <option value="International">International Practice</option>
-                                </optgroup>
-                            </select>
-
-                            <label for="emr" class="sr-only">Primary EHR / EMR</label>
-                            <select id="emr" name="emr" class="form-input" aria-label="Select your primary EHR or EMR" title="Select your primary EHR / EMR">
-                                <option value="" disabled selected>Primary EHR / EMR System</option>
-                                <optgroup label="Canadian EMRs">
-                                    <option value="Accuro">Accuro EMR (QHR)</option>
-                                    <option value="Telus-PS-Suite">Telus PS Suite</option>
-                                    <option value="Telus-Med-Access">Telus Med Access</option>
-                                    <option value="OSCAR">OSCAR Pro</option>
-                                </optgroup>
-                                <optgroup label="US / Enterprise EHRs">
-                                    <option value="Epic">Epic</option>
-                                    <option value="Cerner">Oracle Cerner</option>
-                                    <option value="Athena">athenahealth</option>
-                                    <option value="eClinicalWorks">eClinicalWorks</option>
-                                    <option value="Other-EMR">Other EMR / System</option>
-                                </optgroup>
-                            </select>
-
-                            <label for="service" class="sr-only">Service of Interest</label>
-                            <select id="service" name="service" class="form-input" required
-                                title="Select the service you are interested in">
-                                <option value="" disabled selected>Service of Interest</option>
-                                <option value="documentation">Clinical Documentation</option>
-                                <option value="billing">Revenue Cycle Management</option>
-                                <option value="coding">Coding &amp; Compliance</option>
-                                <option value="payroll">Payroll Administration</option>
-                                <option value="multiple">Multiple Services</option>
-                            </select>
-
-                            <label for="specialty" class="sr-only">Clinical Specialty</label>
-                            <select id="specialty" name="specialty" class="form-input" required
-                                title="Select your clinical specialty">
-                                <option value="" disabled selected>Select Specialty</option>
-                                <optgroup label="Primary Care">
-                                    <option value="primary-care">Primary Care / Family Medicine</option>
-                                    <option value="internal-medicine">Internal Medicine</option>
-                                    <option value="pediatrics">Pediatrics</option>
-                                    <option value="geriatrics">Geriatrics</option>
-                                </optgroup>
-                                <optgroup label="Surgical Specialties">
-                                    <option value="orthopedics">Orthopedics</option>
-                                    <option value="general-surgery">General Surgery</option>
-                                    <option value="neurosurgery">Neurosurgery</option>
-                                    <option value="plastic-surgery">Plastic &amp; Reconstructive Surgery</option>
-                                    <option value="vascular-surgery">Vascular Surgery</option>
-                                    <option value="urology">Urology</option>
-                                    <option value="ent">ENT / Otolaryngology</option>
-                                    <option value="ophthalmology">Ophthalmology</option>
-                                </optgroup>
-                                <optgroup label="Medicine Specialties">
-                                    <option value="cardiology">Cardiology</option>
-                                    <option value="pulmonology">Pulmonology / Critical Care</option>
-                                    <option value="gastroenterology">Gastroenterology</option>
-                                    <option value="nephrology">Nephrology</option>
-                                    <option value="endocrinology">Endocrinology</option>
-                                    <option value="rheumatology">Rheumatology</option>
-                                    <option value="hematology-oncology">Hematology / Oncology</option>
-                                    <option value="neurology">Neurology</option>
-                                    <option value="infectious-disease">Infectious Disease</option>
-                                    <option value="allergy-immunology">Allergy &amp; Immunology</option>
-                                </optgroup>
-                                <optgroup label="Mental Health &amp; Behavioral">
-                                    <option value="psychiatry">Psychiatry</option>
-                                    <option value="psychology">Psychology / Behavioral Health</option>
-                                    <option value="addiction-medicine">Addiction Medicine</option>
-                                </optgroup>
-                                <optgroup label="Women's Health">
-                                    <option value="ob-gyn">OB/GYN</option>
-                                    <option value="maternal-fetal">Maternal-Fetal Medicine</option>
-                                    <option value="reproductive-endocrinology">Reproductive Endocrinology</option>
-                                </optgroup>
-                                <optgroup label="Musculoskeletal &amp; Rehabilitation">
-                                    <option value="physical-medicine">Physical Medicine &amp; Rehabilitation</option>
-                                    <option value="sports-medicine">Sports Medicine</option>
-                                    <option value="pain-management">Pain Management</option>
-                                </optgroup>
-                                <optgroup label="Emergency &amp; Urgent Care">
-                                    <option value="emergency-medicine">Emergency Medicine</option>
-                                    <option value="urgent-care">Urgent Care</option>
-                                    <option value="hospitalist">Hospitalist / Hospital Medicine</option>
-                                </optgroup>
-                                <optgroup label="Diagnostic &amp; Support">
-                                    <option value="radiology">Radiology</option>
-                                    <option value="pathology">Pathology</option>
-                                    <option value="anesthesiology">Anesthesiology</option>
-                                    <option value="dermatology">Dermatology</option>
-                                </optgroup>
-                                <optgroup label="Other">
-                                    <option value="multi-specialty">Multi-Specialty Group</option>
-                                    <option value="other">Other</option>
-                                </optgroup>
-                            </select>
-
-                            <label for="message" class="sr-only">Message</label>
-                            <textarea id="message" name="message" placeholder="How can we help you?" class="form-input"
-                                rows="4" required></textarea>
-
-                            <button type="submit" class="btn btn-cyan btn-full" data-form-submit>Book Your Pilot Demo</button>
-                            <p class="form-status" data-form-status role="status" aria-live="polite" tabindex="-1">This form sends
-                                directly to <strong>admin@anot.health</strong>.</p>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -389,11 +306,23 @@
     <div id="footer-mount"></div>
     <div id="scroll-top-mount"></div>
 
-    <script src="js/components.js?v=202609161530"></script>
-    <script src="js/main.js?v=202609161530" defer></script>
+    <script src="js/components.js?v=202609301630"></script>
+    <script src="js/vendor/lenis.min.js?v=202609201640"></script>
+    <script src="js/main.js?v=202609301640" defer></script>
+    <script src="js/motion-engine.js?v=202609301630" defer></script>
+    <script src="js/chatbot-v2.js?v=202609201640" defer></script>
+    <script src="js/stepper-form.js?v=202609201640" defer></script>
 </body>
 
 </html>
+
+
+
+
+
+
+
+
 
 
 

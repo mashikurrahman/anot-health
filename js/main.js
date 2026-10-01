@@ -1,6 +1,51 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('motion-enhanced');
 
+    // ── Butter-Smooth Momentum Scrolling Engine (Lenis) ──
+    let lenis = null;
+    function startLenis() {
+        if (typeof window.Lenis === 'undefined' || window.lenis) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(pointer: coarse)').matches) return;
+
+        try {
+            lenis = new window.Lenis({
+                duration: 1.2,
+                easing: (t) => 1 - Math.pow(1 - t, 4), // Liquid Quartic ease-out: frictionless, velvety glide
+                orientation: 'vertical',
+                gestureOrientation: 'vertical',
+                smoothWheel: true,
+                wheelMultiplier: 1.05,
+                touchMultiplier: 1.5,
+                syncTouch: false,
+                autoRaf: true,
+                infinite: false,
+                prevent: (node) => {
+                    if (!node) return false;
+                    const el = node.nodeType === 3 ? node.parentNode : node;
+                    if (!el || !(el instanceof Element)) return false;
+                    return el.hasAttribute?.('data-lenis-prevent') ||
+                           Boolean(el.closest?.('[data-lenis-prevent], #chatbotContainer, .chatbot-container, .chatbot-body, .chatbot-messages, #anotContactModal, .anot-modal-overlay, .anot-modal-dialog, [role="dialog"], [aria-modal="true"]'));
+                }
+            });
+
+            window.lenis = lenis;
+        } catch (e) {
+            console.warn('Lenis smooth scroll fallback:', e);
+        }
+    }
+
+    if (typeof window.Lenis !== 'undefined') {
+        startLenis();
+    } else {
+        const existingScript = document.querySelector('script[src*="lenis.min.js"]');
+        if (!existingScript) {
+            const script = document.createElement('script');
+            script.src = 'js/vendor/lenis.min.js';
+            script.onload = startLenis;
+            document.head.appendChild(script);
+        }
+    }
+
     if (window.lucide?.createIcons) {
         window.lucide.createIcons();
     }
@@ -195,79 +240,141 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    if (finePointerQuery.matches && !useLightweightMode) {
-        const magneticBtns = document.querySelectorAll('.btn');
-        magneticBtns.forEach((btn) => {
-            btn.addEventListener('mousemove', (event) => {
-                const rect = btn.getBoundingClientRect();
-                const x = event.clientX - rect.left - rect.width / 2;
-                const y = event.clientY - rect.top - rect.height / 2;
-                const maxOffset = 6;
-                const tx = Math.max(-maxOffset, Math.min(maxOffset, x * 0.12));
-                const ty = Math.max(-maxOffset, Math.min(maxOffset, y * 0.12));
-                btn.style.transform = `translate(${tx}px, ${ty}px)`;
-            });
+    // Magnetic button interactions are managed by motion-engine.js for silky spring physics across all CTA types.
 
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = 'translate(0px, 0px)';
-            });
-        });
-    }
-
+    // ── Ultra-Smooth Scroll Progress & Sticky Header State ──
     const scrollProgress = document.getElementById('scrollProgress');
-    const siteHeader = document.getElementById('siteHeader');
-    function handleScrollUi() {
+    let siteHeader = document.getElementById('siteHeader') || document.querySelector('.h2-navbar');
+    let scrollTicking = false;
+
+    let cachedTotalH = 1;
+    function updateScrollMetrics() {
         const h = document.documentElement;
+        cachedTotalH = (h.scrollHeight - window.innerHeight) || 1;
+    }
+    updateScrollMetrics();
+    window.addEventListener('resize', updateScrollMetrics, { passive: true });
+
+    function applyScrollUi(currentY) {
         if (scrollProgress) {
-            scrollProgress.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
+            scrollProgress.style.width = Math.min(100, Math.max(0, (currentY / cachedTotalH) * 100)) + '%';
+        }
+        if (!siteHeader) {
+            siteHeader = document.getElementById('siteHeader') || document.querySelector('.h2-navbar');
         }
         if (siteHeader) {
-            siteHeader.classList.toggle('scrolled', window.scrollY > 30);
+            siteHeader.classList.toggle('scrolled', currentY > 20);
         }
         if (scrollTopButton) {
-            scrollTopButton.classList.toggle('is-visible', window.scrollY > 320);
+            scrollTopButton.classList.toggle('is-visible', currentY > 320);
+        }
+    }
+
+    function renderScrollUi() {
+        const currentY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        applyScrollUi(currentY);
+        scrollTicking = false;
+    }
+
+    function handleScrollUi() {
+        if (!scrollTicking) {
+            requestAnimationFrame(renderScrollUi);
+            scrollTicking = true;
         }
     }
 
     window.addEventListener('scroll', handleScrollUi, { passive: true });
     handleScrollUi();
 
-    if (scrollTopButton) {
-        scrollTopButton.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.lenis) {
+        window.lenis.on('scroll', ({ scroll }) => {
+            applyScrollUi(scroll);
         });
     }
 
-    const staggerGroups = document.querySelectorAll('.card-grid, .proof-grid, .audience-grid, .implementation-grid, .faq-grid, .icon-detail-grid, .contact-support-grid, .legal-summary-grid, .stat-band');
+    if (scrollTopButton) {
+        scrollTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.lenis) {
+                window.lenis.scrollTo(0, {
+                    duration: 1.15,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
+    // ── Silky Smooth Internal Anchor Navigation ──
+    document.addEventListener('click', (e) => {
+        const anchor = e.target.closest('a[href*="#"]');
+        if (!anchor) return;
+        const href = anchor.getAttribute('href');
+        if (!href || href === '#' || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+        const hashIndex = href.indexOf('#');
+        if (hashIndex === -1) return;
+        const targetId = href.slice(hashIndex);
+        const pathPart = href.slice(0, hashIndex);
+        const currentFile = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+
+        const isSamePage = !pathPart || pathPart.toLowerCase() === currentFile || pathPart === window.location.pathname;
+        if (isSamePage && targetId.length > 1) {
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+                e.preventDefault();
+                if (window.lenis) {
+                    window.lenis.scrollTo(targetEl, {
+                        offset: -80,
+                        duration: 1.15,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                    });
+                } else {
+                    targetEl.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+    });
+
+    // ── Anticipatory Scroll Reveals (Smooth Butter Entry) ──
+    const staggerGroups = document.querySelectorAll('.card-grid, .proof-grid, .audience-grid, .implementation-grid, .faq-grid, .icon-detail-grid, .contact-support-grid, .legal-summary-grid, .stat-band, .accuracy-highlights-grid, .h2-workflow-grid, .h2-bento-grid, .h2-testimonials-grid');
     staggerGroups.forEach((group) => {
-        group.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach((el, index) => {
+        group.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .acc-card, .h2-workflow-card, .h2-bento-card, .h2-testimonial-card').forEach((el, index) => {
             if (useLightweightMode) {
                 el.style.transitionDelay = '0s';
             } else if (!el.classList.contains('delay-100') && !el.classList.contains('delay-200') && !el.classList.contains('delay-300')) {
-                el.style.transitionDelay = `${Math.min(index * 0.08, 0.32)}s`;
+                el.style.transitionDelay = `${Math.min(index * 0.07, 0.28)}s`;
             }
         });
     });
 
-    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .acc-card, .h2-workflow-card, .h2-bento-card, .h2-testimonial-card');
     if (useLightweightMode) {
         revealEls.forEach((el) => {
             el.classList.add('visible');
             el.classList.remove('scrolled-past');
         });
-    }
-    if (!useLightweightMode) {
+    } else {
         const revealObs = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     entry.target.classList.remove('scrolled-past');
-                } else if (entry.boundingClientRect.top < 0) {
-                    entry.target.classList.add('scrolled-past');
+                    revealObs.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-        revealEls.forEach((el) => revealObs.observe(el));
+        }, { threshold: 0.04, rootMargin: '0px 0px 80px 0px' });
+
+        const winH = window.innerHeight;
+        revealEls.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < winH) {
+                el.classList.add('visible');
+            } else {
+                revealObs.observe(el);
+            }
+        });
     }
 
     const spotlightEls = document.querySelectorAll('.video-spotlight');
@@ -343,31 +450,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const parallaxItems = document.querySelectorAll('.parallax-layer, .synergy-wrap');
-    let tick = false;
+    // ── High-Performance Non-Blocking Parallax (Zero Layout Thrashing) ──
+    const parallaxItems = Array.from(document.querySelectorAll('.parallax-layer, .synergy-wrap'));
+    let parallaxData = [];
 
+    function measureParallax() {
+        const scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
+        parallaxData = parallaxItems.map((el) => {
+            const rect = el.getBoundingClientRect();
+            return {
+                el,
+                top: rect.top + scrolled,
+                speed: parseFloat(el.dataset.speed) || 0.05
+            };
+        });
+    }
+
+    let parallaxTick = false;
     function updateParallax() {
-        const scrolled = window.pageYOffset;
+        const scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
         const winH = window.innerHeight;
 
-        parallaxItems.forEach((el) => {
-            const offset = el.offsetTop;
-            const distance = scrolled - offset;
+        parallaxData.forEach(({ el, top, speed }) => {
+            const distance = scrolled - top;
             if (Math.abs(distance) < winH * 1.5) {
-                const speed = parseFloat(el.dataset.speed) || 0.05;
-                el.style.transform = `translate3d(0, ${distance * speed}px, 0)`;
+                el.style.transform = `translate3d(0, ${(distance * speed).toFixed(1)}px, 0)`;
             }
         });
-        tick = false;
+        parallaxTick = false;
+    }
+
+    function onScrollParallax() {
+        if (!parallaxTick) {
+            requestAnimationFrame(updateParallax);
+            parallaxTick = true;
+        }
     }
 
     if (!useLightweightMode && parallaxItems.length) {
-        window.addEventListener('scroll', () => {
-            if (!tick) {
-                requestAnimationFrame(updateParallax);
-                tick = true;
-            }
-        }, { passive: true });
+        measureParallax();
+        window.addEventListener('resize', measureParallax, { passive: true });
+        window.addEventListener('scroll', onScrollParallax, { passive: true });
     }
 
     const autoVideos = Array.from(document.querySelectorAll('[data-auto-video]'));
@@ -430,12 +553,28 @@ document.addEventListener('DOMContentLoaded', () => {
     motionSurfaces.forEach((surface) => {
         surface.classList.add('motion-surface');
         if (finePointerQuery.matches && !useLightweightMode) {
+            let rafId = null;
+            let rect = null;
+            surface.addEventListener('mouseenter', () => {
+                rect = surface.getBoundingClientRect();
+            });
             surface.addEventListener('mousemove', (event) => {
-                const rect = surface.getBoundingClientRect();
-                const x = ((event.clientX - rect.left) / rect.width) * 100;
-                const y = ((event.clientY - rect.top) / rect.height) * 100;
-                surface.style.setProperty('--pointer-x', `${x}%`);
-                surface.style.setProperty('--pointer-y', `${y}%`);
+                if (!rect) rect = surface.getBoundingClientRect();
+                if (rafId) return;
+                rafId = requestAnimationFrame(() => {
+                    const x = ((event.clientX - rect.left) / rect.width) * 100;
+                    const y = ((event.clientY - rect.top) / rect.height) * 100;
+                    surface.style.setProperty('--pointer-x', `${x}%`);
+                    surface.style.setProperty('--pointer-y', `${y}%`);
+                    rafId = null;
+                });
+            });
+            surface.addEventListener('mouseleave', () => {
+                rect = null;
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
             });
         }
     });
@@ -604,6 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
             videoModal.hidden = true;
             videoModal.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('video-modal-open');
+            window.lenis?.start();
             if (videoPlayer) {
                 videoPlayer.pause();
                 videoPlayer.currentTime = 0;
@@ -614,6 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-video-open]').forEach((trigger) => {
             trigger.addEventListener('click', async () => {
                 lastVideoTrigger = trigger;
+                window.lenis?.stop();
                 videoModal.hidden = false;
                 videoModal.setAttribute('aria-hidden', 'false');
                 document.body.classList.add('video-modal-open');
@@ -821,30 +962,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 let response;
                 let result = {};
 
-                if (provider === 'backend') {
-                    const endpoint = demoRequestForm.dataset.apiEndpoint || demoRequestForm.getAttribute('action') || '/api/contact';
-                    const payload = Object.fromEntries(formData.entries());
-                    response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                    result = await response.json();
-                } else if (provider === 'web3forms') {
-                    response = await fetch('https://api.web3forms.com/submit', {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json'
-                        },
-                        body: formData
-                    });
-                    result = await response.json();
-                } else {
-                    throw new Error('Unsupported form provider.');
+                // "backend" is the only supported provider: leads are healthcare
+                // enquiries and must reach our own /api/contact, never a third-party
+                // form service. A previous web3forms branch here would have posted
+                // them to api.web3forms.com and was removed.
+                if (provider !== 'backend') {
+                    throw new Error(`Unsupported form provider "${provider}".`);
                 }
+                const endpoint = demoRequestForm.dataset.apiEndpoint || demoRequestForm.getAttribute('action') || '/api/contact';
+                const payload = Object.fromEntries(formData.entries());
+                response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                result = await response.json();
 
                 if (!response.ok || !result.success) {
                     throw new Error(result.message || 'Submission failed.');
@@ -858,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (formStatus) {
-                    formStatus.innerHTML = `<div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.24); padding: 18px; border-radius: 16px; color: #047857; font-weight: 600; display: flex; align-items: flex-start; gap: 12px; line-height: 1.6;"><i data-lucide="check-circle-2" class="icon-md"></i><div><strong style="display:block; margin-bottom:4px;">Success!</strong>Your demo request was submitted successfully. Our team will contact you within 1 business day.</div></div>`;
+                    formStatus.innerHTML = `<div style="background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.24); padding: 18px; border-radius: 16px; color: #1D4ED8; font-weight: 600; display: flex; align-items: flex-start; gap: 12px; line-height: 1.6;"><i data-lucide="check-circle-2" class="icon-md"></i><div><strong style="display:block; margin-bottom:4px;">Success!</strong>Your demo request was submitted successfully. Our team will contact you within 1 business day.</div></div>`;
                 }
                 demoRequestForm.reset();
                 syncContactFormMeta();
@@ -884,10 +1019,54 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Homepage Consultation Form (h2QuickForm) ---
     const quickForm = document.getElementById('h2QuickForm');
     if (quickForm) {
+        const quickContactInput = quickForm.querySelector('[name="email"]');
+        const showQuickFormError = (message) => {
+            const existingErr = quickForm.querySelector('.form-error-msg');
+            if (existingErr) existingErr.remove();
+            if (!message) return;
+            const errDiv = document.createElement('div');
+            errDiv.className = 'form-error-msg';
+            errDiv.setAttribute('role', 'alert');
+            errDiv.style.cssText = 'background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #b91c1c; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 0.88rem; line-height: 1.5;';
+            errDiv.textContent = message;
+            quickForm.appendChild(errDiv);
+        };
+
+        // The single contact field takes an email or a phone number.
+        const parseQuickContact = (raw) => {
+            const value = String(raw || '').trim();
+            if (value.includes('@')) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? { email: value } : null;
+            }
+            const digits = value.replace(/\D/g, '');
+            return /^\+?[\d\s().-]+$/.test(value) && digits.length >= 7 && digits.length <= 15 ? { phone: value } : null;
+        };
+
+        if (quickContactInput) {
+            quickContactInput.addEventListener('input', () => {
+                quickContactInput.removeAttribute('aria-invalid');
+                showQuickFormError('');
+            });
+        }
+
         quickForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = quickForm.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Submit Request';
+
+            const botCheck = quickForm.querySelector('input[name="botcheck"]');
+            if (botCheck && botCheck.checked) return;
+
+            const contact = parseQuickContact(quickContactInput ? quickContactInput.value : '');
+            if (!contact) {
+                if (quickContactInput) {
+                    quickContactInput.setAttribute('aria-invalid', 'true');
+                    quickContactInput.focus();
+                }
+                showQuickFormError('Please enter a valid email address or phone number (at least 7 digits).');
+                return;
+            }
+            showQuickFormError('');
 
             if (submitBtn) {
                 submitBtn.disabled = true;
@@ -898,15 +1077,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const formData = new FormData(quickForm);
-            const payload = Object.fromEntries(formData.entries());
-
-            // If user entered a phone number instead of email in the contact field
-            const contactVal = (payload.email || '').trim();
-            if (contactVal && !contactVal.includes('@')) {
-                payload.phone = contactVal;
-                payload.email = 'consultation-lead@anot.health';
-                payload.visitor_contact = contactVal;
-            }
+            const { email: _rawContact, ...fields } = Object.fromEntries(formData.entries());
+            const payload = { ...fields, ...contact };
 
             try {
                 const response = await fetch('/api/contact', {
@@ -934,12 +1106,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const bookingCard = quickForm.closest('.h2-booking-card') || quickForm.parentElement;
                 if (bookingCard) {
                     bookingCard.innerHTML = `
-                        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); padding: 32px 24px; border-radius: 16px; text-align: center; color: #047857;">
-                            <div style="width: 48px; height: 48px; border-radius: 50%; background: #10b981; color: #fff; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                        <div style="background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.2); padding: 32px 24px; border-radius: 16px; text-align: center;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: #2563EB; color: #fff; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">
                                 <i data-lucide="check-circle-2" style="width: 26px; height: 26px;"></i>
                             </div>
-                            <h3 style="font-size: 1.25rem; font-weight: 800; color: #065f46; margin-bottom: 8px;">Request Received!</h3>
-                            <p style="font-size: 0.95rem; color: #047857; line-height: 1.6; margin: 0;">Thank you for your interest. Our clinical operations team will follow up with you within 24 hours.</p>
+                            <h3 style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 8px;">Request Received!</h3>
+                            <p style="font-size: 0.95rem; color: #475569; line-height: 1.6; margin: 0;">Thank you for your interest. Our clinical operations team will follow up with you within 24 hours.</p>
                         </div>
                     `;
                     if (window.lucide?.createIcons) {
