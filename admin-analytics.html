@@ -23,16 +23,25 @@
 
     <style>
         :root {
-            --app-bg: #EAECEF;
+            --app-bg: #F8FAFC;
             --surface-white: #FFFFFF;
             
-            /* Reference Lime-Green & Deep Forest Palette */
-            --accent-lime: #98EC55;
-            --accent-lime-light: #B4F576;
-            --accent-lime-bg: #E8FCD0;
-            --dark-forest: #12380B;
-            --dark-forest-deep: #0D2608;
-            --dark-pill: #112A0A;
+            /* Official Anot Health Brand Theme */
+            --brand-blue: #2563EB;
+            --brand-blue-hover: #1D4ED8;
+            --brand-blue-light: #3B82F6;
+            --brand-blue-soft: #EFF6FF;
+            --brand-navy: #0F172A;
+            --brand-navy-deep: #020617;
+            --brand-accent: #BC4800;
+
+            /* Mapped theme variables for complete dashboard harmony */
+            --accent-lime: #2563EB;
+            --accent-lime-light: #3B82F6;
+            --accent-lime-bg: #EFF6FF;
+            --dark-forest: #0F172A;
+            --dark-forest-deep: #020617;
+            --dark-pill: #0F172A;
             
             --text-primary: #0F172A;
             --text-secondary: #64748B;
@@ -85,14 +94,14 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: var(--dark-pill);
+            background: var(--brand-navy);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent-lime);
+            color: #FFFFFF;
             font-weight: 700;
             font-family: 'Outfit', sans-serif;
-            box-shadow: 0 4px 12px rgba(18, 56, 11, 0.2);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
             font-size: 0.95rem;
             flex-shrink: 0;
         }
@@ -130,15 +139,15 @@
         }
 
         .exec-nav-pill.active {
-            background: var(--accent-lime);
-            color: var(--dark-forest);
+            background: var(--brand-blue);
+            color: #FFFFFF;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(152, 236, 85, 0.35);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
         }
 
         .exec-nav-pill:not(.active):hover {
-            color: var(--dark-forest);
-            background: var(--accent-lime-bg);
+            color: var(--brand-blue);
+            background: var(--brand-blue-soft);
         }
 
         .exec-actions {
@@ -363,34 +372,34 @@
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: var(--accent-lime);
-            color: var(--dark-forest);
+            background: var(--brand-blue);
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             border: none;
-            box-shadow: 0 8px 22px rgba(152, 236, 85, 0.45);
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
             transition: all 0.2s ease;
         }
 
         .btn-accent-circle:hover {
-            background: var(--accent-lime-light);
+            background: var(--brand-blue-hover);
             transform: scale(1.06) rotate(45deg);
         }
 
-        /* Top Hero Card 2 (Vibrant Lime Card) */
+        /* Top Hero Card 2 (Signature Brand Blue Card) */
         .card-brand-accent {
-            background: linear-gradient(135deg, #A2EC4B 0%, #87E639 100%);
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
             border-radius: var(--card-radius);
             padding: 28px 28px;
-            color: var(--dark-forest);
+            color: #FFFFFF;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 16px 36px rgba(152, 236, 85, 0.35);
+            box-shadow: 0 16px 36px rgba(37, 99, 235, 0.25);
         }
 
         .card-brand-accent::after {
@@ -400,7 +409,7 @@
             top: -25px;
             width: 170px;
             height: 170px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -415,8 +424,8 @@
         }
 
         .badge-live-stream {
-            background: var(--dark-pill);
-            color: var(--accent-lime);
+            background: rgba(15, 23, 42, 0.35);
+            color: #FFFFFF;
             font-size: 0.76rem;
             font-weight: 700;
             padding: 6px 14px;
@@ -426,6 +435,7 @@
             gap: 6px;
             letter-spacing: 0.06em;
             text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         .brand-sub-val-row {
@@ -437,10 +447,10 @@
         }
 
         .frosted-sub-box {
-            background: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.16);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 18px;
             padding: 12px 16px;
         }
@@ -450,7 +460,7 @@
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.04em;
-            color: #27561B;
+            color: rgba(255, 255, 255, 0.88);
             margin-bottom: 4px;
             display: flex;
             align-items: center;
@@ -461,7 +471,7 @@
             font-family: 'Outfit', sans-serif;
             font-size: 1.35rem;
             font-weight: 800;
-            color: var(--dark-forest);
+            color: #FFFFFF;
             margin: 0;
             display: flex;
             align-items: baseline;
@@ -724,9 +734,9 @@
         }
 
         .banner-striking-distance {
-            background: linear-gradient(135deg, #FDFCE7 0%, #F5FBE6 100%);
-            border: 1px solid #E2E8C0;
-            border-left: 5px solid var(--accent-lime);
+            background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%);
+            border: 1px solid #BFDBFE;
+            border-left: 5px solid var(--brand-blue);
             border-radius: 18px;
             padding: 18px 24px;
             margin-bottom: 24px;
@@ -1192,24 +1202,24 @@
                         </div>
                     </div>
 
-                    <!-- Right Vibrant Lime Card -->
+                    <!-- Right Vibrant Brand Blue Card -->
                     <div class="card-brand-accent">
                         <div>
                             <div class="brand-accent-top">
                                 <span class="badge-live-stream">
-                                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-lime);"></span>
+                                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #60A5FA;"></span>
                                     <span id="connectionBadgeText">CHECKING...</span>
                                 </span>
                                 <div style="display: flex; gap: 6px;">
-                                    <button type="button" aria-label="More search performance options" style="background: rgba(255,255,255,0.4); border: none; border-radius: 50%; width: 32px; height: 32px; color: var(--dark-forest); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                    <button type="button" aria-label="More search performance options" style="background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 32px; height: 32px; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                         <i data-lucide="more-horizontal" class="icon-xs"></i>
                                     </button>
                                 </div>
                             </div>
 
-                            <p style="font-size: 0.85rem; color: #27561B; margin: 0 0 6px; font-weight: 600;">Organic Google Impressions</p>
+                            <p style="font-size: 0.85rem; color: rgba(255,255,255,0.9); margin: 0 0 6px; font-weight: 600;">Organic Google Impressions</p>
                             <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
-                                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; margin: 0; line-height: 1; color: var(--dark-forest);" id="heroSearchViews">24,600</h2>
+                                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 800; margin: 0; line-height: 1; color: #FFFFFF;" id="heroSearchViews">24,600</h2>
                             </div>
                         </div>
 
@@ -1217,7 +1227,7 @@
                             <div class="frosted-sub-box">
                                 <div class="frosted-sub-title">
                                     <span>Google Clicks</span>
-                                    <i data-lucide="mouse-pointer" class="icon-xs" style="color: #27561B;"></i>
+                                    <i data-lucide="mouse-pointer" class="icon-xs" style="color: rgba(255,255,255,0.9);"></i>
                                 </div>
                                 <div class="frosted-sub-val">
                                     <span id="subClicksVal">840</span>
@@ -1227,7 +1237,7 @@
                             <div class="frosted-sub-box">
                                 <div class="frosted-sub-title">
                                     <span>Average CTR</span>
-                                    <i data-lucide="trending-up" class="icon-xs" style="color: #27561B;"></i>
+                                    <i data-lucide="trending-up" class="icon-xs" style="color: rgba(255,255,255,0.9);"></i>
                                 </div>
                                 <div class="frosted-sub-val">
                                     <span id="subCtrVal">3.4%</span>
@@ -1736,7 +1746,7 @@
     <script src="js/vendor/lenis.min.js?v=202609201640"></script>
     <script src="js/main.js?v=202609301640" defer></script>
     <script src="js/motion-engine.js?v=202609301630" defer></script>
-    <script src="js/admin-analytics.js?v=2026100102" defer></script>
+    <script src="js/admin-analytics.js?v=2026100103" defer></script>
 </body>
 
 </html>

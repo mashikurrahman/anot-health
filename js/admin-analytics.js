@@ -759,7 +759,7 @@
             const pages = data.topPages.slice(0, 4);
             progressList.innerHTML = pages.map((p, idx) => {
                 const pagePct = totalViews > 0 ? Math.min(Math.round((p.views / totalViews) * 100), 100) : 25;
-                const colors = ['#98EC55', '#7DD332', '#112A0A', '#A3E635'];
+                const colors = ['#2563EB', '#3B82F6', '#60A5FA', '#0F172A'];
                 const barColor = colors[idx % colors.length];
 
                 let cleanTitle = p.title.split('|')[0].trim();
@@ -811,8 +811,8 @@
         if (queryListStack) {
             const displayQueries = queries.slice(1, 5);
             queryListStack.innerHTML = displayQueries.map(q => {
-                let badgeClass = '#12380B';
-                if (q.position <= 3.0) badgeClass = '#16A34A';
+                let badgeClass = '#0F172A';
+                if (q.position <= 3.0) badgeClass = '#2563EB';
 
                 return `
                     <div class="query-item-row">
@@ -981,7 +981,7 @@
 
         // 1. Render Acquisition Channels
         if (channelsListContainer) {
-            const colors = ['#98EC55', '#7DD332', '#112A0A', '#A3E635'];
+            const colors = ['#2563EB', '#3B82F6', '#60A5FA', '#0F172A'];
             channelsListContainer.innerHTML = channels.map((c, idx) => {
                 const color = colors[idx % colors.length];
                 return `
