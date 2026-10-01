@@ -1070,13 +1070,25 @@
             <form id="analyticsLoginForm">
                 <div style="margin-bottom: 20px; text-align: left;">
                     <label for="adminPass" style="display: block; font-size: 0.82rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Password</label>
-                    <input type="password" id="adminPass" placeholder="••••••••" required autocomplete="current-password"
-                           style="width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid #CBD5E1; font-size: 0.95rem; box-sizing: border-box; outline: none;">
+                    <div style="position: relative;">
+                        <input type="password" id="adminPass" placeholder="••••••••••••" required autocomplete="current-password"
+                               style="width: 100%; padding: 12px 44px 12px 14px; border-radius: 12px; border: 1px solid #CBD5E1; font-size: 0.95rem; box-sizing: border-box; outline: none; transition: border-color 0.2s;">
+                        <button type="button" class="btn-toggle-eye" data-target="adminPass" aria-label="Toggle password visibility"
+                                style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748B; padding: 6px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="eye" class="icon-xs"></i>
+                        </button>
+                    </div>
                 </div>
                 <button type="submit" class="btn-dark-pill" style="width: 100%; justify-content: center; padding: 14px;">
                     <i data-lucide="lock" class="icon-xs"></i> Enter Dashboard
                 </button>
                 <p id="loginError" style="color: #E11D48; font-size: 0.85rem; margin-top: 14px; display: none;"></p>
+                <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #F1F5F9; display: flex; justify-content: center;">
+                    <button type="button" id="btnOpenChangePass" style="background: none; border: none; color: #2563EB; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; transition: background 0.2s;">
+                        <i data-lucide="key-round" class="icon-xs"></i>
+                        <span>Change or Reset Password?</span>
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -1109,6 +1121,9 @@
 
                 <!-- Action Utilities -->
                 <div class="exec-actions">
+                    <button type="button" id="btnHeaderChangePass" class="icon-circle-btn" title="Change Admin Password" style="color: #0F172A;">
+                        <i data-lucide="key" class="icon-xs"></i>
+                    </button>
                     <button type="button" id="btnRefresh" class="icon-circle-btn" title="Refresh Live Data">
                         <i data-lucide="refresh-cw" class="icon-xs"></i>
                     </button>
@@ -1578,6 +1593,140 @@
             </footer>
 
         </div>
+
+        <!-- CHANGE / RESET PASSWORD MODAL -->
+        <div id="changePassModal" role="dialog" aria-modal="true" aria-labelledby="changePassTitle" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 9999; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;">
+            <div style="background: #ffffff; border-radius: 28px; max-width: 460px; width: 100%; padding: 32px 28px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); border: 1px solid #E2E8F0; position: relative; max-height: 90vh; overflow-y: auto;">
+                
+                <!-- Close button -->
+                <button type="button" id="btnCloseChangePass" aria-label="Close modal" style="position: absolute; right: 18px; top: 18px; background: #F1F5F9; border: none; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748B; transition: all 0.2s;">
+                    <i data-lucide="x" class="icon-xs"></i>
+                </button>
+
+                <div style="text-align: center; margin-bottom: 22px;">
+                    <div style="width: 52px; height: 52px; background: #EFF6FF; color: #2563EB; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                        <i data-lucide="key" class="icon-md"></i>
+                    </div>
+                    <h2 id="changePassTitle" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem; margin: 0 0 6px; color: #0F172A;">Admin Password Settings</h2>
+                    <p style="font-size: 0.86rem; color: #64748B; margin: 0;">Update your analytics access password or reset via email.</p>
+                </div>
+
+                <!-- Mode selector tabs -->
+                <div style="display: flex; background: #F1F5F9; border-radius: 14px; padding: 4px; margin-bottom: 22px; border: 1px solid #E2E8F0;">
+                    <button type="button" id="tabModeDirect" class="change-mode-tab active" style="flex: 1; padding: 9px 12px; border: none; background: #ffffff; color: #0F172A; font-weight: 600; font-size: 0.82rem; border-radius: 10px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s;">
+                        Current Password
+                    </button>
+                    <button type="button" id="tabModeReset" class="change-mode-tab" style="flex: 1; padding: 9px 12px; border: none; background: transparent; color: #64748B; font-weight: 500; font-size: 0.82rem; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                        Reset via Email / Code
+                    </button>
+                </div>
+
+                <!-- FORM 1: Direct Change -->
+                <form id="formDirectChange">
+                    <div id="currPassGroup" style="margin-bottom: 14px; text-align: left;">
+                        <label for="currPassInput" style="display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 5px;">
+                            Current Password <span id="currPassNote" style="font-size: 0.72rem; color: #94A3B8; font-weight: 400;">(or fallback during migration)</span>
+                        </label>
+                        <div style="position: relative;">
+                            <input type="password" id="currPassInput" placeholder="Enter current password"
+                                   style="width: 100%; padding: 10px 42px 10px 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 0.9rem; box-sizing: border-box; outline: none;">
+                            <button type="button" class="btn-toggle-eye" data-target="currPassInput" aria-label="Toggle password visibility"
+                                    style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748B; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" class="icon-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 14px; text-align: left;">
+                        <label for="newPassInput" style="display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 5px;">
+                            New Password <span style="font-size: 0.72rem; color: #64748B;">(min 8 characters)</span>
+                        </label>
+                        <div style="position: relative;">
+                            <input type="password" id="newPassInput" placeholder="Enter new strong password" required minlength="8"
+                                   style="width: 100%; padding: 10px 42px 10px 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 0.9rem; box-sizing: border-box; outline: none;">
+                            <button type="button" class="btn-toggle-eye" data-target="newPassInput" aria-label="Toggle password visibility"
+                                    style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748B; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" class="icon-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 18px; text-align: left;">
+                        <label for="confirmPassInput" style="display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 5px;">
+                            Confirm New Password
+                        </label>
+                        <div style="position: relative;">
+                            <input type="password" id="confirmPassInput" placeholder="Re-enter new password" required minlength="8"
+                                   style="width: 100%; padding: 10px 42px 10px 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 0.9rem; box-sizing: border-box; outline: none;">
+                            <button type="button" class="btn-toggle-eye" data-target="confirmPassInput" aria-label="Toggle password visibility"
+                                    style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748B; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" class="icon-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnSubmitChangePass" class="btn-dark-pill" style="width: 100%; justify-content: center; padding: 12px;">
+                        <i data-lucide="check" class="icon-xs"></i> Update Password
+                    </button>
+                </form>
+
+                <!-- FORM 2: Reset via Email OTP -->
+                <form id="formResetViaEmail" style="display: none;">
+                    <p style="font-size: 0.83rem; color: #475569; margin: 0 0 16px; line-height: 1.4; text-align: left;">
+                        Click below to send a 6-digit verification code to the administrator email accounts (<strong>admin@anot.health</strong> &amp; <strong>mashikurrahman7@gmail.com</strong>).
+                    </p>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <button type="button" id="btnSendResetCode" class="btn-action-refresh" style="width: 100%; justify-content: center; padding: 10px; border-radius: 10px; font-weight: 600; border: 1px solid #CBD5E1; background: #F8FAFC;">
+                            <i data-lucide="mail" class="icon-xs"></i> Send 6-Digit Code
+                        </button>
+                        <p id="codeSentNotice" style="color: #059669; font-size: 0.8rem; margin: 8px 0 0; display: none; font-weight: 500;"></p>
+                    </div>
+
+                    <div style="margin-bottom: 14px; text-align: left;">
+                        <label for="resetCodeInput" style="display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 5px;">
+                            6-Digit Verification Code <span style="font-size: 0.72rem; color: #64748B;">(or Master Recovery Key)</span>
+                        </label>
+                        <input type="text" id="resetCodeInput" placeholder="e.g. 582910" required
+                               style="width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 0.95rem; letter-spacing: 2px; box-sizing: border-box; outline: none;">
+                    </div>
+
+                    <div style="margin-bottom: 14px; text-align: left;">
+                        <label for="resetNewPassInput" style="display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 5px;">
+                            New Password <span style="font-size: 0.72rem; color: #64748B;">(min 8 characters)</span>
+                        </label>
+                        <div style="position: relative;">
+                            <input type="password" id="resetNewPassInput" placeholder="Enter new password" required minlength="8"
+                                   style="width: 100%; padding: 10px 42px 10px 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 0.9rem; box-sizing: border-box; outline: none;">
+                            <button type="button" class="btn-toggle-eye" data-target="resetNewPassInput" aria-label="Toggle password visibility"
+                                    style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748B; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" class="icon-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 18px; text-align: left;">
+                        <label for="resetConfirmPassInput" style="display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 5px;">
+                            Confirm New Password
+                        </label>
+                        <div style="position: relative;">
+                            <input type="password" id="resetConfirmPassInput" placeholder="Re-enter new password" required minlength="8"
+                                   style="width: 100%; padding: 10px 42px 10px 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 0.9rem; box-sizing: border-box; outline: none;">
+                            <button type="button" class="btn-toggle-eye" data-target="resetConfirmPassInput" aria-label="Toggle password visibility"
+                                    style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748B; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" class="icon-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnSubmitResetPass" class="btn-dark-pill" style="width: 100%; justify-content: center; padding: 12px;">
+                        <i data-lucide="shield-check" class="icon-xs"></i> Reset &amp; Log In
+                    </button>
+                </form>
+
+                <p id="changePassFeedback" style="font-size: 0.85rem; margin: 14px 0 0; display: none; line-height: 1.4;"></p>
+            </div>
+        </div>
     </main>
 
     <div id="footer-mount"></div>
@@ -1587,7 +1736,7 @@
     <script src="js/vendor/lenis.min.js?v=202609201640"></script>
     <script src="js/main.js?v=202609301640" defer></script>
     <script src="js/motion-engine.js?v=202609301630" defer></script>
-    <script src="js/admin-analytics.js?v=2026092002" defer></script>
+    <script src="js/admin-analytics.js?v=2026100102" defer></script>
 </body>
 
 </html>

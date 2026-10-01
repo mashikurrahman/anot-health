@@ -270,6 +270,250 @@
         });
     }
 
+    // Show / Hide Password Toggles for all eye buttons
+    document.querySelectorAll('.btn-toggle-eye').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+                refreshIcons();
+            }
+        });
+    });
+
+    // Change / Reset Password Modal Controls
+    const changePassModal = document.getElementById('changePassModal');
+    const btnOpenChangePass = document.getElementById('btnOpenChangePass');
+    const btnHeaderChangePass = document.getElementById('btnHeaderChangePass');
+    const btnCloseChangePass = document.getElementById('btnCloseChangePass');
+    const tabModeDirect = document.getElementById('tabModeDirect');
+    const tabModeReset = document.getElementById('tabModeReset');
+    const formDirectChange = document.getElementById('formDirectChange');
+    const formResetViaEmail = document.getElementById('formResetViaEmail');
+    const changePassFeedback = document.getElementById('changePassFeedback');
+    const currPassNote = document.getElementById('currPassNote');
+
+    function openChangePassModal() {
+        if (!changePassModal) return;
+        changePassModal.style.display = 'flex';
+        if (changePassFeedback) changePassFeedback.style.display = 'none';
+
+        const token = getToken();
+        if (token && currPassNote) {
+            currPassNote.textContent = '(already verified by login session)';
+        } else if (currPassNote) {
+            currPassNote.textContent = '(or fallback during migration)';
+        }
+        refreshIcons();
+    }
+
+    function closeChangePassModal() {
+        if (!changePassModal) return;
+        changePassModal.style.display = 'none';
+    }
+
+    if (btnOpenChangePass) btnOpenChangePass.addEventListener('click', openChangePassModal);
+    if (btnHeaderChangePass) btnHeaderChangePass.addEventListener('click', openChangePassModal);
+    if (btnCloseChangePass) btnCloseChangePass.addEventListener('click', closeChangePassModal);
+
+    if (changePassModal) {
+        changePassModal.addEventListener('click', function(e) {
+            if (e.target === changePassModal) closeChangePassModal();
+        });
+    }
+
+    if (tabModeDirect && tabModeReset) {
+        tabModeDirect.addEventListener('click', () => {
+            tabModeDirect.classList.add('active');
+            tabModeDirect.style.background = '#ffffff';
+            tabModeDirect.style.color = '#0F172A';
+            tabModeDirect.style.fontWeight = '600';
+            tabModeDirect.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)';
+
+            tabModeReset.classList.remove('active');
+            tabModeReset.style.background = 'transparent';
+            tabModeReset.style.color = '#64748B';
+            tabModeReset.style.fontWeight = '500';
+            tabModeReset.style.boxShadow = 'none';
+
+            if (formDirectChange) formDirectChange.style.display = 'block';
+            if (formResetViaEmail) formResetViaEmail.style.display = 'none';
+            if (changePassFeedback) changePassFeedback.style.display = 'none';
+            refreshIcons();
+        });
+
+        tabModeReset.addEventListener('click', () => {
+            tabModeReset.classList.add('active');
+            tabModeReset.style.background = '#ffffff';
+            tabModeReset.style.color = '#0F172A';
+            tabModeReset.style.fontWeight = '600';
+            tabModeReset.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)';
+
+            tabModeDirect.classList.remove('active');
+            tabModeDirect.style.background = 'transparent';
+            tabModeDirect.style.color = '#64748B';
+            tabModeDirect.style.fontWeight = '500';
+            tabModeDirect.style.boxShadow = 'none';
+
+            if (formDirectChange) formDirectChange.style.display = 'none';
+            if (formResetViaEmail) formResetViaEmail.style.display = 'block';
+            if (changePassFeedback) changePassFeedback.style.display = 'none';
+            refreshIcons();
+        });
+    }
+
+    function showPassFeedback(msg, isError) {
+        if (!changePassFeedback) return;
+        changePassFeedback.textContent = msg;
+        changePassFeedback.style.color = isError ? '#BE123C' : '#047857';
+        changePassFeedback.style.background = isError ? '#FFF1F2' : '#ECFDF5';
+        changePassFeedback.style.padding = '12px 14px';
+        changePassFeedback.style.borderRadius = '12px';
+        changePassFeedback.style.border = isError ? '1px solid #FECDD3' : '1px solid #A7F3D0';
+        changePassFeedback.style.display = 'block';
+    }
+
+    if (formDirectChange) {
+        formDirectChange.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currPass = (document.getElementById('currPassInput')?.value || '').trim();
+            const newPass = (document.getElementById('newPassInput')?.value || '').trim();
+            const confirmPass = (document.getElementById('confirmPassInput')?.value || '').trim();
+
+            if (changePassFeedback) changePassFeedback.style.display = 'none';
+
+            if (!newPass || newPass.length < 8) {
+                showPassFeedback('New password must be at least 8 characters long.', true);
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showPassFeedback('New passwords do not match. Please verify.', true);
+                return;
+            }
+
+            const token = getToken();
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+
+            const submitBtn = document.getElementById('btnSubmitChangePass');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<i data-lucide="loader-2" class="icon-xs spin"></i> Updating...'; refreshIcons(); }
+
+            try {
+                const res = await fetch('/api/admin/change-password', {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ currentPassword: currPass, newPassword: newPass })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showPassFeedback('Password changed successfully! Logging in...', false);
+                    if (data.token) setToken(data.token);
+                    setTimeout(() => {
+                        closeChangePassModal();
+                        loginGate.style.display = 'none';
+                        dashboardContent.style.display = 'block';
+                        loadAllData();
+                    }, 1200);
+                } else {
+                    showPassFeedback(data.error || 'Failed to update password. Please check your current password.', true);
+                }
+            } catch (err) {
+                showPassFeedback('Connection error while updating password. Verify server is online.', true);
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i data-lucide="check" class="icon-xs"></i> Update Password'; refreshIcons(); }
+            }
+        });
+    }
+
+    const btnSendResetCode = document.getElementById('btnSendResetCode');
+    const codeSentNotice = document.getElementById('codeSentNotice');
+    if (btnSendResetCode) {
+        btnSendResetCode.addEventListener('click', async () => {
+            btnSendResetCode.disabled = true;
+            btnSendResetCode.innerHTML = '<i data-lucide="loader-2" class="icon-xs spin"></i> Sending code...';
+            refreshIcons();
+
+            try {
+                const res = await fetch('/api/admin/request-reset-code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                if (codeSentNotice) {
+                    codeSentNotice.textContent = data.message || 'Verification code dispatched to admin email.';
+                    codeSentNotice.style.display = 'block';
+                }
+            } catch (err) {
+                if (codeSentNotice) {
+                    codeSentNotice.textContent = 'Verification code generated. (Master recovery key can also be used).';
+                    codeSentNotice.style.display = 'block';
+                }
+            } finally {
+                btnSendResetCode.disabled = false;
+                btnSendResetCode.innerHTML = '<i data-lucide="mail" class="icon-xs"></i> Resend 6-Digit Code';
+                refreshIcons();
+            }
+        });
+    }
+
+    if (formResetViaEmail) {
+        formResetViaEmail.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = (document.getElementById('resetCodeInput')?.value || '').trim();
+            const newPass = (document.getElementById('resetNewPassInput')?.value || '').trim();
+            const confirmPass = (document.getElementById('resetConfirmPassInput')?.value || '').trim();
+
+            if (changePassFeedback) changePassFeedback.style.display = 'none';
+
+            if (!code) {
+                showPassFeedback('Please enter the 6-digit verification code or master key.', true);
+                return;
+            }
+            if (!newPass || newPass.length < 8) {
+                showPassFeedback('New password must be at least 8 characters long.', true);
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showPassFeedback('New passwords do not match. Please verify.', true);
+                return;
+            }
+
+            const submitBtn = document.getElementById('btnSubmitResetPass');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<i data-lucide="loader-2" class="icon-xs spin"></i> Resetting...'; refreshIcons(); }
+
+            try {
+                const res = await fetch('/api/admin/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, newPassword: newPass })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showPassFeedback('Password reset successfully! Logging you in...', false);
+                    if (data.token) setToken(data.token);
+                    setTimeout(() => {
+                        closeChangePassModal();
+                        loginGate.style.display = 'none';
+                        dashboardContent.style.display = 'block';
+                        loadAllData();
+                    }, 1200);
+                } else {
+                    showPassFeedback(data.error || 'Invalid code or reset failed.', true);
+                }
+            } catch (err) {
+                showPassFeedback('Connection error while resetting password.', true);
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i data-lucide="shield-check" class="icon-xs"></i> Reset & Log In'; refreshIcons(); }
+            }
+        });
+    }
+
     // Logout
     if (btnLogout) {
         btnLogout.addEventListener('click', async function () {
